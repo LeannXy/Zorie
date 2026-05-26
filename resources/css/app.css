@@ -1,0 +1,159 @@
+@custom-variant dark (&:where(.dark, .dark *));
+@import "tailwindcss";
+@import "../../vendor/livewire/flux/dist/flux.css";
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans:
+        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    --color-accent: var(--color-neutral-800);
+    --color-accent-content: var(--color-neutral-800);
+    --color-accent-foreground: var(--color-white);
+}
+
+@layer components {
+    .analytics-card {
+        @apply rounded-3xl
+    border
+    border-zinc-200
+    dark:border-zinc-800
+    bg-white
+    dark:bg-zinc-900
+    p-6
+    shadow-sm
+    hover:shadow-xl
+    transition;
+    }
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-white);
+        --color-accent-content: var(--color-white);
+        --color-accent-foreground: var(--color-neutral-800);
+    }
+}
+
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+* {
+    box-sizing: border-box;
+    transition:
+        background-color 1s ease,
+        border-color 1.5s ease,
+        color 1s ease,
+        fill 1s ease,
+        stroke 1s ease,
+        opacity 1s ease,
+        box-shadow 1s ease,
+        transform 1s ease;
+}
+
+/* Tom Select */
+
+.ts-wrapper.single .ts-control,
+.ts-wrapper.multi .ts-control {
+    min-height: 52px;
+
+    border-radius: 12px;
+
+    border: 1px solid rgb(228 228 231);
+
+    background: #fafafa;
+
+    padding: 10px 14px;
+
+    box-shadow: none;
+}
+
+.dark .ts-wrapper.single .ts-control,
+.dark .ts-wrapper.multi .ts-control {
+    background: rgb(9 9 11);
+
+    border-color: rgb(39 39 42);
+
+    color: white;
+}
+
+.ts-control input {
+    font-size: 14px;
+}
+
+.ts-wrapper.focus .ts-control {
+    border-color: #3b82f6 !important;
+
+    box-shadow: none !important;
+}
+
+.ts-dropdown {
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    border: 1px solid rgb(228 228 231);
+}
+
+.dark .ts-dropdown {
+    background: rgb(24 24 27);
+
+    border-color: rgb(39 39 42);
+}
+
+.ts-dropdown .option {
+    padding: 12px;
+}
+
+.dark .ts-dropdown .option {
+    color: white;
+}
+
+.ts-dropdown .active {
+    background: rgba(59, 130, 246, 0.1);
+
+    color: #3b82f6;
+}
+/* \[:where(&)\]:size-4 {
+    @apply size-4;
+} */
