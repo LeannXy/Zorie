@@ -26,39 +26,8 @@
         }
     </script>
 </head>
-@if(session('success'))
-<div x-data="{show:true
-        darkMode: localStorage.getItem('darkMode') === 'true',
-    
-        showNotifications: false,
-    
-        search: '',
-    
-        results: [],
-    
-        searchData() {
-    
-            fetch(
-                    '/search?search=' +
-                    this.search
-                )
-    
-                .then(
-                    response =>
-                    response.json()
-                )
-    
-                .then(
-                    data => {
-    
-                        this.results =
-                            data;
-    
-                    })
-    
-        }
-    
-    }" x-init="setTimeout(() => show = false, 4000)" x-show="show"
+@if (session('success'))
+    <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show"
         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-10"
         x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed top-6 right-6 z-[9999]">
@@ -106,11 +75,56 @@
 <body class="bg-zinc-100 text-zinc-900 dark:bg-zinc-950 dark:text-white">
 
     <div x-data="{
-        darkMode: localStorage.getItem('darkMode') === 'true',
-        showNotifications: false
-    }" x-init="if (darkMode) {
-        document.documentElement.classList.add('dark')
-    }" :class="{ 'dark': darkMode }"
+    
+        darkMode: localStorage.getItem(
+            'darkMode'
+        ) === 'true',
+    
+        showNotifications: false,
+    
+        search: '',
+    
+        results: [],
+    
+        openSearch: false,
+    
+        searchData() {
+    
+            if (
+                this.search.trim() === ''
+            ) {
+    
+                this.results = [];
+    
+                this.openSearch = false;
+    
+                return;
+    
+            }
+    
+            fetch(
+                    '/search?search=' +
+                    this.search
+                )
+    
+                .then(
+                    response =>
+                    response.json()
+                )
+    
+                .then(
+                    data => {
+    
+                        this.results = data;
+    
+                        this.openSearch =
+                            data.length > 0;
+    
+                    });
+    
+        }
+    
+    }"
         class="flex min-h-screen bg-zinc-100 text-zinc-900 transition dark:bg-zinc-950 dark:text-white">
 
         <!-- Sidebar -->
@@ -426,13 +440,13 @@ overflow-y-auto z-50">
                             class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500">
                         </i>
 
-                        <div class="relative w-64 md:w-80">
+                        <div class="relative w-64 md:w-80" @click.away="openSearch=false">
 
-                            <input x-model="search" @input.debounce.300ms="searchData()" type="text"
-                                placeholder="Search..."
+                            <input x-model="search" @focus="if(results.length)openSearch=true"
+                                @input.debounce.300ms="searchData()" type="text" placeholder="Search..."
                                 class="w-full rounded-xl border border-zinc-200 py-2 pl-10 pr-4">
 
-                            <div x-show="results.length"
+                            <div x-show="openSearch"
                                 class="absolute top-full mt-2 w-full rounded-2xl border bg-white dark:bg-zinc-900 shadow-xl z-50">
 
                                 <template x-for="item in results">
@@ -620,39 +634,90 @@ overflow-y-auto z-50">
                     <!-- Profile -->
 
 
-                    <div
-                        class="flex items-center gap-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2">
+                    <div class="relative" x-data="{ openProfile: false }">
 
-                        <div
-                            class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500 text-sm font-semibold text-white">
+                        <button @click="openProfile=!openProfile"
+                            class="flex items-center gap-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition">
 
-                            @if (auth()->user()->profile_photo)
-                                <img src="{{ Storage::url(auth()->user()->profile_photo) }}"
-                                    class="h-full w-full object-cover">
-                            @else
-                                <div
-                                    class="flex h-full w-full items-center justify-center bg-blue-500 text-4xl font-bold text-white">
+                            <div class="relative">
 
-                                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                                @if (auth()->user()->profile_photo)
+                                    <img src="{{ Storage::url(auth()->user()->profile_photo) }}"
+                                        class="h-10 w-10 rounded-full object-cover border-2 border-blue-500">
+                                @else
+                                    <div
+                                        class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-white font-bold">
 
-                                </div>
-                            @endif
+                                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
 
-                        </div>
+                                    </div>
+                                @endif
 
-                        <div class="hidden md:block">
+                                <span
+                                    class="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white">
+                                </span>
 
-                            <p class="text-sm font-medium">
+                            </div>
 
-                                {{ auth()->user()->name }}
+                            <div class="hidden md:block text-left">
 
-                            </p>
+                                <p class="text-sm font-medium">
 
-                            <p class="text-xs text-zinc-500">
+                                    {{ auth()->user()->name }}
 
-                                Admin
+                                </p>
 
-                            </p>
+                                <p class="text-xs text-zinc-500">
+
+                                    Administrator
+
+                                </p>
+
+                            </div>
+
+                            <i data-lucide="chevron-down" class="h-4 w-4 text-zinc-500">
+                            </i>
+
+                        </button>
+
+
+                        <div x-show="openProfile" @click.away="openProfile=false" x-transition style="display:none"
+                            class="absolute right-0 top-14 w-56 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl z-50">
+
+                            <a href="{{ route('settings.profile') }}"
+                                class="flex items-center gap-3 p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800">
+
+                                <i data-lucide="user" class="h-4 w-4"></i>
+
+                                Profile
+
+                            </a>
+
+
+                            <a href="{{ route('settings.system') }}"
+                                class="flex items-center gap-3 p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800">
+
+                                <i data-lucide="settings" class="h-4 w-4"></i>
+
+                                Settings
+
+                            </a>
+
+
+                            <form action="{{ route('logout') }}" method="POST">
+
+                                @csrf
+
+                                <button type="submit"
+                                    class="flex w-full items-center gap-3 p-4 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10">
+
+                                    <i data-lucide="log-out" class="h-4 w-4"></i>
+
+                                    Logout
+
+                                </button>
+
+                            </form>
 
                         </div>
 
