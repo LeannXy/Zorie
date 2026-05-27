@@ -25,36 +25,6 @@ Route::middleware(['auth'])->group(function () {
         [SettingsController::class, 'updatePassword']
     )->name('settings.password');
 
-    Route::get(
-        '/settings/appearance',
-        [SettingsController::class, 'appearance']
-    )->name(
-        'settings.appearance'
-    );
-
-    Route::post(
-        '/settings/appearance',
-        [SettingsController::class, 'updateAppearance']
-    )->name(
-        'settings.appearance.update'
-    );
-
-
-
-    Route::get(
-        '/settings/notifications',
-        [SettingsController::class, 'notifications']
-    )->name(
-        'settings.notifications'
-    );
-
-    Route::post(
-        '/settings/notifications',
-        [SettingsController::class, 'updateNotifications']
-    )->name(
-        'settings.notifications.update'
-    );
-
     Route::delete(
         '/notification/{notification}',
         [SettingsController::class, 'deleteNotification']

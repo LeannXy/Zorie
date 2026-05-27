@@ -11,6 +11,15 @@
         document.getElementById(
             'salesChart'
         );
+    const chartData =
+
+        @json($chartValues);
+
+    const allZero =
+
+        chartData.every(
+            value => value === 0
+        );
 
     new Chart(
 
@@ -90,18 +99,37 @@
 
                         displayColors: false,
 
-                        callbacks: {
+                        callback: function(value) {
 
-                            label: function(context) {
+                            if (value >= 1000000) {
 
                                 return 'Rp ' +
 
-                                    context.raw
-                                    .toLocaleString(
-                                        'id-ID'
-                                    );
+                                    (value / 1000000)
+                                    .toFixed(1)
+
+                                    +
+                                    'M';
 
                             }
+
+                            if (value >= 1000) {
+
+                                return 'Rp ' +
+
+                                    (value / 1000)
+                                    .toFixed(0)
+
+                                    +
+                                    'K';
+
+                            }
+
+                            return 'Rp ' +
+
+                                value.toLocaleString(
+                                    'id-ID'
+                                );
 
                         }
 
@@ -140,7 +168,7 @@
 
                                     ?
 
-                                    '#71717a'
+                                    '#a1a1aa'
 
                                     :
 
@@ -154,19 +182,32 @@
 
                     y: {
 
+                        beginAtZero: true,
+
+                        suggestedMax: allZero ? 100 : undefined,
+
                         grid: {
 
                             color: function() {
 
-                                return document.documentElement.classList.contains('dark')
+                                return document
+                                    .documentElement
+                                    .classList
+                                    .contains(
+                                        'dark'
+                                    )
 
                                     ?
-                                    'rgba(255,255,255,0.08)'
+
+                                    'rgba(255,255,255,0.15)'
 
                                     :
+
                                     'rgba(0,0,0,0.08)';
 
-                            }
+                            },
+
+                            drawBorder: false
 
                         },
 
@@ -174,24 +215,56 @@
 
                             color: function() {
 
-                                return document.documentElement.classList.contains('dark')
+                                return document
+                                    .documentElement
+                                    .classList
+                                    .contains(
+                                        'dark'
+                                    )
 
                                     ?
-                                    '#71717a'
+
+                                    '#a1a1aa'
 
                                     :
+
                                     '#52525b';
 
                             },
 
                             callback: function(value) {
 
-                                return 'Rp ' +
+                                if (value === 0) {
 
-                                    (value / 1000000)
+                                    return 'Rp 0';
 
-                                    +
-                                    'M';
+                                }
+
+                                if (value >= 1000000) {
+
+                                    return 'Rp ' +
+
+                                        (value / 1000000)
+                                        .toFixed(1)
+
+                                        +
+                                        'M';
+
+                                }
+
+                                if (value >= 1000) {
+
+                                    return 'Rp ' +
+
+                                        (value / 1000)
+                                        .toFixed(0)
+
+                                        +
+                                        'K';
+
+                                }
+
+                                return 'Rp ' + value;
 
                             }
 

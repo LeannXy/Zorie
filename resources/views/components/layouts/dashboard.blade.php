@@ -129,10 +129,7 @@
 
         <!-- Sidebar -->
         <aside
-            class="fixed left-0 top-0 h-screen w-72
-border-r border-zinc-200
-bg-white dark:border-zinc-800 dark:bg-zinc-950
-overflow-y-auto z-50">
+            class="fixed left-0 top-0 h-screen w-72 border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 overflow-y-auto z-50">
 
             <!-- Logo -->
             <div class="flex items-center gap-3 px-6 py-6">
@@ -140,30 +137,30 @@ overflow-y-auto z-50">
                 <div class="flex items-center gap-3 px-2">
 
                     <!-- Logo Light -->
-                    <img x-show="!darkMode" src="{{ asset('images/logo-light.jpg') }}" class="h-10 w-auto">
+                    <img x-show="!darkMode" src="{{ asset('images/logo-light.png') }}" class="h-10 w-auto">
 
                     <!-- Logo Dark -->
                     <img x-show="darkMode" src="{{ asset('images/logo-dark.png') }}" class="h-10 w-auto">
 
                     <div>
 
-                        <h1 class="text-3xl font-extrabold tracking-wide">
+    <h1 class="text-3xl font-extrabold tracking-tight">
 
-                            <span class="text-zinc-900 dark:text-white">Z</span>
+        <span class="text-zinc-900 dark:text-white">Z</span>
+        <span class="dark:text-blue-500 text-zinc-900">O</span>
+        <span class="text-zinc-900 dark:text-white">R</span>
+        <span class="text-zinc-900 dark:text-white">I</span>
+        <span class="text-zinc-900 dark:text-white">E</span>
 
-                            <span class="text-blue-500">O</span>
+    </h1>
 
-                            <span class="text-zinc-900 dark:text-white">RIE</span>
+    <p class="text-xs text-zinc-500 dark:text-zinc-400">
 
-                        </h1>
+        Shoe Store Admin
 
-                        <p class="text-xs text-zinc-500 dark:text-zinc-400">
+    </p>
 
-                            Shoe Store Admin
-
-                        </p>
-
-                    </div>
+</div>
 
                 </div>
 
@@ -234,10 +231,9 @@ overflow-y-auto z-50">
 
                     <button @click="open=!open"
                         class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm transition
-
-{{ request()->routeIs('customers') || request()->routeIs('testimonials')
-    ? 'bg-blue-500/10 text-blue-500'
-    : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white' }}">
+                        {{ request()->routeIs('customers') || request()->routeIs('testimonials')
+                            ? 'bg-blue-500/10 text-blue-500'
+                            : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white' }}">
 
                         <div class="flex items-center gap-3">
 
@@ -302,9 +298,9 @@ overflow-y-auto z-50">
 
                     <button @click="openSettings=!openSettings"
                         class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm transition
-        {{ request()->routeIs('settings.*')
-            ? 'bg-blue-500/10 text-blue-500'
-            : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white' }}">
+                            {{ request()->routeIs('settings.*')
+                            ? 'bg-blue-500/10 text-blue-500'
+                            : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white' }}">
 
                         <div class="flex items-center gap-3">
 
@@ -330,9 +326,9 @@ overflow-y-auto z-50">
 
                         <a href="{{ route('settings.profile') }}"
                             class="block rounded-lg px-4 py-2 text-sm
-            {{ request()->routeIs('settings.profile')
-                ? 'text-blue-500'
-                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
+                             {{ request()->routeIs('settings.profile')
+                                 ? 'text-blue-500'
+                                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
 
                             Profile
 
@@ -341,41 +337,19 @@ overflow-y-auto z-50">
 
                         <a href="{{ route('settings.security') }}"
                             class="block rounded-lg px-4 py-2 text-sm
-            {{ request()->routeIs('settings.security')
-                ? 'text-blue-500'
-                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
+                            {{ request()->routeIs('settings.security')
+                                ? 'text-blue-500'
+                                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
 
                             Security
 
                         </a>
 
-
-                        <a href="{{ route('settings.appearance') }}"
-                            class="block rounded-lg px-4 py-2 text-sm
-            {{ request()->routeIs('settings.appearance')
-                ? 'text-blue-500'
-                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
-
-                            Appearance
-
-                        </a>
-
-
-                        <a href="{{ route('settings.notifications') }}"
-                            class="block rounded-lg px-4 py-2 text-sm
-            {{ request()->routeIs('settings.notifications')
-                ? 'text-blue-500'
-                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
-
-                            Notifications
-
-                        </a>
-
                         <a href="{{ route('settings.system') }}"
                             class="block rounded-lg px-4 py-2 text-sm
-{{ request()->routeIs('settings.system')
-    ? 'text-blue-500'
-    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
+                            {{ request()->routeIs('settings.system')
+                                ? 'text-blue-500'
+                                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
 
                             System
 
@@ -383,19 +357,18 @@ overflow-y-auto z-50">
 
                         <a href="{{ route('settings.activity') }}"
                             class="block rounded-lg px-4 py-2 text-sm
-{{ request()->routeIs('settings.activity')
-    ? 'text-blue-500'
-    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
+                                {{ request()->routeIs('settings.activity')
+                                ? 'text-blue-500'
+                                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
 
                             Activity Logs
 
                         </a>
 
                         <a href="{{ route('settings.backup') }}"
-                            class="block rounded-lg px-4 py-2 text-sm
-{{ request()->routeIs('settings.backup')
-    ? 'text-blue-500'
-    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
+                            class="block rounded-lg px-4 py-2 text-sm{{ request()->routeIs('settings.backup')
+                            ? 'text-blue-500'
+                            : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
 
                             Backup & Data
 
@@ -446,33 +419,63 @@ overflow-y-auto z-50">
                                 @input.debounce.300ms="searchData()" type="text" placeholder="Search..."
                                 class="w-full rounded-xl border border-zinc-200 py-2 pl-10 pr-4">
 
-                            <div x-show="openSearch"
-                                class="absolute top-full mt-2 w-full rounded-2xl border bg-white dark:bg-zinc-900 shadow-xl z-50">
+                            <div x-show="openSearch" x-transition style="display:none"
+                                class="absolute top-[110%] w-full overflow-hidden rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-2xl z-50">
 
-                                <template x-for="item in results">
+                                <!-- Header -->
+                                <div class="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800">
 
-                                    <a :href="item.url"
-                                        class="flex items-center justify-between p-3 hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                                    <p class="text-xs font-medium uppercase tracking-wider text-zinc-400">
 
-                                        <div class="flex items-center gap-3">
+                                        Search Results
 
-                                            <i :data-lucide="item.icon" class="h-4 w-4 text-zinc-500">
-                                            </i>
+                                    </p>
 
-                                            <div>
+                                </div>
 
-                                                <p x-text="item.title"></p>
+
+                                <!-- Results search -->
+                                <div class="max-h-72 overflow-y-auto">
+
+                                    <template x-for="item in results">
+
+                                        <a :href="item.url"
+                                            class="group flex items-center gap-3 px-4 py-3 transition duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800">
+                                            <div class="flex-1">
+
+                                                <p class="font-medium text-sm group-hover:text-blue-500"
+                                                    x-text="item.title">
+                                                </p>
 
                                                 <p class="text-xs text-zinc-500" x-text="item.type">
                                                 </p>
 
                                             </div>
 
-                                        </div>
 
-                                    </a>
+                                            <i data-lucide="chevron-right"
+                                                class="h-4 w-4 text-zinc-400 opacity-0 transition group-hover:opacity-100">
+                                            </i>
 
-                                </template>
+                                        </a>
+
+                                    </template>
+
+
+                                    <div x-show="results.length===0" class="p-8 text-center">
+
+                                        <i data-lucide="search-x" class="mx-auto h-8 w-8 text-zinc-300">
+                                        </i>
+
+                                        <p class="mt-2 text-sm text-zinc-500">
+
+                                            No results found
+
+                                        </p>
+
+                                    </div>
+
+                                </div>
 
                             </div>
 

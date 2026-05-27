@@ -31,7 +31,13 @@ class DashboardController extends Controller
 
 
         $salesData =
-            Order::select(
+
+            Order::where(
+                'status',
+                'Completed'
+            )
+
+            ->select(
 
                 DB::raw(
                     'MONTH(created_at) as month'
@@ -59,18 +65,22 @@ class DashboardController extends Controller
         $chartValues = [];
 
 
-        $maxMonth =
+        /* sesuaikan bulan*/
+        $currentMonth =
 
-            $salesData->max(
-                'month'
-            );
+            now()->month;
+
+        $chartLabels = [];
+
+        $chartValues = [];
+
 
 
         for (
 
             $i = 1;
 
-            $i <= $maxMonth;
+            $i <= $currentMonth;
 
             $i++
 
@@ -104,9 +114,12 @@ class DashboardController extends Controller
 
             $chartValues[] =
 
-                $monthData
-                ? $monthData->total
-                : 0;
+                (int)(
+
+                    $monthData?->total
+                    ?? 0
+
+                );
         }
 
         $activities =
