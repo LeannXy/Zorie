@@ -22,15 +22,6 @@
 
         </div>
 
-        <button
-        class="flex items-center gap-2 rounded-2xl bg-blue-500 px-5 py-3 text-sm font-medium text-white hover:bg-blue-600 transition">
-
-            <i data-lucide="download"></i>
-
-            Export Report
-
-        </button>
-
     </div>
 
 
