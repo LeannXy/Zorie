@@ -109,7 +109,7 @@
         ) === 'true',
     
         showNotifications: false,
-
+    
         sidebarOpen: false,
     
         search: '',
@@ -158,8 +158,7 @@
         class="flex min-h-screen bg-zinc-100 text-zinc-900 transition dark:bg-zinc-950 dark:text-white">
 
         <!-- Sidebar Overlay for mobile -->
-        <div @click="sidebarOpen=false" 
-            :class="{ 'hidden': !sidebarOpen, 'block': sidebarOpen }"
+        <div @click="sidebarOpen=false" :class="{ 'hidden': !sidebarOpen, 'block': sidebarOpen }"
             class="fixed inset-0 bg-black/50 z-40 md:hidden md:hidden">
         </div>
 
@@ -169,7 +168,8 @@
             :class="{ 'hidden': !sidebarOpen, 'flex': sidebarOpen, 'md:flex': true }">
 
             <!-- Close button for mobile -->
-            <button @click="sidebarOpen=false" class="md:hidden absolute top-6 right-4 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300">
+            <button @click="sidebarOpen=false"
+                class="md:hidden absolute top-6 right-4 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300">
                 <i data-lucide="x" class="h-6 w-6"></i>
             </button>
 
@@ -186,23 +186,23 @@
 
                     <div>
 
-    <h1 class="text-3xl font-extrabold tracking-tight">
+                        <h1 class="text-3xl font-extrabold tracking-tight">
 
-        <span class="text-zinc-900 dark:text-white">Z</span>
-        <span class="dark:text-blue-500 text-zinc-900">O</span>
-        <span class="text-zinc-900 dark:text-white">R</span>
-        <span class="text-zinc-900 dark:text-white">I</span>
-        <span class="text-zinc-900 dark:text-white">E</span>
+                            <span class="text-zinc-900 dark:text-white">Z</span>
+                            <span class="dark:text-blue-500 text-zinc-900">O</span>
+                            <span class="text-zinc-900 dark:text-white">R</span>
+                            <span class="text-zinc-900 dark:text-white">I</span>
+                            <span class="text-zinc-900 dark:text-white">E</span>
 
-    </h1>
+                        </h1>
 
-    <p class="text-xs text-zinc-500 dark:text-zinc-400">
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400">
 
-        Shoe Store Admin
+                            Shoe Store Admin
 
-    </p>
+                        </p>
 
-</div>
+                    </div>
 
                 </div>
 
@@ -341,8 +341,8 @@
                     <button @click="openSettings=!openSettings"
                         class="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm transition
                             {{ request()->routeIs('settings.*')
-                            ? 'bg-blue-500/10 text-blue-500'
-                            : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white' }}">
+                                ? 'bg-blue-500/10 text-blue-500'
+                                : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white' }}">
 
                         <div class="flex items-center gap-3">
 
@@ -370,7 +370,7 @@
                             class="block rounded-lg px-4 py-2 text-sm
                              {{ request()->routeIs('settings.profile')
                                  ? 'text-blue-500'
-                                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
+                                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
 
                             Profile
 
@@ -400,8 +400,8 @@
                         <a href="{{ route('settings.activity') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-4 py-2 text-sm
                                 {{ request()->routeIs('settings.activity')
-                                ? 'text-blue-500'
-                                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
+                                    ? 'text-blue-500'
+                                    : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
 
                             Activity Logs
 
@@ -409,8 +409,8 @@
 
                         <a href="{{ route('settings.backup') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-4 py-2 text-sm{{ request()->routeIs('settings.backup')
-                            ? 'text-blue-500'
-                            : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
+                                ? 'text-blue-500'
+                                : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
 
                             Backup & Data
 
@@ -446,81 +446,89 @@
             <header
                 class="sticky top-0 z-40 flex items-center justify-between border-b border-zinc-200 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md px-6 md:px-8 py-4 md:py-5 dark:border-zinc-800">
 
-                <!-- Mobile Sidebar Toggle -->
-                <button @click="sidebarOpen=!sidebarOpen" class="md:hidden flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 transition hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                    <i data-lucide="menu" class="h-5 w-5"></i>
-                </button>
+                <!-- Mobile Sidebar & search Toggle -->
+                <div class="md:hidden flex items-center gap-2">
+
+                    <button @click="sidebarOpen=!sidebarOpen"
+                        class="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+
+                        <i data-lucide="menu" class="h-5 w-5"></i>
+
+                    </button>
+
+                    <button @click="openSearch=true"
+                        class="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+
+                        <i data-lucide="search" class="h-5 w-5"></i>
+
+                    </button>
+
+                </div>
 
                 <!-- Search -->
-                <form class="flex-1 md:flex-none">
+                <!-- Search Desktop -->
+                <div class="hidden md:block flex-1 max-w-lg ml-6">
 
-                    <div class="relative w-full md:w-80">
+                    <div class="relative w-full max-w-xl" @click.away="openSearch=false">
 
                         <i data-lucide="search"
-                            class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500">
+                            class="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400">
                         </i>
 
-                        <div class="relative w-full md:w-80" @click.away="openSearch=false">
+                        <input x-model="search" @focus="if(results.length)openSearch=true"
+                            @input.debounce.300ms="searchData()" type="text"
+                            placeholder="Search products, customers, orders..."
+                            class="h-11 w-full rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 pl-11 pr-4 text-sm shadow-sm transition focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 focus:outline-none">
 
-                            <input x-model="search" @focus="if(results.length)openSearch=true"
-                                @input.debounce.300ms="searchData()" type="text" placeholder="Search..."
-                                class="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-800 py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50">
+                        <div x-show="openSearch" x-transition style="display:none"
+                            class="absolute top-[115%] w-full overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl z-50">
 
-                            <div x-show="openSearch" x-transition style="display:none"
-                                class="absolute top-[110%] w-full overflow-hidden rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-2xl z-50">
+                            <div class="border-b border-zinc-100 dark:border-zinc-800 px-4 py-3">
 
-                                <!-- Header -->
-                                <div class="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800">
+                                <p class="text-xs uppercase tracking-wider text-zinc-400">
 
-                                    <p class="text-xs font-medium uppercase tracking-wider text-zinc-400">
+                                    Search Results
 
-                                        Search Results
+                                </p>
 
-                                    </p>
+                            </div>
 
-                                </div>
+                            <div class="max-h-80 overflow-y-auto">
 
+                                <template x-for="item in results">
 
-                                <!-- Results search -->
-                                <div class="max-h-72 overflow-y-auto">
-
-                                    <template x-for="item in results">
-
-                                        <a :href="item.url"
-                                            class="group flex items-center gap-3 px-4 py-3 transition duration-200 hover:bg-zinc-50 dark:hover:bg-zinc-800">
-                                            <div class="flex-1">
-
-                                                <p class="font-medium text-sm group-hover:text-blue-500"
-                                                    x-text="item.title">
-                                                </p>
-
-                                                <p class="text-xs text-zinc-500" x-text="item.type">
-                                                </p>
-
-                                            </div>
+                                    <a :href="item.url"
+                                        class="group flex items-center gap-3 px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition">
 
 
-                                            <i data-lucide="chevron-right"
-                                                class="h-4 w-4 text-zinc-400 opacity-0 transition group-hover:opacity-100">
-                                            </i>
+                                        <div class="flex-1">
 
-                                        </a>
+                                            <p class="font-medium text-sm" x-text="item.title">
+                                            </p>
 
-                                    </template>
+                                            <p class="text-xs text-zinc-500" x-text="item.type">
+                                            </p>
 
+                                        </div>
 
-                                    <div x-show="results.length===0" class="p-8 text-center">
-
-                                        <i data-lucide="search-x" class="mx-auto h-8 w-8 text-zinc-300">
+                                        <i data-lucide="chevron-right"
+                                            class="h-4 w-4 text-zinc-400 opacity-0 transition group-hover:opacity-100">
                                         </i>
 
-                                        <p class="mt-2 text-sm text-zinc-500">
+                                    </a>
 
-                                            No results found
+                                </template>
 
-                                        </p>
+                                <div x-show="results.length===0" class="p-8 text-center">
 
-                                    </div>
+                                    <i data-lucide="search-x" class="mx-auto h-8 w-8 text-zinc-300">
+                                    </i>
+
+                                    <p class="mt-2 text-sm text-zinc-500">
+
+                                        No results found
+
+                                    </p>
 
                                 </div>
 
@@ -530,7 +538,56 @@
 
                     </div>
 
-                </form>
+                </div>
+
+
+
+                <!-- Mobile Search Modal -->
+                <div x-show="openSearch" x-transition style="display:none"
+                    class="fixed inset-0 z-[9999] bg-white dark:bg-zinc-950 md:hidden">
+
+                    <div class="border-b border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950">
+
+                        <div class="flex items-center gap-3">
+
+                            <input x-model="search" @input.debounce.300ms="searchData()" type="text"
+                                placeholder="Search..."
+                                class="h-12 flex-1 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                            <button @click="openSearch=false" class="font-medium text-zinc-500">
+
+                                Cancel
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="h-[calc(100vh-80px)] overflow-y-auto bg-white dark:bg-zinc-950 p-4">
+
+                        <template x-for="item in results">
+
+                            <a :href="item.url"
+                                class="mb-2 flex items-center gap-3 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 shadow-sm">
+
+                                <div class="flex-1">
+
+                                    <p class="font-medium" x-text="item.title">
+                                    </p>
+
+                                    <p class="text-xs text-zinc-500" x-text="item.type">
+                                    </p>
+
+                                </div>
+
+                            </a>
+
+                        </template>
+
+                    </div>
+
+                </div>
 
                 <!-- Right -->
                 <div class="ml-6 flex items-center gap-3">
