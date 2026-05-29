@@ -313,7 +313,19 @@
         <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
 
             <!-- Top -->
-            <div class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 p-5">
+           <div class="border-b border-zinc-200 dark:border-zinc-800">
+
+    <div class="lg:hidden px-5 pt-4 flex items-center gap-2 text-xs text-zinc-500">
+
+        <i data-lucide="move-right" class="h-4 w-4"></i>
+
+        <span>Geser untuk melihat filter lainnya</span>
+
+    </div>
+
+    <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700">
+
+        <div class="flex items-center justify-between gap-4 p-5 min-w-[900px]">
 
                 <div class="relative w-full max-w-sm">
 
@@ -399,7 +411,11 @@ window.location='?'+params.toString();
                             </i>
 
                         </a>
-                </div>
+                       </div>
+
+    </div>
+
+</div>
 
                 <div x-show="selectedCategories.length" x-transition
                     class="flex items-center gap-3 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-3">

@@ -267,13 +267,13 @@ $save = function () {
                 <!-- Header -->
                 <div class="mb-6">
 
-                    <h2 class="text-lg md:text-xl font-bold text-zinc-900 dark:text-white">
+                    <h2 class="text-xl font-semibold text-zinc-900 dark:text-white">
 
                         Products by Category
 
                     </h2>
 
-                    <p class="mt-1 text-xs md:text-sm text-zinc-500">
+                    <p class="mt-1 text-sm text-zinc-500">
 
                         Total jumlah produk berdasarkan kategori
 
@@ -281,19 +281,10 @@ $save = function () {
 
                 </div>
 
-                <!-- Scroll indicator for mobile -->
-                <div class="lg:hidden mb-3 flex items-center gap-2 text-xs text-zinc-500">
-                    <i data-lucide="move-right" class="h-4 w-4"></i>
-                    <span>Scroll untuk melihat lebih banyak</span>
-                </div>
+                <div class="relative h-[350px]">
 
-                <!-- Chart container with horizontal scroll -->
-                <div class="overflow-x-auto -mx-6 px-6 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
-                    <div class="min-w-full lg:w-full">
-                        <div class="relative h-80 sm:h-96" style="min-width: 500px;">
-                            <canvas id="categoryChart"></canvas>
-                        </div>
-                    </div>
+                    <canvas id="categoryChart"></canvas>
+
                 </div>
 
             </div>
@@ -302,7 +293,20 @@ $save = function () {
             <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
 
                 <!-- Top -->
-                <div class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 p-5">
+                <div class="border-b border-zinc-200 dark:border-zinc-800">
+
+    <!-- Scroll Hint Mobile -->
+    <div class="lg:hidden px-5 pt-4 flex items-center gap-2 text-xs text-zinc-500">
+
+        <i data-lucide="move-right" class="h-4 w-4"></i>
+
+        <span>Geser untuk melihat filter lainnya</span>
+
+    </div>
+
+    <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+
+        <div class="flex items-center justify-between gap-4 p-5 min-w-[900px]">
 
                     <div class="flex items-start gap-3">
 
@@ -460,7 +464,11 @@ $save = function () {
 
                     </div>
 
-                </div>
+                        </div>
+
+    </div>
+
+</div>
 
                 <!-- Table -->
                 <div class="overflow-x-auto">
