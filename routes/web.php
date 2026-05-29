@@ -11,6 +11,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerAuthController;
+use App\Mail\OtpMail;
+use Illuminate\Support\Facades\Mail;
 
 Route::view('/', 'pages.home.index')->name('home');
 
@@ -34,8 +37,69 @@ Route::delete('/wishlist/remove/{productId}', [WishlistController::class, 'remov
 Route::get('/wishlist/count', [WishlistController::class, 'count'])->name('wishlist.count');
 Route::post('/wishlist/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
 
-// Account page
-Route::view('/account', 'pages.account')->name('account');
+// customer akun
+
+Route::view(
+    '/login-customer',
+    'pages.home.loginCustomers'
+)->name('customer.login');
+Route::view(
+    '/account',
+    'pages.home.loginCustomers'
+)->name('account');
+
+Route::post(
+    '/customer/login',
+    [CustomerAuthController::class, 'login']
+)->name('customer.login.post');
+
+Route::post(
+    '/customer/register',
+    [CustomerAuthController::class, 'register']
+)->name('customer.register');
+
+Route::post(
+    '/customer/logout',
+    [CustomerAuthController::class, 'logout']
+)->name('customer.logout');
+
+//forgot password
+Route::view(
+    '/forgot-password',
+    'pages.home.forgotPassword'
+)->name('customer.password.request');
+
+Route::post(
+    '/forgot-password',
+    [CustomerAuthController::class, 'sendResetLink']
+)->name('customer.password.email');
+
+Route::post(
+    '/forgot-password/send',
+    [CustomerAuthController::class, 'sendOtp']
+)->name('customer.password.send');
+
+Route::post(
+    '/forgot-password/reset',
+    [CustomerAuthController::class, 'resetPassword']
+)->name('customer.password.reset');
+
+Route::post(
+    '/forgot-password/verify',
+    [CustomerAuthController::class, 'verifyOtp']
+)->name('customer.password.verify');
+
+// route step fogot pw
+Route::get('/forgot-password/cancel', function () {
+
+    session()->forget([
+        'showOtpForm',
+        'showPasswordForm',
+        'reset_email'
+    ]);
+
+    return redirect()->route('customer.login');
+})->name('customer.password.cancel');
 
 Route::middleware(['auth', 'verified'])->group(function () {
 

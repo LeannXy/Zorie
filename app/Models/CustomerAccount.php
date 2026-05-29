@@ -14,8 +14,15 @@ class CustomerAccount extends Model
         'phone',
         'address',
         'profile_photo',
-        'status'
+        'status',
+        'password',
 
+        'otp_code',
+        'otp_expires_at'
+
+    ];
+    protected $hidden = [
+        'password'
     ];
 
     public function orders()
@@ -24,6 +31,13 @@ class CustomerAccount extends Model
             Order::class,
             'customer_id'
         );
-        
+    }
+
+    public function testimonials()
+    {
+        return $this->hasMany(
+            Testimonial::class,
+            'customer_id'
+        );
     }
 }

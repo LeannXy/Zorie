@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Testimonial extends Model
 {
-    protected $fillable=[
+    protected $fillable = [
 
-        'user_id',
+        'customer_id',
 
         'product_id',
 
@@ -31,6 +31,13 @@ class Testimonial extends Model
     {
         return $this->belongsTo(
             Product::class
+        );
+    }
+    public function customer()
+    {
+        return $this->belongsTo(
+            CustomerAccount::class,
+            'customer_id'
         );
     }
 }
