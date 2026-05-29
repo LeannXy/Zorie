@@ -135,7 +135,7 @@
             </div>
 
             {{-- Google --}}
-            <button type="button"
+            <a href="{{ route('google.login') }}"
                 class="w-full py-3 border border-[#e5e5e3] rounded-[10px] bg-transparent text-[12px] font-semibold text-[#555] flex items-center justify-center gap-2.5 hover:border-[#aaa] hover:bg-[#f8f8f6] transition-all cursor-pointer tracking-[0.02em]">
                 <svg width="15" height="15" viewBox="0 0 24 24">
                     <path
@@ -152,7 +152,7 @@
                         fill="#EA4335" />
                 </svg>
                 Continue with Google
-            </button>
+            </a>
 
             <p class="mt-6 text-[12px] text-[#bbb] text-center leading-[1.6]">
                 New to Zorie?

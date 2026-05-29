@@ -12,6 +12,7 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\GoogleController;
 use App\Mail\OtpMail;
 use Illuminate\Support\Facades\Mail;
 
@@ -100,6 +101,19 @@ Route::get('/forgot-password/cancel', function () {
 
     return redirect()->route('customer.login');
 })->name('customer.password.cancel');
+
+///////////
+//login google
+/////////
+Route::get(
+    '/auth/google',
+    [GoogleController::class, 'redirect']
+)->name('google.login');
+
+Route::get(
+    '/auth/google/callback',
+    [GoogleController::class, 'callback']
+);
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
