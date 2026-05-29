@@ -10,12 +10,12 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\SearchController;
-
 use App\Http\Controllers\CategoryController;
 
-Route::view('/', 'welcome')->name('home');
+Route::view('/', 'pages.home.index')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+
 
 
     Route::view('/dashboard', 'pages.dashboard.dashboard')
