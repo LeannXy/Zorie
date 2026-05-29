@@ -143,28 +143,28 @@ $save = function () {
                 </button>
 
             </div>
-            <div class="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div class="mb-8 grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
 
                 <!-- Total Products -->
-                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
+                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
-                    <div class="flex items-start justify-between">
+                    <div class="flex items-start justify-between gap-3">
 
-                        <div>
+                        <div class="min-w-0">
 
-                            <p class="text-sm text-zinc-500">
+                            <p class="text-xs md:text-sm text-zinc-500 truncate">
                                 Total Products
                             </p>
 
-                            <h2 class="mt-2 text-3xl font-bold text-zinc-900 dark:text-white">
+                            <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
                                 {{ $totalProducts }}
                             </h2>
 
                         </div>
 
-                        <div class="rounded-xl bg-blue-500/10 p-3">
+                        <div class="rounded-xl bg-blue-500/10 p-3 flex-shrink-0">
 
-                            <i data-lucide="package" class="h-6 w-6 text-blue-500">
+                            <i data-lucide="package" class="h-6 w-6 md:h-7 md:w-7 text-blue-500">
                             </i>
 
                         </div>
@@ -174,25 +174,25 @@ $save = function () {
                 </div>
 
                 <!-- Total Stock -->
-                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
+                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
-                    <div class="flex items-start justify-between">
+                    <div class="flex items-start justify-between gap-3">
 
-                        <div>
+                        <div class="min-w-0">
 
-                            <p class="text-sm text-zinc-500">
+                            <p class="text-xs md:text-sm text-zinc-500 truncate">
                                 Total Stock
                             </p>
 
-                            <h2 class="mt-2 text-3xl font-bold text-zinc-900 dark:text-white">
+                            <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
                                 {{ $totalStock }}
                             </h2>
 
                         </div>
 
-                        <div class="rounded-xl bg-green-500/10 p-3">
+                        <div class="rounded-xl bg-green-500/10 p-3 flex-shrink-0">
 
-                            <i data-lucide="boxes" class="h-6 w-6 text-green-500">
+                            <i data-lucide="boxes" class="h-6 w-6 md:h-7 md:w-7 text-green-500">
                             </i>
 
                         </div>
@@ -202,25 +202,25 @@ $save = function () {
                 </div>
 
                 <!-- Out Of Stock -->
-                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
+                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
-                    <div class="flex items-start justify-between">
+                    <div class="flex items-start justify-between gap-3">
 
-                        <div>
+                        <div class="min-w-0">
 
-                            <p class="text-sm text-zinc-500">
+                            <p class="text-xs md:text-sm text-zinc-500 truncate">
                                 Out of Stock
                             </p>
 
-                            <h2 class="mt-2 text-3xl font-bold text-zinc-900 dark:text-white">
+                            <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
                                 {{ $outOfStock }}
                             </h2>
 
                         </div>
 
-                        <div class="rounded-xl bg-red-500/10 p-3">
+                        <div class="rounded-xl bg-red-500/10 p-3 flex-shrink-0">
 
-                            <i data-lucide="triangle-alert" class="h-6 w-6 text-red-500">
+                            <i data-lucide="triangle-alert" class="h-6 w-6 md:h-7 md:w-7 text-red-500">
                             </i>
 
                         </div>
@@ -232,25 +232,25 @@ $save = function () {
 
 
                 <!-- Inventory Value -->
-                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
+                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
-                    <div class="flex items-start justify-between">
+                    <div class="flex items-start justify-between gap-3">
 
-                        <div>
+                        <div class="min-w-0">
 
-                            <p class="text-sm text-zinc-500">
+                            <p class="text-xs md:text-sm text-zinc-500 truncate">
                                 Inventory Value
                             </p>
 
-                            <h2 class="mt-2 text-3xl font-bold text-zinc-900 dark:text-white">
+                            <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white truncate">
                                 Rp {{ number_format($totalValue) }}
                             </h2>
 
                         </div>
 
-                        <div class="rounded-xl bg-yellow-500/10 p-3">
+                        <div class="rounded-xl bg-yellow-500/10 p-3 flex-shrink-0">
 
-                            <i data-lucide="wallet" class="h-6 w-6 text-yellow-500">
+                            <i data-lucide="wallet" class="h-6 w-6 md:h-7 md:w-7 text-yellow-500">
                             </i>
 
                         </div>
@@ -267,13 +267,13 @@ $save = function () {
                 <!-- Header -->
                 <div class="mb-6">
 
-                    <h2 class="text-xl font-semibold text-zinc-900 dark:text-white">
+                    <h2 class="text-lg md:text-xl font-bold text-zinc-900 dark:text-white">
 
                         Products by Category
 
                     </h2>
 
-                    <p class="mt-1 text-sm text-zinc-500">
+                    <p class="mt-1 text-xs md:text-sm text-zinc-500">
 
                         Total jumlah produk berdasarkan kategori
 
@@ -281,10 +281,19 @@ $save = function () {
 
                 </div>
 
-                <div class="relative h-[350px]">
+                <!-- Scroll indicator for mobile -->
+                <div class="lg:hidden mb-3 flex items-center gap-2 text-xs text-zinc-500">
+                    <i data-lucide="move-right" class="h-4 w-4"></i>
+                    <span>Scroll untuk melihat lebih banyak</span>
+                </div>
 
-                    <canvas id="categoryChart"></canvas>
-
+                <!-- Chart container with horizontal scroll -->
+                <div class="overflow-x-auto -mx-6 px-6 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+                    <div class="min-w-full lg:w-full">
+                        <div class="relative h-80 sm:h-96" style="min-width: 500px;">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
             </div>

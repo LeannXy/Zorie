@@ -192,7 +192,7 @@
 
         </p>
 
-        <div class="h-[300px]">
+        <div class="relative ">
 
             <x-chart
             :chartLabels="$chartLabels"

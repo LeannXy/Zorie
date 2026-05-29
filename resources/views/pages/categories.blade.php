@@ -114,11 +114,11 @@
     }">
 
         <!-- Header -->
-        <div class="mb-8 flex items-center justify-between">
+        <div class="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
 
             <div>
 
-                <h1 class="text-2xl font-semibold text-zinc-900 dark:text-white">
+                <h1 class="text-3xl font-bold text-zinc-900 dark:text-white">
 
                     Categories
 
@@ -134,7 +134,7 @@
 
             <button
                 @click=" showModal=true; editMode=false; form.id=''; form.name=''; form.description=''; form.status=true; form.featured=false; form.image=''; duplicate=false; "
-                class="rounded-xl bg-blue-500 px-4 py-2 text-white">
+                class="w-full sm:w-auto text-center rounded-xl bg-blue-500 px-4 py-2 text-white font-medium hover:bg-blue-600 transition">
 
                 + Add Category
 
@@ -142,22 +142,22 @@
 
         </div>
 
-        <div class="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div class="mb-8 grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
 
             <!-- Total -->
-            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
+            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
-                <div class="flex justify-between">
+                <div class="flex justify-between gap-3">
 
-                    <div>
+                    <div class="min-w-0">
 
-                        <p class="text-sm text-zinc-500">
+                        <p class="text-xs md:text-sm text-zinc-500 truncate">
 
                             Total Categories
 
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold text-zinc-900 dark:text-white">
+                        <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
 
                             {{ $totalCategories }}
 
@@ -165,9 +165,9 @@
 
                     </div>
 
-                    <div class="rounded-xl bg-blue-500/10 p-3">
+                    <div class="rounded-xl bg-blue-500/10 p-3 flex-shrink-0">
 
-                        <i data-lucide="tags" class="h-6 w-6 text-blue-500"></i>
+                        <i data-lucide="tags" class="h-6 w-6 md:h-7 md:w-7 text-blue-500"></i>
 
                     </div>
 
@@ -177,19 +177,19 @@
 
             <!-- Active -->
 
-            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
+            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
-                <div class="flex justify-between">
+                <div class="flex justify-between gap-3">
 
-                    <div>
+                    <div class="min-w-0">
 
-                        <p class="text-sm text-zinc-500">
+                        <p class="text-xs md:text-sm text-zinc-500 truncate">
 
                             Active
 
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold text-zinc-900 dark:text-white">
+                        <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
 
                             {{ $activeCategories }}
 
@@ -197,7 +197,7 @@
 
                     </div>
 
-                    <div class="rounded-xl bg-green-500/10 p-3">
+                    <div class="rounded-xl bg-green-500/10 p-3 flex-shrink-0">
 
                         <i data-lucide="circle-check" class="h-6 w-6 text-green-500"></i>
 
@@ -221,7 +221,7 @@
 
                         </p>
 
-                        <h2 class="mt-2 text-3xl font-bold text-zinc-900 dark:text-white">
+                        <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
 
                             {{ $inactiveCategories }}
 
@@ -229,9 +229,9 @@
 
                     </div>
 
-                    <div class="rounded-xl bg-red-500/10 p-3">
+                    <div class="rounded-xl bg-red-500/10 p-3 flex-shrink-0">
 
-                        <i data-lucide="circle-x" class="h-6 w-6 text-red-500"></i>
+                        <i data-lucide="circle-x" class="h-6 w-6 md:h-7 md:w-7 text-red-500"></i>
 
                     </div>
 
@@ -241,19 +241,19 @@
 
             <!-- Popular -->
 
-            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
+            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
-                <div class="flex justify-between">
+                <div class="flex justify-between gap-3">
 
-                    <div>
+                    <div class="min-w-0">
 
-                        <p class="text-sm text-zinc-500">
+                        <p class="text-xs md:text-sm text-zinc-500 truncate">
 
                             Most Used
 
                         </p>
 
-                        <h2 class="mt-2 text-lg font-bold text-zinc-900 dark:text-white">
+                        <h2 class="mt-2 md:mt-3 text-lg md:text-xl font-bold text-zinc-900 dark:text-white truncate">
 
                             {{ $popularCategory?->name ?? '-' }}
 
@@ -261,9 +261,9 @@
 
                     </div>
 
-                    <div class="rounded-xl bg-yellow-500/10 p-3">
+                    <div class="rounded-xl bg-yellow-500/10 p-3 flex-shrink-0">
 
-                        <i data-lucide="star" class="h-6 w-6 text-yellow-500"></i>
+                        <i data-lucide="star" class="h-6 w-6 md:h-7 md:w-7 text-yellow-500"></i>
 
                     </div>
 
@@ -278,13 +278,13 @@
             <!-- Header -->
             <div class="mb-6">
 
-                <h2 class="text-xl font-semibold text-zinc-900 dark:text-white">
+                <h2 class="text-lg md:text-xl font-bold text-zinc-900 dark:text-white">
 
                     Category Usage
 
                 </h2>
 
-                <p class="mt-1 text-sm text-zinc-500">
+                <p class="mt-1 text-xs md:text-sm text-zinc-500">
 
                     Total products by category
 
@@ -292,11 +292,19 @@
 
             </div>
 
-            <div class="relative h-[350px]">
+            <!-- Scroll indicator for mobile -->
+            <div class="lg:hidden mb-3 flex items-center gap-2 text-xs text-zinc-500">
+                <i data-lucide="move-right" class="h-4 w-4"></i>
+                <span>Scroll untuk melihat lebih banyak</span>
+            </div>
 
-                <canvas id="categoryUsageChart">
-                </canvas>
-
+            <!-- Chart container with horizontal scroll -->
+            <div class="overflow-x-auto -mx-6 px-6 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+                <div class="min-w-full lg:w-full">
+                    <div class="relative h-80 sm:h-96" style="min-width: 500px;">
+                        <canvas id="categoryUsageChart"></canvas>
+                    </div>
+                </div>
             </div>
 
         </div>

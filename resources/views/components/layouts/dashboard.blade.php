@@ -25,6 +25,34 @@
 
         }
     </script>
+
+    <style>
+        /* Custom scrollbar styling */
+        .scrollbar-thin::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            border-radius: 3px;
+            background: #d4d4d8;
+        }
+
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #52525b;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background: #a1a1aa;
+        }
+
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background: #71717a;
+        }
+    </style>
 </head>
 @if (session('success'))
     <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show"
@@ -81,6 +109,8 @@
         ) === 'true',
     
         showNotifications: false,
+
+        sidebarOpen: false,
     
         search: '',
     
@@ -127,9 +157,21 @@
     }"
         class="flex min-h-screen bg-zinc-100 text-zinc-900 transition dark:bg-zinc-950 dark:text-white">
 
+        <!-- Sidebar Overlay for mobile -->
+        <div @click="sidebarOpen=false" 
+            :class="{ 'hidden': !sidebarOpen, 'block': sidebarOpen }"
+            class="fixed inset-0 bg-black/50 z-40 md:hidden md:hidden">
+        </div>
+
         <!-- Sidebar -->
         <aside
-            class="fixed left-0 top-0 h-screen w-72 border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 overflow-y-auto z-50">
+            class="fixed left-0 top-0 h-screen w-72 border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 overflow-y-auto z-50 md:flex flex-col"
+            :class="{ 'hidden': !sidebarOpen, 'flex': sidebarOpen, 'md:flex': true }">
+
+            <!-- Close button for mobile -->
+            <button @click="sidebarOpen=false" class="md:hidden absolute top-6 right-4 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300">
+                <i data-lucide="x" class="h-6 w-6"></i>
+            </button>
 
             <!-- Logo -->
             <div class="flex items-center gap-3 px-6 py-6">
@@ -170,7 +212,7 @@
             <nav class=" space-y-1 px-3">
 
                 <!-- Dashboard -->
-                <a href="{{ route('dashboard') }}"
+                <a href="{{ route('dashboard') }}" @click="sidebarOpen=false"
                     class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition
                         {{ request()->routeIs('dashboard')
                             ? 'bg-blue-500/10 text-blue-500'
@@ -183,7 +225,7 @@
                 </a>
 
                 <!-- Products -->
-                <a href="{{ route('products') }}"
+                <a href="{{ route('products') }}" @click="sidebarOpen=false"
                     class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition
                         {{ request()->routeIs('products')
                             ? 'bg-blue-500/10 text-blue-500'
@@ -196,7 +238,7 @@
                 </a>
 
                 <!-- Categories -->
-                <a href="{{ route('categories') }}"
+                <a href="{{ route('categories') }}" @click="sidebarOpen=false"
                     class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition
                         {{ request()->routeIs('categories')
                             ? 'bg-blue-500/10 text-blue-500'
@@ -208,7 +250,7 @@
                 </a>
 
                 <!-- Orders -->
-                <a href="{{ route('orders') }}"
+                <a href="{{ route('orders') }}" @click="sidebarOpen=false"
                     class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition
                         {{ request()->routeIs('orders')
                             ? 'bg-blue-500/10 text-blue-500'
@@ -258,7 +300,7 @@
                     <div x-show="open" x-transition style="display:none"
                         class="ml-7 mt-2 space-y-1 border-l border-zinc-200 dark:border-zinc-800 pl-4">
 
-                        <a href="{{ route('customers') }}"
+                        <a href="{{ route('customers') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-3 py-2 text-sm transition
                             {{ request()->routeIs('customers') ? 'bg-blue-500/10 text-blue-500' : 'text-zinc-500 hover:text-blue-500' }}">
 
@@ -267,7 +309,7 @@
                         </a>
 
 
-                        <a href="{{ route('testimonials') }}"
+                        <a href="{{ route('testimonials') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-3 py-2 text-sm transition
                             {{ request()->routeIs('testimonials') ? 'bg-blue-500/10 text-blue-500' : 'text-zinc-500 hover:text-blue-500' }}">
 
@@ -279,7 +321,7 @@
                 </div>
 
                 <!-- Analytics -->
-                <a href="{{ route('analytics') }}"
+                <a href="{{ route('analytics') }}" @click="sidebarOpen=false"
                     class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition
                         {{ request()->routeIs('analytics')
                             ? 'bg-blue-500/10 text-blue-500'
@@ -324,7 +366,7 @@
 
                     <div x-show="openSettings" x-transition class="mt-2 ml-6 space-y-2">
 
-                        <a href="{{ route('settings.profile') }}"
+                        <a href="{{ route('settings.profile') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-4 py-2 text-sm
                              {{ request()->routeIs('settings.profile')
                                  ? 'text-blue-500'
@@ -335,7 +377,7 @@
                         </a>
 
 
-                        <a href="{{ route('settings.security') }}"
+                        <a href="{{ route('settings.security') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-4 py-2 text-sm
                             {{ request()->routeIs('settings.security')
                                 ? 'text-blue-500'
@@ -345,7 +387,7 @@
 
                         </a>
 
-                        <a href="{{ route('settings.system') }}"
+                        <a href="{{ route('settings.system') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-4 py-2 text-sm
                             {{ request()->routeIs('settings.system')
                                 ? 'text-blue-500'
@@ -355,7 +397,7 @@
 
                         </a>
 
-                        <a href="{{ route('settings.activity') }}"
+                        <a href="{{ route('settings.activity') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-4 py-2 text-sm
                                 {{ request()->routeIs('settings.activity')
                                 ? 'text-blue-500'
@@ -365,7 +407,7 @@
 
                         </a>
 
-                        <a href="{{ route('settings.backup') }}"
+                        <a href="{{ route('settings.backup') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-4 py-2 text-sm{{ request()->routeIs('settings.backup')
                             ? 'text-blue-500'
                             : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
@@ -399,25 +441,30 @@
         </aside>
 
         <!-- Main -->
-        <main class="ml-72 flex flex-1 flex-col">
+        <main class="md:ml-72 flex flex-1 flex-col w-full">
 
             <header
-                class="sticky top-0 z-40 flex items-center justify-between border-b border-zinc-200 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md px-8 py-5 dark:border-zinc-800">
+                class="sticky top-0 z-40 flex items-center justify-between border-b border-zinc-200 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md px-6 md:px-8 py-4 md:py-5 dark:border-zinc-800">
+
+                <!-- Mobile Sidebar Toggle -->
+                <button @click="sidebarOpen=!sidebarOpen" class="md:hidden flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 transition hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                    <i data-lucide="menu" class="h-5 w-5"></i>
+                </button>
 
                 <!-- Search -->
-                <form class="w-64 md:w-80">
+                <form class="flex-1 md:flex-none">
 
-                    <div class="relative">
+                    <div class="relative w-full md:w-80">
 
                         <i data-lucide="search"
                             class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500">
                         </i>
 
-                        <div class="relative w-64 md:w-80" @click.away="openSearch=false">
+                        <div class="relative w-full md:w-80" @click.away="openSearch=false">
 
                             <input x-model="search" @focus="if(results.length)openSearch=true"
                                 @input.debounce.300ms="searchData()" type="text" placeholder="Search..."
-                                class="w-full rounded-xl border border-zinc-200 py-2 pl-10 pr-4">
+                                class="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-800 py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50">
 
                             <div x-show="openSearch" x-transition style="display:none"
                                 class="absolute top-[110%] w-full overflow-hidden rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-2xl z-50">
@@ -640,16 +687,16 @@
                     <div class="relative" x-data="{ openProfile: false }">
 
                         <button @click="openProfile=!openProfile"
-                            class="flex items-center gap-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-3 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition">
+                            class="flex items-center gap-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-2 md:px-3 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition">
 
                             <div class="relative">
 
                                 @if (auth()->user()->profile_photo)
                                     <img src="{{ Storage::url(auth()->user()->profile_photo) }}"
-                                        class="h-10 w-10 rounded-full object-cover border-2 border-blue-500">
+                                        class="h-10 w-10 rounded-full object-cover flex-shrink-0">
                                 @else
                                     <div
-                                        class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-white font-bold">
+                                        class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-blue-600 text-white font-bold text-sm flex-shrink-0">
 
                                         {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
 
@@ -657,7 +704,7 @@
                                 @endif
 
                                 <span
-                                    class="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white">
+                                    class="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-white dark:border-zinc-900 flex-shrink-0">
                                 </span>
 
                             </div>
@@ -731,7 +778,7 @@
             </header>
 
             <!-- Content -->
-            <div class="flex-1 overflow-y-auto p-10">
+            <div class="flex-1 overflow-y-auto p-6 md:p-8 lg:p-10">
 
                 {{ $slot }}
 
