@@ -14,6 +14,29 @@ use App\Http\Controllers\CategoryController;
 
 Route::view('/', 'pages.home.index')->name('home');
 
+// Public search route
+Route::get('/search', [SearchController::class, 'index'])->name('search');
+
+// Public cart and wishlist routes
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishlistController;
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+Route::delete('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
+Route::patch('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
+Route::post('/wishlist/add/{product}', [WishlistController::class, 'add'])->name('wishlist.add');
+Route::delete('/wishlist/remove/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::get('/wishlist/count', [WishlistController::class, 'count'])->name('wishlist.count');
+Route::post('/wishlist/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
+
+// Account page
+Route::view('/account', 'pages.account')->name('account');
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
 
@@ -49,13 +72,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('analytics');
 
     Route::get('/products/search', [ProductController::class, 'search']);
-    Route::get(
-        '/search',
-        [SearchController::class, 'index']
-    )->name(
-        'search'
-    );
-
     Route::post(
         '/products/bulk-delete',
         [ProductController::class, 'bulkDelete']
@@ -294,12 +310,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'dashboard.export'
     );
 });
-
-
-
-
-
-
-
 
 require __DIR__ . '/settings.php';

@@ -1,4 +1,4 @@
-```blade
+
 <section class="bg-[#f5f5f3] py-24">
 
     <div class="max-w-[1280px] mx-auto px-5">
@@ -154,4 +154,4 @@
     </div>
 
 </section>
-```
+

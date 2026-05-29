@@ -1,6 +1,9 @@
 <header
-    x-data="{ scrolled: false }"
-    x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 60)"
+    x-data="{ scrolled: false, cartCount: 0 }"
+    x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 60);
+             fetch('{{ route('cart.count') }}')
+                .then(r => r.json())
+                .then(d => cartCount = d.count);"
     class="fixed top-0 left-0 w-full z-50 pointer-events-none"
 >
 
@@ -102,7 +105,8 @@
                 >
 
                     {{-- SEARCH --}}
-                    <button
+                    <a 
+                        href="{{ route('search') }}"
                         class="flex items-center justify-center rounded-full border border-[#ececec] bg-white transition-all duration-500 hover:bg-[#f8f8f8]"
 
                         :class="scrolled
@@ -110,58 +114,125 @@
                             : 'w-[46px] h-[46px]'"
                     >
 
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            class="text-[#777] transition-all duration-500"
-
-                            :class="scrolled
-                                ? 'w-[15px] h-[15px]'
-                                : 'w-[17px] h-[17px]'"
-
+                                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
-                            stroke="currentColor">
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="text-[#777] transition-all duration-500"
+                            :class="scrolled
+                                ? 'w-[18px] h-[18px]'
+                                : 'w-[22px] h-[22px]'">
 
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="1.8"
-                                d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
-                            />
+                            <path d="m21 21-4.34-4.34"/>
+                            <circle cx="11" cy="11" r="8"/>
 
                         </svg>
 
-                    </button>
+                                            </a>
 
-                    {{-- MENU --}}
-                    <button
-                        class="rounded-full bg-black flex items-center justify-center transition-all duration-500 hover:scale-105"
+                    {{-- WISHLIST --}}
+                    <a 
+                        href="{{ route('wishlist') }}"
+                        class="flex items-center justify-center rounded-full border border-[#ececec] bg-white transition-all duration-500 hover:bg-[#f8f8f8]"
 
                         :class="scrolled
                             ? 'w-[38px] h-[38px]'
                             : 'w-[46px] h-[46px]'"
                     >
 
-                        <div class="relative flex flex-col items-center justify-center">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="text-[#777] transition-all duration-500"
+                        :class="scrolled
+                            ? 'w-[18px] h-[18px]'
+                            : 'w-[22px] h-[22px]'">
 
-                            <span
-                                class="bg-white rounded-full transition-all duration-500"
+                        <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
 
-                                :class="scrolled
-                                    ? 'w-[13px] h-[1.5px]'
-                                    : 'w-[15px] h-[1.7px]'"
-                            ></span>
+                    </svg>
+                    </a>
 
-                            <span
-                                class="bg-white rounded-full transition-all duration-500 mt-[4px]"
+            {{-- CART --}}
+            <a
+                href="{{ route('cart') }}"
+                class="relative rounded-full border border-[#ececec] bg-white flex items-center justify-center transition-all duration-500 hover:bg-[#f8f8f8]"
 
-                                :class="scrolled
-                                    ? 'w-[13px] h-[1.5px]'
-                                    : 'w-[15px] h-[1.7px]'"
-                            ></span>
+                :class="scrolled
+                    ? 'w-[38px] h-[38px]'
+                    : 'w-[46px] h-[46px]'"
+            >
 
-                        </div>
+                <svg 
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="text-[#777] transition-all duration-500"
+                    :class="scrolled
+                        ? 'w-[15px] h-[15px]'
+                        : 'w-[17px] h-[17px]'"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor">
 
-                    </button>
+                    <circle cx="8" cy="21" r="1"/>
+                    <circle cx="19" cy="21" r="1"/>
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="1.8"
+                        d="M2.05 2H5l2.4 11.39A2 2 0 0 0 9.35 15h8.75a2 2 0 0 0 1.95-1.57L22 6H6"/>
+
+                </svg>
+
+                {{-- Badge --}}
+                <span
+                    x-show="cartCount > 0"
+                    class="absolute bg-red-500 text-white rounded-full flex items-center justify-center font-medium"
+                    :class="scrolled
+                        ? '-top-1 -right-1 w-4 h-4 text-[9px]'
+                        : '-top-1 -right-1 w-5 h-5 text-[10px]'"
+                    x-text="cartCount">
+                </span>
+
+            </a>
+
+            {{-- ACCOUNT --}}
+            <a
+                href="{{ route('account') }}"
+                class="flex items-center justify-center rounded-full bg-black transition-all duration-500 hover:scale-105"
+
+                :class="scrolled
+                    ? 'w-[38px] h-[38px]'
+                    : 'w-[46px] h-[46px]'"
+            >
+
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="text-white transition-all duration-500"
+                    :class="scrolled
+                        ? 'w-[18px] h-[18px]'
+                        : 'w-[22px] h-[22px]'">
+
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+
+                </svg>
+
+            </a>
 
                 </div>
 
