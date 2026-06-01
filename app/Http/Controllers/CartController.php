@@ -25,7 +25,7 @@ class CartController extends Controller
             }
         }
 
-        return view('pages.cart', [
+        return view('pages.home.cart', [
             'cartItems' => $cartItems,
             'total' => $total,
             'cartCount' => count($cart)

@@ -6,6 +6,7 @@ use App\Models\CustomerAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyEmailOtpMail;
 use App\Mail\OtpMail;
 
 class CustomerAuthController extends Controller
@@ -27,6 +28,8 @@ class CustomerAuthController extends Controller
             'address' => null,
             'profile_photo' => null,
             'status' => true,
+            'email_verified' => false,
+            'provider' => 'local'
         ]);
 
         session([
@@ -141,84 +144,159 @@ class CustomerAuthController extends Controller
         ]);
     }
 
-    public function verifyOtp(Request $request)
-{
-    $customer = CustomerAccount::where(
-        'email',
-        session('reset_email')
-    )->first();
-
-    if (!$customer) {
-
-        return back()->withErrors([
-            'email' => 'Email tidak ditemukan'
-        ]);
-    }
-
-    if ($customer->otp_code != $request->otp) {
-
-        return back()->withErrors([
-            'otp' => 'OTP salah'
-        ]);
-    }
-
-    if (now()->gt($customer->otp_expires_at)) {
-
-        return back()->withErrors([
-            'otp' => 'OTP expired'
-        ]);
-    }
-
-    session([
-        'showPasswordForm' => true
-    ]);
-
-    return back();
-}
-
-   public function resetPassword(Request $request)
-{
-    $request->validate([
-
-        'password' => 'required|min:8|confirmed'
-
-    ]);
-
-    $customer = CustomerAccount::where(
-        'email',
-        session('reset_email')
-    )->first();
-
-    if (!$customer) {
-
-        return back()->withErrors([
-            'email' => 'Customer not found'
-        ]);
-    }
-
-    $customer->update([
-
-        'password' => Hash::make(
-            $request->password
-        ),
-
-        'otp_code' => null,
-
-        'otp_expires_at' => null
-
-    ]);
-
-    session()->forget([
-        'showOtpForm',
-        'showPasswordForm',
-        'reset_email'
-    ]);
-
-    return redirect()
-        ->route('customer.login')
-        ->with(
-            'success',
-            'Password berhasil diubah, silakan login.'
+    public function sendEmailVerificationOtp()
+    {
+        $customer = CustomerAccount::find(
+            session('customer_id')
         );
-}
+
+        if (!$customer) {
+            return redirect()
+                ->route('customer.login');
+        }
+
+        $otp = rand(100000, 999999);
+
+        $customer->update([
+            'otp_code' => $otp,
+            'otp_expires_at' => now()->addMinutes(10)
+        ]);
+
+        Mail::to($customer->email)
+            ->send(
+                new VerifyEmailOtpMail($otp)
+            );
+
+        session([
+            'showEmailOtpForm' => true
+        ]);
+
+        return back()
+            ->with(
+                'success',
+                'OTP verifikasi berhasil dikirim'
+            );
+    }
+    public function verifyOtp(Request $request)
+    {
+        $customer = CustomerAccount::where(
+            'email',
+            session('reset_email')
+        )->first();
+
+        if (!$customer) {
+
+            return back()->withErrors([
+                'email' => 'Email tidak ditemukan'
+            ]);
+        }
+
+        if ($customer->otp_code != $request->otp) {
+
+            return back()->withErrors([
+                'otp' => 'OTP salah'
+            ]);
+        }
+
+        if (now()->gt($customer->otp_expires_at)) {
+
+            return back()->withErrors([
+                'otp' => 'OTP expired'
+            ]);
+        }
+
+        session([
+            'showPasswordForm' => true
+        ]);
+
+        return back();
+    }
+
+    public function verifyEmailOtp(Request $request)
+    {
+        $customer = CustomerAccount::find(
+            session('customer_id')
+        );
+
+        if (!$customer) {
+            return back();
+        }
+
+        if ($customer->otp_code != $request->otp) {
+
+            return back()->withErrors([
+                'otp' => 'OTP salah'
+            ]);
+        }
+
+        if (now()->gt($customer->otp_expires_at)) {
+
+            return back()->withErrors([
+                'otp' => 'OTP expired'
+            ]);
+        }
+
+        $customer->update([
+            'email_verified' => true,
+            'otp_code' => null,
+            'otp_expires_at' => null
+        ]);
+
+        session()->forget(
+            'showEmailOtpForm'
+        );
+
+        return back()->with(
+            'success',
+            'Email berhasil diverifikasi'
+        );
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+
+            'password' => 'required|min:8|confirmed'
+
+        ]);
+
+        $customer = CustomerAccount::where(
+            'email',
+            session('reset_email')
+        )->first();
+
+        if (!$customer) {
+
+            return back()->withErrors([
+                'email' => 'Customer not found'
+            ]);
+        }
+
+        $customer->update([
+
+            'password' => Hash::make(
+                $request->password
+            ),
+
+            'otp_code' => null,
+
+            'otp_expires_at' => null
+
+        ]);
+
+        session()->forget([
+            'showOtpForm',
+            'showPasswordForm',
+            'reset_email'
+        ]);
+
+        return redirect()
+            ->route('customer.login')
+            ->with(
+                'success',
+                'Password berhasil diubah, silakan login.'
+            );
+    }
+
+   
 }

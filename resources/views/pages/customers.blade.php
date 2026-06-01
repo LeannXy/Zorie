@@ -12,36 +12,34 @@
 
         <div class="mb-8 flex items-center justify-between">
 
-    <div>
+            <div>
 
-        <h1 class="text-2xl font-semibold text-zinc-900 dark:text-white">
+                <h1 class="text-2xl font-semibold text-zinc-900 dark:text-white">
 
-            Customers
+                    Customers
 
-        </h1>
+                </h1>
 
-        <p class="text-sm text-zinc-500">
+                <p class="text-sm text-zinc-500">
 
-            Manage customer accounts
+                    Manage customer accounts
 
-        </p>
+                </p>
 
-    </div>
+            </div>
 
-    <div class="flex gap-3">
+            <div class="flex gap-3">
 
-        <a
-        href="{{ route('customers.export') }}"
+                <a href="{{ route('customers.export') }}"
+                    class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 transition hover:bg-zinc-100 dark:hover:bg-zinc-800">
 
-        class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 transition hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                    Download Report
 
-            Download Report
+                </a>
 
-        </a>
+            </div>
 
-    </div>
-
-</div>
+        </div>
 
 
         <div class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
@@ -193,12 +191,20 @@ photo:'{{ $customer->profile_photo
 
                                     </button>
 
-                                    <button
-                                        class="flex h-9 w-9 items-center justify-center rounded-xl bg-red-500/10 text-red-500">
+                                    <form action="{{ route('customers.destroy', $customer->id) }}" method="POST"
+                                        onsubmit="return confirm( 'Yakin ingin menghapus customer ini?' )">
 
-                                        <i data-lucide="trash-2"></i>
+                                        @csrf
+                                        @method('DELETE')
 
-                                    </button>
+                                        <button type="submit"
+                                            class="flex h-9 w-9 items-center justify-center rounded-xl bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition">
+
+                                            <i data-lucide="trash-2"></i>
+
+                                        </button>
+
+                                    </form>
 
                                 </div>
 
@@ -249,13 +255,13 @@ photo:'{{ $customer->profile_photo
 
                 <div class="space-y-4">
 
-                   
 
-                        <img :x-src="selectedCustomer?.photo"
-                            class="mx-auto h-28 w-28 rounded-full object-cover border-4 border-blue-500 shadow-lg cursor-pointer hover:scale-105 transition"
-                            @click="showImage=true">
 
-                
+                    <img :x-src="selectedCustomer?.photo"
+                        class="mx-auto h-28 w-28 rounded-full object-cover border-4 border-blue-500 shadow-lg cursor-pointer hover:scale-105 transition"
+                        @click="showImage=true">
+
+
 
 
                     <div>

@@ -170,10 +170,10 @@
                     <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome to Your Account</h2>
                     <p class="text-gray-600 mb-8">Please log in or create an account to access your profile</p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <a href="{{ route('login') }}" class="px-8 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition">
+                        <a href="{{ route('customer.login') }}" class="px-8 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-800 transition">
                             Login
                         </a>
-                        <a href="{{ route('register') }}" class="px-8 py-3 border border-gray-300 text-gray-900 rounded-lg font-semibold hover:bg-gray-50 transition">
+                        <a href="{{ route('customer.register') }}" class="px-8 py-3 border border-gray-300 text-gray-900 rounded-lg font-semibold hover:bg-gray-50 transition">
                             Create Account
                         </a>
                     </div>

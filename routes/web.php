@@ -13,8 +13,12 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\CustomerAccountController;
+use App\Http\Controllers\AddressController;
 use App\Mail\OtpMail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishlistController;
 
 Route::view('/', 'pages.home.index')->name('home');
 
@@ -22,8 +26,7 @@ Route::view('/', 'pages.home.index')->name('home');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 // Public cart and wishlist routes
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\WishlistController;
+
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
@@ -45,9 +48,9 @@ Route::view(
     'pages.home.loginCustomers'
 )->name('customer.login');
 Route::view(
-    '/account',
-    'pages.home.loginCustomers'
-)->name('account');
+    '/login--',
+    'pages.home.account'
+)->name('customer.login');
 
 Route::post(
     '/customer/login',
@@ -64,7 +67,9 @@ Route::post(
     [CustomerAuthController::class, 'logout']
 )->name('customer.logout');
 
+/////////////////
 //forgot password
+/////////////////
 Route::view(
     '/forgot-password',
     'pages.home.forgotPassword'
@@ -102,9 +107,9 @@ Route::get('/forgot-password/cancel', function () {
     return redirect()->route('customer.login');
 })->name('customer.password.cancel');
 
-///////////
+////////////////
 //login google
-/////////
+///////////////
 Route::get(
     '/auth/google',
     [GoogleController::class, 'redirect']
@@ -115,10 +120,79 @@ Route::get(
     [GoogleController::class, 'callback']
 );
 
+Route::get(
+    '/my-account',
+    [CustomerAccountController::class, 'dashboard']
+)->name('account');
+
+///////////////////
+//edit profil
+//////////////////
+Route::post(
+    '/my-account/profile',
+    [CustomerAccountController::class, 'updateProfile']
+)->name('customer.profile.update');
+//cange pw
+Route::post(
+    '/customer/change-password',
+    [CustomerAccountController::class, 'changePassword']
+)->name('customer.password.change');
+//address
+Route::post(
+    '/customer/address',
+    [AddressController::class, 'store']
+)->name('address.store');
+
+Route::delete(
+    '/customer/address/{address}',
+    [AddressController::class, 'destroy']
+)->name('address.destroy');
+
+Route::post(
+    '/customer/address/default/{address}',
+    [AddressController::class, 'setDefault']
+)->name('address.default');
+
+Route::put(
+    '/customer/address/{address}',
+    [AddressController::class, 'update']
+)->name('address.update');
+//verify email 
+Route::post(
+    '/customer/email/send-otp',
+    [CustomerAuthController::class, 'sendEmailVerificationOtp']
+)->name('customer.email.send-otp');
+
+Route::post(
+    '/customer/email/verify',
+    [CustomerAuthController::class, 'verifyEmailOtp']
+)->name('customer.email.verify');
+//change email
+Route::post(
+    '/customer/email/send-old-otp',
+    [CustomerAccountController::class, 'sendOldEmailOtp']
+)->name('customer.email.send-old-otp');
+
+Route::post(
+    '/customer/email/verify-old-otp',
+    [CustomerAccountController::class, 'verifyOldEmailOtp']
+)->name('customer.email.verify-old-otp');
+
+Route::post(
+    '/customer/email/verify-new-email',
+    [CustomerAccountController::class, 'sendNewEmailOtp']
+)->name('customer.email.send-new-otp');
+
+Route::post(
+    '/customer/email/verify-new-otp',
+    [CustomerAccountController::class, 'verifyNewEmailOtp']
+)->name('customer.email.verify-new-otp');
+
+
+///////////////////
+//DASHBOARD
+///////////////////
 Route::middleware(['auth', 'verified'])->group(function () {
-
-
-
     Route::view('/dashboard', 'pages.dashboard.dashboard')
         ->name('dashboard');
 
@@ -352,6 +426,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     )->name(
         'customers.profile'
     );
+
+    Route::delete(
+        '/customers/{customer}',
+        [CustomerController::class, 'destroy']
+    )->name('customers.destroy');
 
     Route::get(
         '/customers/export',

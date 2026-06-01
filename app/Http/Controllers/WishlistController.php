@@ -19,7 +19,7 @@ class WishlistController extends Controller
             }
         }
 
-        return view('pages.wishlist', [
+        return view('pages.home.wishlist', [
             'wishlistItems' => $wishlistItems
         ]);
     }

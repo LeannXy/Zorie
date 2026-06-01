@@ -161,7 +161,7 @@ class CustomerController extends Controller
 
                     [
                         $customer->id,
-                        
+
                         $customer->name,
 
                         $customer->email,
@@ -184,5 +184,16 @@ class CustomerController extends Controller
                 200,
                 $headers
             );
+    }
+
+    public function destroy(
+        CustomerAccount $customer
+    ) {
+        $customer->delete();
+
+        return back()->with(
+            'success',
+            'Customer deleted successfully'
+        );
     }
 }

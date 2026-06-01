@@ -24,8 +24,19 @@ class GoogleController extends Controller
                 'name' => $googleUser->name,
                 'profile_photo' => $googleUser->avatar,
                 'status' => true,
+
+                'provider' => 'google',
+                'email_verified' => true,
             ]
         );
+
+        // Jika akun lama dibuat sebelum ada kolom provider
+        if (!$customer->provider) {
+
+            $customer->provider = 'google';
+
+            $customer->save();
+        }
 
         session([
             'customer_id' => $customer->id
