@@ -7,7 +7,7 @@
 --}}
 
 <div class="min-h-screen bg-[#f5f5f3] font-['Plus_Jakarta_Sans',sans-serif]" x-data="{
-    tab: 'dashboard',
+    tab: '{{ session('active_tab', 'dashboard') }}',
     mobileNav: false,
     logoutModal: false,
     changeEmailStep: {{ session('change_email_step', 0) }},
@@ -118,8 +118,21 @@
         {{-- ═══════════════════════════════════════════════
          SIDEBAR
     ═══════════════════════════════════════════════ --}}
+    
         <aside class="hidden lg:flex flex-col w-[240px] flex-shrink-0 gap-2">
+          <a href="{{ url('/') }}"
+            class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition mb-6">
 
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+
+            </svg>
+
+            Kembali ke Beranda
+
+        </a>
             {{-- User card --}}
             <div class="bg-white rounded-2xl border border-[#e5e5e3] p-5 mb-2">
                 <div class="flex items-center gap-3">

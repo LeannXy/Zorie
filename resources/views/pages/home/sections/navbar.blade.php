@@ -168,6 +168,13 @@ fetch('{{ route('cart.count') }}')
 
                     </a>
 
+                    @php
+                        $navbarCustomer = null;
+
+                        if (session('customer_id')) {
+                            $navbarCustomer = \App\Models\CustomerAccount::find(session('customer_id'));
+                        }
+                    @endphp
                     {{-- ACCOUNT --}}
                     @if (session('customer_id'))
                         <a href="{{ route('account') }}"
@@ -177,18 +184,28 @@ fetch('{{ route('cart.count') }}')
                                 'w-[38px] h-[38px]' :
                                 'w-[46px] h-[46px]'">
 
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="text-white transition-all duration-500"
-                                :class="scrolled
-                                    ?
-                                    'w-[18px] h-[18px]' :
-                                    'w-[22px] h-[22px]'">
+                            @if ($navbarCustomer)
 
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                <circle cx="12" cy="7" r="4" />
+                                @if ($navbarCustomer->profile_photo)
 
-                            </svg>
+                                    @if (Str::startsWith($navbarCustomer->profile_photo, 'http'))
+                                        <img src="{{ $navbarCustomer->profile_photo }}" alt="Profile"
+                                            class="w-full h-full rounded-full object-cover">
+                                    @else
+                                        <img src="{{ asset('storage/' . $navbarCustomer->profile_photo) }}"
+                                            alt="Profile" class="w-full h-full rounded-full object-cover">
+                                    @endif
+                                @else
+                                    <div
+                                        class="w-full h-full rounded-full bg-black text-white flex items-center justify-center font-black">
+
+                                        {{ strtoupper(substr($navbarCustomer->name, 0, 1)) }}
+
+                                    </div>
+
+                                @endif
+
+                            @endif
 
                         </a>
                     @else

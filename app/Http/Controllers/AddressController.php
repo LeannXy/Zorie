@@ -74,10 +74,15 @@ class AddressController extends Controller
     {
         $address->delete();
 
-        return back()->with(
-            'success',
-            'Alamat berhasil dihapus'
-        );
+        return back()
+            ->with(
+                'success',
+                'Alamat berhasil dihapus'
+            )
+            ->with(
+                'active_tab',
+                'addresses'
+            );
     }
 
     public function setDefault(Address $address)
@@ -93,10 +98,15 @@ class AddressController extends Controller
             'is_default' => true
         ]);
 
-        return back()->with(
-            'success',
-            'Alamat utama diperbarui'
-        );
+        return back()
+            ->with(
+                'success',
+                'Alamat berhasil ditambahkan'
+            )
+            ->with(
+                'active_tab',
+                'addresses'
+            );
     }
 
     public function update(Request $request, Address $address)
@@ -141,9 +151,14 @@ class AddressController extends Controller
 
         ]);
 
-        return back()->with(
-            'success',
-            'Alamat berhasil diperbarui'
-        );
+        return back()
+            ->with(
+                'success',
+                'Alamat berhasil diperbarui'
+            )
+            ->with(
+                'active_tab',
+                'addresses'
+            );
     }
 }

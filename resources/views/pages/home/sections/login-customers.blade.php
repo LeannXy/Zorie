@@ -7,6 +7,7 @@
     <div
         class="relative overflow-hidden flex flex-col justify-between px-10 py-14 border-r border-[#e5e5e3] hidden lg:flex">
 
+
         {{-- Background ZORIE --}}
         <span
             class="absolute -bottom-16 -left-7 text-[310px] font-black tracking-[-0.07em] text-[#eceae8] leading-none select-none pointer-events-none whitespace-nowrap z-0"
@@ -50,6 +51,19 @@
 
     {{-- ═══════════ RIGHT PANEL ═══════════ --}}
     <div class="bg-white flex flex-col justify-center px-8 py-12 sm:px-14 min-h-screen border-l border-[#e5e5e3]">
+        <a href="{{ url('/') }}"
+            class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition mb-6">
+
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+
+            </svg>
+
+            Kembali ke Beranda
+
+        </a>
 
         {{-- Tabs --}}
         <div class="flex border-b border-[#ececea] mb-10">
