@@ -230,7 +230,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     )->name(
         'products.bulkDelete'
     );
+    Route::get(
+        '/products/create',
+        [ProductController::class, 'create']
+    )->name('products.create');
 
+    Route::get(
+        '/products/{product}/edit',
+        [ProductController::class, 'edit']
+    )->name('products.edit');
     Route::get(
         '/products/export',
         [ProductController::class, 'export']

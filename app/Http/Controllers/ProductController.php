@@ -161,7 +161,7 @@ class ProductController extends Controller
             ->withQueryString();
 
         return view(
-            'pages.products',
+            'pages.products.index',
             compact(
                 'products',
                 'totalProducts',
@@ -177,6 +177,19 @@ class ProductController extends Controller
         );
     }
 
+    public function create()
+    {
+        $categories = Category::where(
+            'status',
+            true
+        )->get();
+
+        return view(
+            'pages.products.create',
+            compact('categories')
+        );
+    }
+
     public function store(Request $request)
     {
         $product = Product::create([
@@ -187,7 +200,9 @@ class ProductController extends Controller
 
             'discount' => $request->discount ?? 0,
 
-            'stock' => $request->stock,
+            'stock' => collect(
+                $request->sizes ?? []
+            )->sum('stock'),
 
             'description' => $request->description,
 
@@ -215,6 +230,18 @@ class ProductController extends Controller
         $product->categories()->sync(
             $request->categories ?? []
         );
+
+        // simpan ukuran
+        if ($request->has('sizes')) {
+            foreach ($request->sizes as $size) {
+                if (!empty($size['size']) && $size['stock'] !== null) {
+                    $product->sizes()->create([
+                        'size' => $size['size'],
+                        'stock' => $size['stock'],
+                    ]);
+                }
+            }
+        }
 
         $this->createNotification(
 
@@ -245,6 +272,29 @@ class ProductController extends Controller
 
         );
     }
+
+    public function edit(Product $product)
+    {
+        $categories = Category::where(
+            'status',
+            true
+        )->get();
+
+        $product->load([
+            'categories',
+            'images',
+            'sizes'
+        ]);
+
+        return view(
+            'pages.products.edit',
+            compact(
+                'product',
+                'categories'
+            )
+        );
+    }
+
     public function destroy(Product $product)
     {
         foreach ($product->images as $image) {
@@ -299,7 +349,9 @@ class ProductController extends Controller
                 ? $request->discount
                 : 0,
 
-            'stock' => $request->stock,
+            'stock' => collect(
+                $request->sizes ?? []
+            )->sum('stock'),
 
             'description' => $request->description,
 
@@ -348,6 +400,19 @@ class ProductController extends Controller
         $product->categories()->sync(
             $request->categories ?? []
         );
+
+        // update ukuran
+        if ($request->has('sizes')) {
+            $product->sizes()->delete();
+            foreach ($request->sizes as $size) {
+                if (!empty($size['size']) && $size['stock'] !== null) {
+                    $product->sizes()->create([
+                        'size' => $size['size'],
+                        'stock' => $size['stock'],
+                    ]);
+                }
+            }
+        }
 
         $this->createNotification(
 
@@ -558,6 +623,4 @@ class ProductController extends Controller
 
         return $response;
     }
-
-
 }

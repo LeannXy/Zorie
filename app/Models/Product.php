@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Category;
 use App\Models\Cart;
+use App\Models\ProductSize;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -35,5 +36,10 @@ class Product extends Model
             Cart::class,
             'product_id'
         );
+    }
+
+    public function sizes()
+    {
+        return $this->hasMany(ProductSize::class);
     }
 }
