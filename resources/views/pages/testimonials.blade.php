@@ -2,40 +2,44 @@
 
     <div>
 
-        <div class="mb-8">
+        <div class="mb-10">
 
-            <h1 class="text-2xl font-semibold">
+            <div class="dashboard-header">
 
-                Testimonials
+                <h1 class="font-jakarta-bold text-3xl md:text-4xl text-zinc-900 dark:text-white">
 
-            </h1>
+                    Testimoni Pelanggan
 
-            <p class="text-sm text-zinc-500">
+                </h1>
 
-                Manage customer reviews
+                <p class="mt-2 text-sm md:text-base text-zinc-600 dark:text-zinc-400">
 
-            </p>
-            <div class="mt-6 flex items-center justify-between">
+                    Kelola ulasan dan testimoni pelanggan
 
-                <div class="relative w-[350px]">
+                </p>
+
+            </div>
+
+            <div class="mt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+
+                <div class="relative w-full md:w-[350px]">
 
                     <i data-lucide="search" class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500">
                     </i>
 
                     <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="Search testimonial..."
+                        placeholder="Cari testimoni..."
                         onkeydown="
 if(event.key==='Enter'){
 window.location='?search='+this.value
 }"
-                        class="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 py-2.5 pl-10 pr-4 text-sm">
+                        class="input-field w-full">
 
                 </div>
 
-
                 <select onchange="
 window.location='?status='+this.value"
-                    class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 text-sm">
+                    class="input-field w-full md:w-auto">
 
                     <option value="">
 

@@ -7,8 +7,26 @@
 
     <title>{{ $title ?? 'Dashboard' }}</title>
     @fluxAppearance
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        
+        :root {
+            --font-jakarta: 'Plus Jakarta Sans', sans-serif;
+        }
+        
+        .font-jakarta {
+            font-family: var(--font-jakarta);
+            letter-spacing: -0.5px;
+        }
+        
+        .font-jakarta-bold {
+            font-family: var(--font-jakarta);
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+    </style>
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 

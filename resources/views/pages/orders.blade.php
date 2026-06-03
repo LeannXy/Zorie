@@ -50,85 +50,81 @@
 
         <!-- Header -->
 
-        <div class=" mb-8 flex items-center justify-between">
+        <div class="mb-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
 
-            <div>
+            <div class="dashboard-header">
 
-                <h1 class="text-2xl font-semibold">
+                <h1 class="font-jakarta-bold text-3xl md:text-4xl text-zinc-900 dark:text-white">
 
-                    Orders
+                    Pesanan Pelanggan
 
                 </h1>
 
-                <p class="text-sm text-zinc-500">
+                <p class="mt-2 text-sm md:text-base text-zinc-600 dark:text-zinc-400">
 
-                    Manage customer orders
+                    Kelola dan pantau semua pesanan pelanggan
 
                 </p>
 
             </div>
 
-            <div class="flex gap-3">
+            <a href="{{ route('orders.export') }}"
+                class="btn-secondary w-full sm:w-auto flex items-center justify-center gap-2 whitespace-nowrap">
 
-                <a href="{{ route('orders.export') }}"
-                    class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 transition hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                <i data-lucide="download" class="h-5 w-5"></i> Unduh Laporan
 
-                    Download Report
-
-                </a>
-
-            </div>
+            </a>
 
         </div>
 
 
 
         <!-- Stats Cards -->
-        <div class="mb-8 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
-                <div class="flex justify-between">
+        <div class="dashboard-grid mb-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="dashboard-card group">
+                <div class="flex justify-between gap-3">
                     <div>
-                        <p class="text-sm text-zinc-500">Total Orders</p>
-                        <h2 class="mt-2 text-3xl font-bold">{{ $totalOrders }}</h2>
+                        <p class="text-xs md:text-sm text-zinc-500 dark:text-zinc-400">Total Pesanan</p>
+                        <h2 class="mt-3 md:mt-4 text-3xl md:text-4xl font-jakarta-bold text-zinc-900 dark:text-white">{{ $totalOrders }}</h2>
                     </div>
-                    <div class="rounded-xl bg-blue-500/10 p-3">
-                        <i data-lucide="shopping-bag" class="h-6 w-6 text-blue-500"></i>
+                    <div class="stat-icon bg-blue-500/10">
+                        <i data-lucide="shopping-bag" class="h-6 w-6 md:h-7 md:w-7 text-blue-500"></i>
                     </div>
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
-                <div class="flex justify-between">
+            <div class="dashboard-card group">
+                <div class="flex justify-between gap-3">
                     <div>
-                        <p class="text-sm text-zinc-500">Pending</p>
-                        <h2 class="mt-2 text-3xl font-bold text-yellow-500">{{ $pendingOrders }}</h2>
+                        <p class="text-xs md:text-sm text-zinc-500 dark:text-zinc-400">Menunggu</p>
+                        <h2 class="mt-3 md:mt-4 text-3xl md:text-4xl font-jakarta-bold text-yellow-600 dark:text-yellow-400">{{ $pendingOrders }}</h2>
                     </div>
-                    <div class="rounded-xl bg-yellow-500/10 p-3">
-                        <i data-lucide="clock-3" class="h-6 w-6 text-yellow-500"></i>
+                    <div class="stat-icon bg-yellow-500/10">
+                        <i data-lucide="clock-3" class="h-6 w-6 md:h-7 md:w-7 text-yellow-500"></i>
                     </div>
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
-                <div class="flex justify-between">
+            <div class="dashboard-card group">
+                <div class="flex justify-between gap-3">
                     <div>
-                        <p class="text-sm text-zinc-500">Completed</p>
-                        <h2 class="mt-2 text-3xl font-bold text-green-500">{{ $completedOrders }}</h2>
+                        <p class="text-xs md:text-sm text-zinc-500 dark:text-zinc-400">Selesai</p>
+                        <h2 class="mt-3 md:mt-4 text-3xl md:text-4xl font-jakarta-bold text-green-600 dark:text-green-400">{{ $completedOrders }}</h2>
                     </div>
-                    <div class="rounded-xl bg-green-500/10 p-3">
-                        <i data-lucide="circle-check" class="h-6 w-6 text-green-500"></i>
+                    <div class="stat-icon bg-green-500/10">
+                        <i data-lucide="circle-check" class="h-6 w-6 md:h-7 md:w-7 text-green-500"></i>
                     </div>
                 </div>
             </div>
 
-            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5">
-                <div class="flex justify-between">
+            <div class="dashboard-card group">
+                <div class="flex justify-between gap-3">
                     <div>
-                        <p class="text-sm text-zinc-500">Revenue</p>
-                        <h2 class="mt-2 text-3xl font-bold">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</h2>
+                        <p class="text-xs md:text-sm text-zinc-500 dark:text-zinc-400">Pendapatan</p>
+                        <h2 class="mt-3 md:mt-4 text-2xl md:text-3xl font-jakarta-bold text-zinc-900 dark:text-white">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</h2>
                     </div>
-                    <div class="rounded-xl bg-emerald-500/10 p-3">
-                        <i data-lucide="wallet" class="h-6 w-6 text-emerald-500"></i>
+                    <div class="stat-icon bg-emerald-500/10">
+                        <i data-lucide="wallet" class="h-6 w-6 md:h-7 md:w-7 text-emerald-500"></i>
                     </div>
                 </div>
             </div>
@@ -136,7 +132,7 @@
 
 
         <!-- Table Card -->
-        <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+        <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-lg">
             <!-- Filter Section -->
             <div
                 class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 p-5 flex-col md:flex-row gap-4">

@@ -10,41 +10,37 @@
     
     }">
 
-        <div class="mb-8 flex items-center justify-between">
+        <div class="mb-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
 
-            <div>
+            <div class="dashboard-header">
 
-                <h1 class="text-2xl font-semibold text-zinc-900 dark:text-white">
+                <h1 class="font-jakarta-bold text-3xl md:text-4xl text-zinc-900 dark:text-white">
 
-                    Customers
+                    Pelanggan
 
                 </h1>
 
-                <p class="text-sm text-zinc-500">
+                <p class="mt-2 text-sm md:text-base text-zinc-600 dark:text-zinc-400">
 
-                    Manage customer accounts
+                    Kelola akun dan data pelanggan Anda
 
                 </p>
 
             </div>
 
-            <div class="flex gap-3">
+            <a href="{{ route('customers.export') }}"
+                class="btn-secondary w-full sm:w-auto flex items-center justify-center gap-2 whitespace-nowrap">
 
-                <a href="{{ route('customers.export') }}"
-                    class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 transition hover:bg-zinc-100 dark:hover:bg-zinc-800">
+                <i data-lucide="download" class="h-5 w-5"></i> Unduh Laporan
 
-                    Download Report
-
-                </a>
-
-            </div>
+            </a>
 
         </div>
 
 
-        <div class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+        <div class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-lg">
 
-            <table class="w-full">
+            <table class="dashboard-table">
 
                 <thead>
 

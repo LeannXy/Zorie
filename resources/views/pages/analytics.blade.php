@@ -4,19 +4,19 @@
 
     <!-- Header -->
 
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
 
-        <div>
+        <div class="dashboard-header">
 
-            <h1 class="text-3xl font-bold text-zinc-900 dark:text-white">
+            <h1 class="font-jakarta-bold text-3xl md:text-4xl text-zinc-900 dark:text-white">
 
-                Analytics Dashboard
+                Analitik Penjualan
 
             </h1>
 
-            <p class="text-zinc-500">
+            <p class="mt-2 text-sm md:text-base text-zinc-600 dark:text-zinc-400">
 
-                Sales insights and business performance
+                Wawasan penjualan dan kinerja bisnis
 
             </p>
 
@@ -24,26 +24,25 @@
 
     </div>
 
-
     <!-- KPI -->
 
-    <div class="grid gap-6 lg:grid-cols-4">
+    <div class="dashboard-grid">
 
         <!-- Revenue -->
 
-        <div class="rounded-3xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6">
+        <div class="dashboard-card group">
 
-            <div class="flex justify-between">
+            <div class="flex justify-between gap-3">
 
                 <div>
 
-                    <p class="text-zinc-500">
+                    <p class="text-xs md:text-sm text-zinc-500 dark:text-zinc-400">
 
-                        Revenue
+                        Pendapatan Total
 
                     </p>
 
-                    <h2 class="mt-2 text-3xl font-bold text-zinc-900 dark:text-white">
+                    <h2 class="mt-3 md:mt-4 text-2xl md:text-3xl font-jakarta-bold text-zinc-900 dark:text-white">
 
                         Rp {{ number_format($revenue) }}
 

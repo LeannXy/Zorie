@@ -111,7 +111,7 @@ class CategoryController extends Controller
             );
 
         return view(
-            'pages.categories',
+            'pages.categories.index',
             compact(
                 'categories',
                 'totalCategories',
@@ -221,6 +221,25 @@ class CategoryController extends Controller
 
         );
     }
+
+    public function create()
+{
+    return view(
+        'pages.categories.create'
+    );
+}
+
+public function edit(
+    Category $category
+)
+{
+    return view(
+        'pages.categories.edit',
+        compact(
+            'category'
+        )
+    );
+}
 
     public function update(
         Request $request,

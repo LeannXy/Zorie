@@ -107,48 +107,48 @@ $save = function () {
         }">
 
             <!-- Header -->
-            <div class="mb-8 flex items-center justify-between">
+            <div class="mb-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
 
-                <div>
+                <div class="dashboard-header">
 
-                    <h1 class="text-2xl font-semibold text-zinc-900 dark:text-white">
-                        Products
+                    <h1 class="font-jakarta-bold text-3xl md:text-4xl text-zinc-900 dark:text-white">
+                        Kelola Produk
                     </h1>
 
-                    <p class="mt-1 text-sm text-zinc-500">
-                        Manage your shoe products
+                    <p class="mt-2 text-sm md:text-base text-zinc-600 dark:text-zinc-400">
+                        Atur dan kelola semua produk sepatu Anda dengan mudah
                     </p>
 
                 </div>
 
-                <a href="{{ route('products.create') }}" class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white">
+                <a href="{{ route('products.create') }}" 
+                    class="btn-primary w-full sm:w-auto flex items-center justify-center gap-2 whitespace-nowrap">
 
-                    + Add Product
+                    <i data-lucide="plus" class="h-5 w-5"></i> Tambah Produk
 
                 </a>
 
             </div>
-            <div class="mb-8 grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="dashboard-grid mb-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
 
                 <!-- Total Products -->
-                <div
-                    class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
+                <div class="dashboard-card group">
 
                     <div class="flex items-start justify-between gap-3">
 
                         <div class="min-w-0">
 
-                            <p class="text-xs md:text-sm text-zinc-500 truncate">
-                                Total Products
+                            <p class="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 truncate">
+                                Total Produk
                             </p>
 
-                            <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
+                            <h2 class="mt-3 md:mt-4 text-3xl md:text-4xl font-jakarta-bold text-zinc-900 dark:text-white">
                                 {{ $totalProducts }}
                             </h2>
 
                         </div>
 
-                        <div class="rounded-xl bg-blue-500/10 p-3 flex-shrink-0">
+                        <div class="stat-icon bg-blue-500/10">
 
                             <i data-lucide="package" class="h-6 w-6 md:h-7 md:w-7 text-blue-500">
                             </i>
@@ -160,24 +160,23 @@ $save = function () {
                 </div>
 
                 <!-- Total Stock -->
-                <div
-                    class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
+                <div class="dashboard-card group">
 
                     <div class="flex items-start justify-between gap-3">
 
                         <div class="min-w-0">
 
-                            <p class="text-xs md:text-sm text-zinc-500 truncate">
-                                Total Stock
+                            <p class="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 truncate">
+                                Total Stok
                             </p>
 
-                            <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
+                            <h2 class="mt-3 md:mt-4 text-3xl md:text-4xl font-jakarta-bold text-zinc-900 dark:text-white">
                                 {{ $totalStock }}
                             </h2>
 
                         </div>
 
-                        <div class="rounded-xl bg-green-500/10 p-3 flex-shrink-0">
+                        <div class="stat-icon bg-green-500/10">
 
                             <i data-lucide="boxes" class="h-6 w-6 md:h-7 md:w-7 text-green-500">
                             </i>
@@ -189,24 +188,23 @@ $save = function () {
                 </div>
 
                 <!-- Out Of Stock -->
-                <div
-                    class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
+                <div class="dashboard-card group">
 
                     <div class="flex items-start justify-between gap-3">
 
                         <div class="min-w-0">
 
-                            <p class="text-xs md:text-sm text-zinc-500 truncate">
-                                Out of Stock
+                            <p class="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 truncate">
+                                Stok Habis
                             </p>
 
-                            <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white">
+                            <h2 class="mt-3 md:mt-4 text-3xl md:text-4xl font-jakarta-bold text-zinc-900 dark:text-white">
                                 {{ $outOfStock }}
                             </h2>
 
                         </div>
 
-                        <div class="rounded-xl bg-red-500/10 p-3 flex-shrink-0">
+                        <div class="stat-icon bg-red-500/10">
 
                             <i data-lucide="triangle-alert" class="h-6 w-6 md:h-7 md:w-7 text-red-500">
                             </i>
@@ -217,28 +215,25 @@ $save = function () {
 
                 </div>
 
-
-
                 <!-- Inventory Value -->
-                <div
-                    class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
+                <div class="dashboard-card group">
 
                     <div class="flex items-start justify-between gap-3">
 
                         <div class="min-w-0">
 
-                            <p class="text-xs md:text-sm text-zinc-500 truncate">
-                                Inventory Value
+                            <p class="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 truncate">
+                                Nilai Inventori
                             </p>
 
                             <h2
-                                class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white truncate">
-                                Rp {{ number_format($totalValue) }}
+                                class="mt-3 md:mt-4 text-2xl md:text-3xl font-jakarta-bold text-zinc-900 dark:text-white truncate">
+                                Rp {{ number_format($totalValue, 0, ',', '.') }}
                             </h2>
 
                         </div>
 
-                        <div class="rounded-xl bg-yellow-500/10 p-3 flex-shrink-0">
+                        <div class="stat-icon bg-yellow-500/10">
 
                             <i data-lucide="wallet" class="h-6 w-6 md:h-7 md:w-7 text-yellow-500">
                             </i>
@@ -252,20 +247,20 @@ $save = function () {
             </div>
 
             <div
-                class="mb-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-6 overflow-hidden">
+                class="mb-8 dashboard-card">
 
                 <!-- Header -->
                 <div class="mb-6">
 
-                    <h2 class="text-xl font-semibold text-zinc-900 dark:text-white">
+                    <h2 class="font-jakarta-bold text-xl md:text-2xl text-zinc-900 dark:text-white">
 
-                        Products by Category
+                        Produk per Kategori
 
                     </h2>
 
-                    <p class="mt-1 text-sm text-zinc-500">
+                    <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
 
-                        Total jumlah produk berdasarkan kategori
+                        Distribusi produk berdasarkan kategori
 
                     </p>
 
@@ -280,7 +275,7 @@ $save = function () {
             </div>
 
             <!-- Table -->
-            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+            <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-lg">
 
                 <!-- Top -->
                 <div class="border-b border-zinc-200 dark:border-zinc-800">
@@ -290,7 +285,7 @@ $save = function () {
 
                         <i data-lucide="move-right" class="h-4 w-4"></i>
 
-                        <span>Geser untuk melihat filter lainnya</span>
+                        <span>Geser untuk filter lainnya</span>
 
                     </div>
 
