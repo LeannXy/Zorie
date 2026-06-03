@@ -4,7 +4,7 @@
 
         <h1 class="text-2xl font-bold">
 
-            Search Results:
+            Hasil Pencarian:
             "{{ $search }}"
 
         </h1>
@@ -14,7 +14,7 @@
 
             <h2 class="font-semibold">
 
-                Products
+                Produk
 
             </h2>
 
@@ -29,7 +29,7 @@
 
             <h2 class="font-semibold">
 
-                Orders
+                Pesanan
 
             </h2>
 
@@ -48,7 +48,7 @@
 
             <h2 class="font-semibold">
 
-                Customers
+                Pelanggan
 
             </h2>
 
@@ -67,7 +67,7 @@
 
             <h2 class="font-semibold">
 
-                Categories
+                Kategori
 
             </h2>
 

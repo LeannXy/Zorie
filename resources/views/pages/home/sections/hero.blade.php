@@ -3,7 +3,7 @@
     <div class="max-w-[1280px] mx-auto px-5">
 
         {{-- HERO CONTAINER --}}
-        <div class="relative min-h-[760px] flex items-center justify-center border-y border-[#e7e7e7]">
+        <div class="relative min-h-[360px] flex items-center justify-center border-y border-[#e7e7e7]">
 
             {{-- HUGE BACKGROUND TEXT --}}
             <h1
@@ -94,7 +94,7 @@
                         leading-[1.5]
                         text-[#555]"
                     >
-                        Energy Unisex Sneakers
+                        Sneakers Unisex Energi
                     </p>
 
                     {{-- PRICE --}}
@@ -105,7 +105,7 @@
                         font-semibold
                         text-[#111]"
                     >
-                        Rs12,999/-
+                        Rp129.990
                     </p>
 
                 </div>

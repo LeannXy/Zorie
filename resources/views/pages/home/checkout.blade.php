@@ -13,7 +13,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
-                    Back
+                    Kembali
                 </a>
                 <span class="text-gray-300">/</span>
                 <span class="text-gray-600">Checkout</span>
@@ -24,7 +24,7 @@
                 <div class="lg:col-span-2 space-y-8">
                     <!-- Cart Items Section -->
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Cart Items</h2>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Item Keranjang</h2>
 
                     @if(count($cartItems) > 0)
                         <div class="space-y-4">
@@ -38,7 +38,7 @@
                                                  class="h-24 w-24 object-cover rounded">
                                         @else
                                             <div class="h-24 w-24 bg-gray-200 rounded flex items-center justify-center">
-                                                <span class="text-gray-400 text-xs text-center">No Image</span>
+                                                <span class="text-gray-400 text-xs text-center">Tidak Ada Gambar</span>
                                             </div>
                                         @endif
                                     </div>
@@ -47,7 +47,7 @@
                                     <div class="flex-grow">
                                         <h3 class="text-sm font-semibold text-gray-900">{{ $item['product']->name }}</h3>
                                         <p class="text-xs text-gray-600 mt-1">Sku: XXS</p>
-                                        <p class="text-xs text-gray-600">Color: {{ $item['product']->category->name ?? 'Standard' }}</p>
+                                        <p class="text-xs text-gray-600">Warna: {{ $item['product']->category->name ?? 'Standard' }}</p>
                                         
                                         <!-- Quantity Selector -->
                                         <div class="flex items-center gap-3 mt-3">
@@ -63,7 +63,7 @@
                                     <div class="text-right">
                                         <p class="text-lg font-semibold text-gray-900">Rp {{ number_format($item['product']->price, 0, ',', '.') }}</p>
                                         <button onclick="removeFromCart({{ $item['product']->id }})" 
-                                                class="text-xs text-red-600 hover:text-red-800 font-semibold mt-2">Remove</button>
+                                                class="text-xs text-red-600 hover:text-red-800 font-semibold mt-2">Hapus</button>
                                     </div>
                                 </div>
                             @endforeach
@@ -73,10 +73,10 @@
                             <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                             </svg>
-                            <h3 class="text-gray-900 font-semibold mb-2">Your cart is empty</h3>
-                            <p class="text-gray-600 text-sm mb-4">Start shopping to add items to your cart</p>
+                            <h3 class="text-gray-900 font-semibold mb-2">Keranjang Anda kosong</h3>
+                            <p class="text-gray-600 text-sm mb-4">Mulai berbelanja untuk menambahkan item ke keranjang Anda</p>
                             <a href="{{ route('home') }}" class="inline-block text-gray-900 hover:text-gray-700 font-semibold">
-                                Continue Shopping
+                                Lanjutkan Berbelanja
                             </a>
                         </div>
                     @endif
@@ -84,20 +84,20 @@
 
                     <!-- Delivery Method Section -->
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-4">Delivery Method</h3>
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Metode Pengiriman</h3>
                         <div class="space-y-3">
                             <label class="border border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-50 transition">
                                 <input type="radio" name="delivery" value="standard" checked class="w-4 h-4 text-black">
                                 <span class="ml-3 text-sm text-gray-700">
-                                    <span class="font-semibold">Standard delivery (5-6 days)</span>
-                                    <span class="text-gray-600 ml-2">FREE</span>
+                                    <span class="font-semibold">Pengiriman Standar (5-6 hari)</span>
+                                    <span class="text-gray-600 ml-2">GRATIS</span>
                                 </span>
                             </label>
                             <label class="border border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-50 transition">
                                 <input type="radio" name="delivery" value="express" class="w-4 h-4 text-black">
                                 <span class="ml-3 text-sm text-gray-700">
-                                    <span class="font-semibold">Express delivery (1-2 days)</span>
-                                    <span class="text-gray-600 ml-2">$10</span>
+                                    <span class="font-semibold">Pengiriman Ekspres (1-2 hari)</span>
+                                    <span class="text-gray-600 ml-2">Rp150.000</span>
                                 </span>
                             </label>
                         </div>
@@ -105,22 +105,22 @@
 
                     <!-- Shipping Information Section -->
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-4">Shipping Information</h3>
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Informasi Pengiriman</h3>
                         <div class="space-y-4">
                             <div class="grid grid-cols-2 gap-4">
-                                <input type="text" placeholder="Country" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
-                                <input type="text" placeholder="City" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
+                                <input type="text" placeholder="Negara" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
+                                <input type="text" placeholder="Kota" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
-                                <input type="text" placeholder="Address" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
-                                <input type="text" placeholder="Postal code" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
+                                <input type="text" placeholder="Alamat" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
+                                <input type="text" placeholder="Kode Pos" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
                             </div>
                         </div>
                     </div>
 
                     <!-- Payment Method Section -->
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-4">Payment Method</h3>
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Metode Pembayaran</h3>
                         <div class="space-y-3">
                             <!-- Visa -->
                             <label class="border border-gray-300 rounded-lg p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition">
@@ -189,7 +189,7 @@
                 <!-- Right Column - Order Summary -->
                 <div class="lg:col-span-1">
                     <div class="border border-gray-200 rounded-lg p-6 sticky top-32">
-                        <h3 class="text-xl font-bold text-gray-900 mb-6">Order Summary</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-6">Ringkasan Pesanan</h3>
 
                         <!-- Product Items in Summary -->
                         <div class="space-y-4 mb-6 pb-6 border-b border-gray-200">
@@ -201,7 +201,7 @@
                                              class="h-16 w-16 object-cover rounded">
                                     @else
                                         <div class="h-16 w-16 bg-gray-200 rounded flex items-center justify-center">
-                                            <span class="text-gray-400 text-xs">No Image</span>
+                                            <span class="text-gray-400 text-xs">Tidak Ada Gambar</span>
                                         </div>
                                     @endif
                                     <div class="flex-grow">
@@ -223,27 +223,27 @@
                                 <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
                             </div>
                             <div class="flex justify-between text-gray-600">
-                                <span>Discount</span>
+                                <span>Diskon</span>
                                 <span>-Rp 0</span>
                             </div>
                             <div class="flex justify-between text-gray-600">
-                                <span>Delivery</span>
-                                <span class="text-gray-900 font-semibold">FREE</span>
+                                <span>Pengiriman</span>
+                                <span class="text-gray-900 font-semibold">GRATIS</span>
                             </div>
                             <div class="border-t border-gray-200 pt-3 flex justify-between text-lg font-bold text-gray-900">
-                                <span>Total to pay</span>
+                                <span>Total Pembayaran</span>
                                 <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
                             </div>
                         </div>
 
                         <!-- Checkout Button -->
                         <button class="w-full mt-6 bg-black hover:bg-gray-800 text-white py-3 rounded-lg font-semibold transition">
-                            Pay Now
+                            Bayar Sekarang
                         </button>
 
                         <!-- Terms -->
                         <p class="text-xs text-gray-600 text-center mt-4">
-                            By proceeding I accept the <a href="#" class="text-gray-900 hover:text-gray-700 underline">Terms & Conditions</a>
+                            Dengan melanjutkan saya menerima <a href="#" class="text-gray-900 hover:text-gray-700 underline">Syarat & Ketentuan</a>
                         </p>
                     </div>
                 </div>
