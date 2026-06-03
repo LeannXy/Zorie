@@ -22,6 +22,12 @@ use App\Http\Controllers\WishlistController;
 
 Route::view('/', 'pages.home.index')->name('home');
 
+// Public all products route
+Route::view('/all-products', 'pages.all-products')->name('all-products');
+
+// Public running route
+Route::view('/running', 'pages.running')->name('running');
+
 // Public search route
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 

@@ -9,8 +9,8 @@
             <!-- Header with Back Button -->
             <div class="mb-8 flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900">My Wishlist</h1>
-                    <p class="text-gray-600 mt-2">{{ count($wishlistItems) }} item(s) in your wishlist</p>
+                    <h1 class="text-4xl font-bold text-gray-900">Wishlist Saya</h1>
+                    <p class="text-gray-600 mt-2">{{ count($wishlistItems) }} item dalam wishlist Anda</p>
                 </div>
                 <a href="{{ route('home') }}" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-semibold">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,7 +32,7 @@
                                          class="w-full h-full object-cover hover:scale-110 transition">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center">
-                                        <span class="text-gray-400">No Image</span>
+                                        <span class="text-gray-400">Tidak Ada Gambar</span>
                                     </div>
                                 @endif
 
@@ -54,20 +54,20 @@
 
                                 <!-- Stock Status -->
                                 @if($product->stock > 0)
-                                    <p class="text-gray-900 text-sm font-semibold mt-2">In Stock</p>
+                                    <p class="text-gray-900 text-sm font-semibold mt-2">Stok Tersedia</p>
                                 @else
-                                    <p class="text-gray-600 text-sm font-semibold mt-2">Out of Stock</p>
+                                    <p class="text-gray-600 text-sm font-semibold mt-2">Stok Habis</p>
                                 @endif
 
                                 <!-- Add to Cart Button -->
                                 @if($product->stock > 0)
                                     <button onclick="addToCart({{ $product->id }})"
                                             class="w-full mt-4 bg-black text-white py-2 rounded font-semibold hover:bg-gray-800 transition">
-                                        Add to Cart
+                                        Tambah ke Keranjang
                                     </button>
                                 @else
                                     <button disabled class="w-full mt-4 bg-gray-300 text-gray-600 py-2 rounded font-semibold cursor-not-allowed">
-                                        Out of Stock
+                                        Stok Habis
                                     </button>
                                 @endif
                             </div>
@@ -79,10 +79,10 @@
                     <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                     </svg>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Your wishlist is empty</h2>
-                    <p class="text-gray-600 mb-6">Start adding items to your wishlist</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Wishlist Anda kosong</h2>
+                    <p class="text-gray-600 mb-6">Mulai tambahkan item ke wishlist Anda</p>
                     <a href="{{ route('home') }}" class="inline-block bg-black text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
-                        Continue Shopping
+                        Lanjutkan Berbelanja
                     </a>
                 </div>
             @endif
