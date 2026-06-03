@@ -68,8 +68,8 @@
     class="fixed top-0 left-0 w-full z-[100] pointer-events-none">
 
     {{-- ===== WRAPPER ===== --}}
-    <div class="mx-auto transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto overflow-visible"
-        :class="scrolled ? 'mt-3 max-w-[500px] px-3' : 'mt-0 max-w-full px-0'">
+    <div class="transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto overflow-visible"
+        :class="scrolled ? 'mx-auto mt-3 max-w-[500px]' : 'mx-0 mt-0 max-w-full'">
 
         {{-- ===== TOP BAR ===== --}}
         <div class="backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-visible"
