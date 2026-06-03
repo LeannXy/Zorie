@@ -68,8 +68,8 @@
     class="fixed top-0 left-0 w-full z-[100] pointer-events-none">
 
     {{-- ===== WRAPPER ===== --}}
-    <div class="transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto overflow-visible"
-        :class="scrolled ? 'mx-auto mt-3 max-w-[500px]' : 'mx-0 mt-0 max-w-full'">
+    <div class="mx-auto transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto overflow-visible"
+        :class="scrolled ? 'mt-3 max-w-[500px] px-3' : 'mt-0 max-w-full px-0'">
 
         {{-- ===== TOP BAR ===== --}}
         <div class="backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-visible"
@@ -182,9 +182,9 @@
                         </span>
                     </a>
 
-<!-- 
+
                     {{-- Akun --}}
-                    @if (session('customer_id'))
+                    {{-- @if (session('customer_id'))
                         <a href="{{ route('account') }}"
                             class="flex items-center justify-center rounded-full bg-[#000039] text-white transition-all duration-300 hover:scale-105 hover:bg-[#000039]/85"
                             :class="scrolled ? 'w-[38px] h-[38px]' : 'w-[44px] h-[44px]'">
@@ -192,8 +192,7 @@
                                 :class="scrolled ? 'w-[16px] h-[16px]' : 'w-[20px] h-[20px]'">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                 <circle cx="12" cy="7" r="4" />
-                            </svg>
-= -->
+                            </svg> --}}
                     @php
                         $navbarCustomer = null;
 
