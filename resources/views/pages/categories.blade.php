@@ -299,7 +299,8 @@
             </div>
 
             <!-- Chart container with horizontal scroll -->
-            <div class="overflow-x-auto -mx-6 px-6 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+            <div
+                class="overflow-x-auto -mx-6 px-6 scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
                 <div class="min-w-full lg:w-full">
                     <div class="relative h-80 sm:h-96" style="min-width: 500px;">
                         <canvas id="categoryUsageChart"></canvas>
@@ -313,109 +314,110 @@
         <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
 
             <!-- Top -->
-           <div class="border-b border-zinc-200 dark:border-zinc-800">
+            <div class="border-b border-zinc-200 dark:border-zinc-800">
 
-    <div class="lg:hidden px-5 pt-4 flex items-center gap-2 text-xs text-zinc-500">
+                <div class="lg:hidden px-5 pt-4 flex items-center gap-2 text-xs text-zinc-500">
 
-        <i data-lucide="move-right" class="h-4 w-4"></i>
+                    <i data-lucide="move-right" class="h-4 w-4"></i>
 
-        <span>Geser untuk melihat filter lainnya</span>
-
-    </div>
-
-    <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700">
-
-        <div class="flex items-center justify-between gap-4 p-5 min-w-[900px]">
-
-                <div class="relative w-full max-w-sm">
-
-                    <i data-lucide="search" class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500">
-                    </i>
-
-                    <input type="text" value="{{ request('search') }}" placeholder="Search category..."
-                        onkeydown="if(event.key==='Enter'){let params=new URLSearchParams(window.location.search);if(this.value){params.set('search',this.value);}else{params.delete('search');}window.location='?'+params.toString();}"
-                        class="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 py-2.5 pl-10 pr-4 text-sm">
+                    <span>Geser untuk melihat filter lainnya</span>
 
                 </div>
 
-                {{-- filter --}}
-                <div class="flex gap-3">
+                <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700">
 
-                    <select
-                        onchange="let params=new URLSearchParams(window.location.search);if(this.value===''){params.delete('status');}else{params.set('status',this.value);}window.location='?'+params.toString();"
-                        class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 text-sm">
+                    <div class="flex items-center justify-between gap-4 p-5 min-w-[900px]">
 
-                        <option value=""
-                            {{ request('status') === '' || request('status') === null ? 'selected' : '' }}>
+                        <div class="relative w-full max-w-sm">
 
-                            All Status
-
-                        </option>
-
-                        <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>
-
-                            Active
-
-                        </option>
-
-                        <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>
-
-                            Inactive
-
-                        </option>
-
-                    </select>
-
-                    <select
-                        onchange="let params=new URLSearchParams(window.location.search);
-
-if(this.value===''){
-
-params.delete('featured');
-
-}else{
-
-params.set('featured',this.value);
-
-}
-
-window.location='?'+params.toString();
-"
-                        class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 text-sm">
-
-                        <option value=""
-                            {{ request('featured') === '' || request('featured') === null ? 'selected' : '' }}>
-
-                            All Featured
-
-                        </option>
-
-                        <option value="1" {{ request('featured') == '1' ? 'selected' : '' }}>
-
-                            Featured
-
-                        </option>
-
-                        <option value="0" {{ request('featured') == '0' ? 'selected' : '' }}>
-
-                            Normal
-
-                        </option>
-
-                    </select>
-                     {{-- download file --}}
-                        <a href="{{ route('categories.export') }}"
-                            class="flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/10 text-green-500 transition hover:bg-green-500 hover:text-white">
-
-                            <i data-lucide="download" class="h-5 w-5">
+                            <i data-lucide="search"
+                                class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500">
                             </i>
 
-                        </a>
-                       </div>
+                            <input type="text" value="{{ request('search') }}" placeholder="Search category..."
+                                onkeydown="if(event.key==='Enter'){let params=new URLSearchParams(window.location.search);if(this.value){params.set('search',this.value);}else{params.delete('search');}window.location='?'+params.toString();}"
+                                class="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 py-2.5 pl-10 pr-4 text-sm">
 
-    </div>
+                        </div>
 
-</div>
+                        {{-- filter --}}
+                        <div class="flex gap-3">
+
+                            <select
+                                onchange="let params=new URLSearchParams(window.location.search);if(this.value===''){params.delete('status');}else{params.set('status',this.value);}window.location='?'+params.toString();"
+                                class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 text-sm">
+
+                                <option value=""
+                                    {{ request('status') === '' || request('status') === null ? 'selected' : '' }}>
+
+                                    All Status
+
+                                </option>
+
+                                <option value="1" {{ request('status') == '1' ? 'selected' : '' }}>
+
+                                    Active
+
+                                </option>
+
+                                <option value="0" {{ request('status') == '0' ? 'selected' : '' }}>
+
+                                    Inactive
+
+                                </option>
+
+                            </select>
+
+                            <select
+                                onchange="let params=new URLSearchParams(window.location.search);
+
+                                    if(this.value===''){
+
+                                        params.delete('featured');
+
+                                        }else{
+
+                                        params.set('featured',this.value);
+
+                                    }
+
+                                        window.location='?'+params.toString();
+                                    "
+                                class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 text-sm">
+
+                                <option value=""
+                                    {{ request('featured') === '' || request('featured') === null ? 'selected' : '' }}>
+
+                                    All Featured
+
+                                </option>
+
+                                <option value="1" {{ request('featured') == '1' ? 'selected' : '' }}>
+
+                                    Featured
+
+                                </option>
+
+                                <option value="0" {{ request('featured') == '0' ? 'selected' : '' }}>
+
+                                    Normal
+
+                                </option>
+
+                            </select>
+                            {{-- download file --}}
+                            <a href="{{ route('categories.export') }}"
+                                class="flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/10 text-green-500 transition hover:bg-green-500 hover:text-white">
+
+                                <i data-lucide="download" class="h-5 w-5">
+                                </i>
+
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
 
                 <div x-show="selectedCategories.length" x-transition
                     class="flex items-center gap-3 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-3">

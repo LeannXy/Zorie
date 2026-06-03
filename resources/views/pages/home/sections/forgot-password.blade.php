@@ -47,12 +47,24 @@
 
     {{-- ═══════════ RIGHT PANEL ═══════════ --}}
     <div class="bg-white flex flex-col justify-center px-8 py-12 sm:px-14 min-h-screen border-l border-[#e5e5e3]">
+        <a href="{{ url('/') }}"
+            class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition mb-6">
 
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+
+            </svg>
+
+            Kembali ke Beranda
+
+        </a>
         {{-- ── FORM STATE ── --}}
         <div x-transition>
 
             {{-- Back link --}}
-           <a href="{{ route('customer.password.cancel') }}"
+            <a href="{{ route('customer.password.cancel') }}"
                 class="inline-flex items-center gap-2 text-[10.5px] font-bold tracking-[0.12em] uppercase text-[#bbb] hover:text-[#111] transition-colors mb-10 group">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                     stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"

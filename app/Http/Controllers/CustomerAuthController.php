@@ -175,6 +175,10 @@ class CustomerAuthController extends Controller
             ->with(
                 'success',
                 'OTP verifikasi berhasil dikirim'
+            )
+            ->with(
+                'active_tab',
+                'security'
             );
     }
     public function verifyOtp(Request $request)
@@ -209,7 +213,11 @@ class CustomerAuthController extends Controller
             'showPasswordForm' => true
         ]);
 
-        return back();
+        return back()
+            ->with(
+                'active_tab',
+                'security'
+            );
     }
 
     public function verifyEmailOtp(Request $request)
@@ -246,10 +254,15 @@ class CustomerAuthController extends Controller
             'showEmailOtpForm'
         );
 
-        return back()->with(
-            'success',
-            'Email berhasil diverifikasi'
-        );
+        return back()
+            ->with(
+                'success',
+                'Email berhasil diverifikasi'
+            )
+            ->with(
+                'active_tab',
+                'security'
+            );
     }
 
     public function resetPassword(Request $request)
@@ -297,6 +310,4 @@ class CustomerAuthController extends Controller
                 'Password berhasil diubah, silakan login.'
             );
     }
-
-   
 }

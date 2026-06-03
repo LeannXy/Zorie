@@ -182,6 +182,7 @@
                         </span>
                     </a>
 
+<!-- 
                     {{-- Akun --}}
                     @if (session('customer_id'))
                         <a href="{{ route('account') }}"
@@ -192,6 +193,47 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                 <circle cx="12" cy="7" r="4" />
                             </svg>
+= -->
+                    @php
+                        $navbarCustomer = null;
+
+                        if (session('customer_id')) {
+                            $navbarCustomer = \App\Models\CustomerAccount::find(session('customer_id'));
+                        }
+                    @endphp
+                    {{-- ACCOUNT --}}
+                    @if (session('customer_id'))
+                        <a href="{{ route('account') }}"
+                            class="flex items-center justify-center rounded-full bg-black transition-all duration-500 hover:scale-105"
+                            :class="scrolled
+                                ?
+                                'w-[38px] h-[38px]' :
+                                'w-[46px] h-[46px]'">
+
+                            @if ($navbarCustomer)
+
+                                @if ($navbarCustomer->profile_photo)
+
+                                    @if (Str::startsWith($navbarCustomer->profile_photo, 'http'))
+                                        <img src="{{ $navbarCustomer->profile_photo }}" alt="Profile"
+                                            class="w-full h-full rounded-full object-cover">
+                                    @else
+                                        <img src="{{ asset('storage/' . $navbarCustomer->profile_photo) }}"
+                                            alt="Profile" class="w-full h-full rounded-full object-cover">
+                                    @endif
+                                @else
+                                    <div
+                                        class="w-full h-full rounded-full bg-black text-white flex items-center justify-center font-black">
+
+                                        {{ strtoupper(substr($navbarCustomer->name, 0, 1)) }}
+
+                                    </div>
+
+                                @endif
+
+                            @endif
+
+ 
                         </a>
                     @else
                         <a href="{{ route('customer.login') }}"

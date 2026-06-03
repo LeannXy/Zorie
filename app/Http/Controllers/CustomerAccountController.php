@@ -43,7 +43,7 @@ class CustomerAccountController extends Controller
             ->addresses()
             ->latest()
             ->get();
-        
+
         $profileCompletion = 0;
 
         if ($customer->name) $profileCompletion += 25;
@@ -116,10 +116,15 @@ class CustomerAccountController extends Controller
 
         $customer->save();
 
-        return back()->with(
-            'success',
-            'Profil berhasil diperbarui'
-        );
+        return back()
+            ->with(
+                'success',
+                'Profil berhasil diperbarui'
+            )
+            ->with(
+                'active_tab',
+                'profile'
+            );
     }
 
     public function changePassword(Request $request)
@@ -144,10 +149,15 @@ class CustomerAccountController extends Controller
                 $customer->password
             )
         ) {
-            return back()->withErrors([
-                'current_password' =>
-                'Password saat ini salah'
-            ]);
+            return back()
+                ->withErrors([
+                    'current_password' =>
+                    'Password saat ini salah'
+                ])
+                ->with(
+                    'active_tab',
+                    'security'
+                );
         }
 
         $customer->password =
@@ -167,7 +177,7 @@ class CustomerAccountController extends Controller
             );
     }
 
-     public function sendOldEmailOtp(Request $request)
+    public function sendOldEmailOtp(Request $request)
     {
         $request->validate([
             'new_email' =>
