@@ -12,6 +12,8 @@ class Testimonial extends Model
 
         'product_id',
 
+        'order_id',
+
         'rating',
 
         'comment',

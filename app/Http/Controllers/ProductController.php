@@ -206,6 +206,8 @@ class ProductController extends Controller
 
             'description' => $request->description,
 
+            'weight' => $request->weight ?? 1000,
+
         ]);
 
         // upload gambar
@@ -354,6 +356,7 @@ class ProductController extends Controller
             )->sum('stock'),
 
             'description' => $request->description,
+            'weight' => $request->weight,
 
         ]);
 
@@ -490,7 +493,9 @@ class ProductController extends Controller
 
             'ids' => 'required|array',
 
-            'ids.*' => 'exists:products,id'
+            'ids.*' => 'exists:products,id',
+
+            'weight' => 'required|numeric|min:1',
 
         ]);
 

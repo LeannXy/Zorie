@@ -194,6 +194,7 @@
                 </div>
             </div>
 
+
             <!-- Discount -->
             <div>
                 <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Discount</label>
@@ -204,6 +205,24 @@
                     <span class="absolute right-4 top-2.5 text-zinc-500">%</span>
                 </div>
             </div>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+
+                Berat Produk (gram)
+
+            </label>
+
+            <input type="number" name="weight" min="1" placeholder="Contoh: 900" x-model="form.weight"
+                class="w-full px-4 py-2.5 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white placeholder-zinc-500 dark:placeholder-zinc-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">
+
+            <small class="text-gray-500">
+
+                Masukkan berat dalam gram.
+                Contoh sepatu running 900 gram.
+
+            </small>
         </div>
 
         <!-- Final Price Display -->
@@ -258,26 +277,7 @@
                     <!-- Delete Button -->
                     <div class="sm:col-span-3">
                         <button type="button"
-                          @click.stop="
-
-if(form.images[index]?.id){
-
-    form.deletedImages.push(
-        form.images[index].id
-    );
-
-}else{
-
-    form.files.splice(index,1);
-
-}
-
-form.images.splice(index,1);
-
-$refs.imageInput.value='';
-
-"
-
+                            @click.stop="if(form.images[index]?.id){   form.deletedImages.push(form.images[index].id   );}else{    form.files.splice(index,1);}form.images.splice(index,1);$refs.imageInput.value='';"
                             class="w-full px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 rounded-lg font-medium transition border border-red-200 dark:border-red-900">
                             Delete
                         </button>
@@ -326,8 +326,8 @@ $refs.imageInput.value='';
         <div x-show="form.images.length > 0"
             class=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             <template x-for="(image, index) in form.images" :key="index">
-              <div
-    class="relative group rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-square">
+                <div
+                    class="relative group rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 aspect-square">
                     <!-- Image -->
                     <img :src="image.url ?? image"
                         @click="

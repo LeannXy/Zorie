@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CategoryBanner;
+use App\Models\Product;
 
 class Category extends Model
 {
@@ -23,5 +25,10 @@ class Category extends Model
             Product::class
         );
     }
-    
+    public function banners()
+{
+    return $this->hasMany(
+        CategoryBanner::class
+    );
+}
 }

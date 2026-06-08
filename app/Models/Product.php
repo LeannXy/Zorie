@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Category;
 use App\Models\Cart;
 use App\Models\ProductSize;
+use App\Models\Testimonial;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -17,8 +18,10 @@ class Product extends Model
         'stock',
         'discount',
         'description',
+        'weight',
     ];
 
+    
     public function images()
     {
         return $this->hasMany(ProductImage::class);
@@ -41,5 +44,17 @@ class Product extends Model
     public function sizes()
     {
         return $this->hasMany(ProductSize::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Testimonial::class)
+            ->where('status', 'Approved')
+            ->latest();
+    }
+
+    public function testimonials()
+    {
+        return $this->hasMany(Testimonial::class);
     }
 }

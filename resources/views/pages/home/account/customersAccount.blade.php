@@ -5,7 +5,7 @@
     -------------------------------------------------------
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 --}}
-
+@extends('layouts.app')
 <div class="min-h-screen bg-[#f5f5f3] font-['Plus_Jakarta_Sans',sans-serif]" x-data="{
     tab: '{{ session('active_tab', 'dashboard') }}',
     mobileNav: false,
@@ -15,7 +15,7 @@
     needsAlertDismissed: false,
     addressMode: 'create',
     addressPage: 'list',
-
+    selectedLocationId: null,
     editingAddressId: null,
 
     user: {
@@ -41,7 +41,7 @@
         district: '',
         postal_code: '',
         address: '',
-        google_maps_url: '',
+        rajaongkir_city_id: '',
         is_default: false,
     },
     get initials() {
@@ -118,86 +118,84 @@
         {{-- ═══════════════════════════════════════════════
          SIDEBAR
     ═══════════════════════════════════════════════ --}}
-    
-        <aside class="hidden lg:flex flex-col w-[240px] flex-shrink-0 gap-2">
-          <a href="{{ url('/') }}"
-            class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition mb-6">
 
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
+       <aside class="hidden lg:flex flex-col w-[240px] flex-shrink-0 gap-2">
+    <a href="{{ url('/') }}"
+        class="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-black transition mb-6">
 
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
 
-            </svg>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
 
-            Kembali ke Beranda
+        </svg>
 
-        </a>
-            {{-- User card --}}
-            <div class="bg-white rounded-2xl border border-[#e5e5e3] p-5 mb-2">
-                <div class="flex items-center gap-3">
-                    @if ($customer->profile_photo)
+        Kembali ke Beranda
 
-                        @if (Str::startsWith($customer->profile_photo, 'http'))
-                            <img src="{{ $customer->profile_photo }}" class="w-20 h-20 rounded-full object-cover">
-                        @else
-                            <img src="{{ asset('storage/' . $customer->profile_photo) }}"
-                                class="w-20 h-20 rounded-full object-cover">
-                        @endif
-                    @else
-                        <div class="w-20 h-20 rounded-full bg-[#111] text-white flex items-center justify-center text-[20px] font-black"
-                            x-text="initials">
-                        </div>
+    </a>
+    {{-- User card --}}
+    <div class="bg-white rounded-2xl border border-[#e5e5e3] p-5 mb-2">
+        <div class="flex items-center gap-3">
+            @if ($customer->profile_photo)
 
-                    @endif
-                    <div class="min-w-0">
-                        <p class="text-[13px] font-bold text-[#111] truncate" x-text="user.name"></p>
-                        <p class="text-[11px] text-[#aaa] truncate" x-text="user.email"></p>
-                    </div>
+                @if (Str::startsWith($customer->profile_photo, 'http'))
+                    <img src="{{ $customer->profile_photo }}" class="w-20 h-20 rounded-full object-cover">
+                @else
+                    <img src="{{ asset('storage/' . $customer->profile_photo) }}"
+                        class="w-20 h-20 rounded-full object-cover">
+                @endif
+            @else
+                <div class="w-20 h-20 rounded-full bg-[#111] text-white flex items-center justify-center text-[20px] font-black"
+                    x-text="initials">
                 </div>
-                <div class="mt-3 pt-3 border-t border-[#f0f0ee]">
-                    <span :class="isVerified ? 'bg-[#111] text-white' : 'bg-[#fff3cd] text-[#856404]'"
-                        class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-[0.06em] uppercase">
-                        <span x-text="isVerified ? '✓' : @if ($customer->email_verified) '✓' @else '!' @endif"></span>
-                        <span
-                            x-text="isVerified ? 'Verified' : @if ($customer->email_verified) 'Verified' @else 'Belum Diverifikasi' @endif"></span>
-                    </span>
-                </div>
+
+            @endif
+            <div class="min-w-0">
+                <p class="text-[13px] font-bold text-[#111] truncate" x-text="user.name"></p>
+                <p class="text-[11px] text-[#aaa] truncate" x-text="user.email"></p>
             </div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-[#f0f0ee]">
+            <span :class="isVerified ? 'bg-[#111] text-white' : 'bg-[#fff3cd] text-[#856404]'"
+                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold tracking-[0.06em] uppercase">
+                <span x-text="isVerified ? '✓' : '!'"></span>
+                <span
+                    x-text="isVerified ? 'Verified' : 'Belum Diverifikasi'"></span>
+            </span>
+        </div>
+    </div>
 
-            {{-- Nav --}}
-            @foreach ([
-        ['dashboard', 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', 'Dashboard'],
-        ['profile', 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'Profile'],
-        ['orders', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', 'Orders'],
-        ['wishlist', 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', 'Wishlist'],
-        ['reviews', 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z', 'Reviews'],
-        ['addresses', 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z', 'Addresses'],
-        ['security', 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', 'Security'],
-    ] as [$key, $icon, $label])
-                <button @click="tab = '{{ $key }}'"
-                    :class="tab === '{{ $key }}' ? 'bg-[#111] text-white' : 'bg-white text-[#555] hover:bg-[#f5f5f3]'"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl border border-[#e5e5e3] text-[12.5px] font-semibold tracking-[0.02em] transition-all w-full text-left">
-                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.8"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="{{ $icon }}" />
-                    </svg>
-                    {{ $label }}
-                </button>
-            @endforeach
+    {{-- Nav (Diubah menjadi elemen <a> dan menggunakan fungsi route() Laravel) --}}
+    @foreach ([
+        ['customer.account', 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6', 'Dashboard'],
+        ['customer.profile', 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z', 'Profile'],
+        ['customer.orders', 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', 'Orders'],
+        ['customer.wishlist', 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z', 'Wishlist'],
+        ['customer.reviews', 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z', 'Reviews'],
+        ['customer.addresses', 'M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z', 'Addresses'],
+        ['customer.security', 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', 'Security'],
+    ] as [$route, $icon, $label])
+        <a href="{{ route($route) }}"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl border {{ Route::is($route) ? 'bg-[#111] text-white border-[#111]' : 'bg-white text-[#555] hover:bg-[#f5f5f3] border-[#e5e5e3]' }} text-[12.5px] font-semibold tracking-[0.02em] transition-all w-full text-left">
+            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.8"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="{{ $icon }}" />
+            </svg>
+            {{ $label }}
+        </a>
+    @endforeach
 
-            {{-- Logout --}}
-            <button @click="logoutModal = true"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl border border-red-100 text-red-500 bg-white hover:bg-red-50 text-[12.5px] font-semibold tracking-[0.02em] transition-all w-full text-left mt-1">
-                <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.8"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                Logout
-            </button>
-        </aside>
-
+    {{-- Logout --}}
+    <button @click="logoutModal = true"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl border border-red-100 text-red-500 bg-white hover:bg-red-50 text-[12.5px] font-semibold tracking-[0.02em] transition-all w-full text-left mt-1">
+        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.8"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+        Logout
+    </button>
+</aside>
         {{-- ═══════════════════════════════════════════════
          MAIN CONTENT
     ═══════════════════════════════════════════════ --}}
@@ -942,7 +940,7 @@
                                          district:'',
                                          postal_code:'',
                                           address:'',
-                                          google_maps_url:'',
+                                            rajaongkir_city_id:'',
                                          is_default:false
                                         };"
                         class="px-5 py-2.5 bg-[#111] text-white rounded-xl text-[11px] font-bold tracking-[0.08em] uppercase hover:bg-[#222] hover:-translate-y-px transition-all">
@@ -991,15 +989,6 @@
 
                                         </p>
 
-                                        @if ($address->google_maps_url)
-                                            <a href="{{ $address->google_maps_url }}" target="_blank"
-                                                class="inline-flex mt-3 text-blue-600 text-sm font-semibold">
-
-                                                Lihat Lokasi
-
-                                            </a>
-                                        @endif
-
                                     </div>
 
                                     <div class="flex flex-col gap-2">
@@ -1014,7 +1003,8 @@
                                         form.district='{{ addslashes($address->district) }}';
                                         form.postal_code='{{ $address->postal_code }}';
                                         form.address='{{ addslashes($address->address) }}';
-                                        form.google_maps_url='{{ $address->google_maps_url }}';
+                                        form.rajaongkir_city_id='{{ $address->rajaongkir_city_id }}';
+                                        selectedLocationId = '{{ $address->rajaongkir_city_id }}';
                                         editingAddressId={{ $address->id }};
                                         form.is_default = {{ $address->is_default ? 'true' : 'false' }}; "
                                             class="px-3 py-1.5 border border-[#e5e5e3] rounded-lg text-[11px] font-bold">
@@ -1189,9 +1179,12 @@
                                 </div>
                             </div>
 
+                            <input type="hidden" name="rajaongkir_city_id" id="rajaongkir_city_id">
+                            <input type="hidden" name="city" id="city_name">
+
                             {{-- ── SECTION: Lokasi ── --}}
-                            <p class="text-[10px] font-bold tracking-[0.14em] uppercase text-[#ccc] mb-3.5 mt-5">Lokasi
-                            </p>
+                            {{-- <p class="text-[10px] font-bold tracking-[0.14em] uppercase text-[#ccc] mb-3.5 mt-5">Lokasi
+                            </p> --}}
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3.5">
                                 {{-- Provinsi --}}
@@ -1209,7 +1202,7 @@
                                             </svg>
                                         </span>
                                         <input type="text" name="province" x-model="form.province"
-                                            placeholder="Jawa Tengah"
+                                            placeholder="Masukan provinsi"
                                             class="w-full pl-10 pr-4 py-3 border border-[#ebebea] rounded-[10px] bg-[#f8f8f6] text-[13.5px] text-[#111] outline-none placeholder:text-[#ccc] focus:border-[#111] focus:bg-white focus:ring-[3px] focus:ring-black/[0.06] transition-all">
                                     </div>
                                     @error('province')
@@ -1233,8 +1226,8 @@
                                                 <line x1="12" y1="17" x2="12" y2="21" />
                                             </svg>
                                         </span>
-                                        <input type="text" name="city" x-model="form.city"
-                                            placeholder="Semarang"
+                                         <input type="text" name="city" id="city" x-model="form.city" 
+                                            placeholder="masukan kota atau kabupaten"
                                             class="w-full pl-10 pr-4 py-3 border border-[#ebebea] rounded-[10px] bg-[#f8f8f6] text-[13.5px] text-[#111] outline-none placeholder:text-[#ccc] focus:border-[#111] focus:bg-white focus:ring-[3px] focus:ring-black/[0.06] transition-all">
                                     </div>
                                     @error('city')
@@ -1242,19 +1235,60 @@
                                     @enderror
                                 </div>
 
-                                <div>
-                                    <label>Kecamatan</label>
-                                    <input type="text" name="district" x-model="form.district"
-                                        class="w-full border p-3 rounded-xl border-[#ebebea] rounded-[10px] bg-[#f8f8f6] text-[13.5px] text-[#111] outline-none placeholder:text-[#ccc] focus:border-[#111] focus:bg-white focus:ring-[3px] focus:ring-black/[0.06] transition-all">
-                                </div>
 
                                 <div>
-                                    <label>Kode Pos</label>
-                                    <input type="text" name="postal_code" x-model="form.postal_code"
+                                    <label  class="block text-[10px] font-bold tracking-[0.14em] uppercase text-[#aaa] mb-2">Kecamatan</label>
+                                    <input type="text" name="district" id="district" x-model="form.district" placeholder="masukan Kecamatan"
                                         class="w-full border p-3 rounded-xl border-[#ebebea] rounded-[10px] bg-[#f8f8f6] text-[13.5px] text-[#111] outline-none placeholder:text-[#ccc] focus:border-[#111] focus:bg-white focus:ring-[3px] focus:ring-black/[0.06] transition-all">
                                 </div>
+                    
+                                <div>
+
+                                    <label  class="block text-[10px] font-bold tracking-[0.14em] uppercase text-[#aaa] mb-2">
+
+                                        Kode Pos
+
+                                    </label>
+
+                                    <input type="text" id="postal_code" x-model="form.postal_code" name="postal_code" maxlength="5" placeholder="Masukan 5 digit kode pos alamat anda"
+                                         class="w-full border p-3 rounded-xl border-[#ebebea] rounded-[10px] bg-[#f8f8f6] text-[13.5px] text-[#111] outline-none placeholder:text-[#ccc] focus:border-[#111] focus:bg-white focus:ring-[3px] focus:ring-black/[0.06] transition-all">
+                                </div>
+                            </div>
+
+                             <div class="mb-4 p-4 rounded-xl bg-amber-50 border border-amber-200">
+                                        <div class="flex gap-3">
+                                            <svg class="w-5 h-5 text-amber-500 flex-shrink-0" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 8v4m0 4h.01M10.29 3.86l-7.5 13A2 2 0 004.5 20h15a2 2 0 001.71-3.14l-7.5-13a2 2 0 00-3.42 0z" />
+                                            </svg>
+
+                                            <div>
+                                                <p class="text-sm font-semibold text-amber-800">
+                                                    Periksa Kode Pos Anda
+                                                </p>
+
+                                                <p class="text-xs text-amber-700 mt-1">
+                                                    Jika alamat tidak ditemukan, coba periksa kembali kode pos yang
+                                                    dimasukkan.
+                                                    Pastikan kode pos sesuai dengan wilayah tujuan pengiriman.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <div class="mb-4">
+                                <h3 class="text-sm font-bold text-[#111]">
+                                    Pilih Alamat Pengiriman
+                                </h3>
+
+                                <p class="text-xs text-gray-500 mt-1">
+                                    Pilih alamat yang ditemukan dengan benar.
+                                </p>
+                            </div>
+                            <div id="postal-result" class="mt-4 space-y-3" >
                             </div>
                             {{-- Alamat Lengkap --}}
+
                             <div class="mb-5">
                                 <label
                                     class="block text-[10px] font-bold tracking-[0.14em] uppercase text-[#aaa] mb-2">Alamat
@@ -1310,7 +1344,7 @@
                                     class="px-5 py-4 border border-[#e5e5e3] rounded-[10px] text-[10.5px] font-bold tracking-[0.14em] uppercase text-[#888] bg-transparent hover:border-[#bbb] hover:text-[#333] hover:bg-[#f8f8f6] transition-all cursor-pointer"
                                     style="font-family:'Plus Jakarta Sans',sans-serif;">Batal</button>
 
-                                <button type="submit"
+                                <button type="submit" id="save-address-btn"
                                     class="flex-1 py-4 bg-[#111] text-[#f5f5f3] rounded-[10px] text-[10.5px] font-bold tracking-[0.18em] uppercase hover:bg-[#1a1a1a] hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(0,0,0,0.16)] active:translate-y-0 active:shadow-none transition-all cursor-pointer"
                                     style="font-family:'Plus Jakarta Sans',sans-serif;"
                                     x-text="addressPage === 'create' ? 'Simpan Alamat' : 'Perbarui Alamat'"></button>
@@ -1619,4 +1653,77 @@
         </div>
     </div>
     </main>
+
+
+    <script>
+        // Pencarian kode pos
+        document.getElementById('postal_code').addEventListener('keyup', async function() {
+            if (this.value.length < 5) return;
+
+            const response = await fetch('/search-postal-code?postal_code=' + this.value);
+            const data = await response.json();
+            let html = '';
+
+            if (data.data) {
+                data.data.forEach(location => {
+                    html += `
+            <div class="location-card border rounded-xl p-4 cursor-pointer hover:border-blue-500 transition"
+                data-id="${location.id}"
+                data-province="${location.province_name}"
+                data-city="${location.city_name}"
+                data-district="${location.district_name}">
+                <h4 class="font-bold">${location.subdistrict_name}</h4>
+                <p class="text-sm text-gray-500">${location.district_name}, ${location.city_name}</p>
+                <p class="text-xs text-gray-400">${location.province_name}</p>
+            </div>`;
+                });
+            }
+             else {
+        html = `
+        <div class="flex items-center gap-3 p-4 rounded-xl border border-red-100 bg-red-50">
+            <svg class="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <div>
+                <p class="text-sm font-semibold text-red-700">Alamat tidak ditemukan</p>
+                <p class="text-xs text-red-500 mt-0.5">Kode pos <strong>${this.value}</strong> tidak ditemukan. Periksa kembali atau coba kode pos lain.</p>
+            </div>
+        </div>`;
+    }
+            document.getElementById('postal-result').innerHTML = html;
+        });
+
+      
+
+
+        // Klik kartu hasil
+        document.addEventListener('click', function(e) {
+            const card = e.target.closest('.location-card');
+            if (!card) return;
+
+            // Ambil Alpine component dan update state-nya
+            const alpineRoot = document.querySelector('[x-data]');
+            const alpineData = Alpine.$data(alpineRoot);
+
+            alpineData.form.province = card.dataset.province;
+            alpineData.form.city = card.dataset.city;
+            alpineData.form.district = card.dataset.district;
+            alpineData.form.rajaongkir_city_id = card.dataset.id;
+
+            // Update hidden field rajaongkir_city_id juga (untuk jaga-jaga)
+            document.getElementById('rajaongkir_city_id').value = card.dataset.id;
+
+            // Highlight kartu yang dipilih
+            document.querySelectorAll('.location-card').forEach(item =>
+                item.classList.remove('border-blue-600', 'bg-blue-50')
+            );
+            card.classList.add('border-blue-600', 'bg-blue-50');
+        });
+
+
+
+    </script>
 </div>
+@endsection

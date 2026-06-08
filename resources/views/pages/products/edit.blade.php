@@ -24,6 +24,7 @@
             categories: @js($product->categories->pluck('id')->toArray()),
             price: {{ $product->price }},
             discount: {{ $product->discount ?? 0 }},
+            weight: {{ $product->weight ?? 1000 }},
             description: @js($product->description ?? ''),
             stock: {{ $product->stock ?? 0 }},
             images: @js($product->images->map(fn($img) => ['id' => $img->id, 'url' => asset('storage/' . $img->image)])->toArray()),

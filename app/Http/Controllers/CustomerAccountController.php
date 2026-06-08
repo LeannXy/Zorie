@@ -15,13 +15,17 @@ class CustomerAccountController extends Controller
 {
     public function dashboard()
     {
-        $customer = CustomerAccount::find(
-            session('customer_id')
-        );
+        $customerId = session('customer_id');
+        
+        if (!$customerId) {
+            return redirect()->route('customer.login');
+        }
+        
+        $customer = CustomerAccount::find($customerId);
 
         if (!$customer) {
-            return redirect()
-                ->route('customer.login');
+            session()->forget('customer_id');
+            return redirect()->route('customer.login');
         }
 
         $totalOrders = Order::where(
@@ -34,10 +38,12 @@ class CustomerAccountController extends Controller
             $customer->id
         )->count();
 
-        $orders = Order::where(
+        $orders = Order::with(['items.product.images'])->where(
             'customer_id',
             $customer->id
-        );
+        )
+        ->latest()
+        ->get();
 
         $addresses = $customer
             ->addresses()
@@ -51,7 +57,7 @@ class CustomerAccountController extends Controller
         if ($customer->phone) $profileCompletion += 25;
         if ($addresses->count() > 0) $profileCompletion += 25;
         return view(
-            'pages.home.customersAccount',
+            'pages.home.account.dashboard',
             compact(
                 'customer',
                 'totalOrders',
@@ -195,17 +201,23 @@ class CustomerAccountController extends Controller
             'otp_expires_at' => now()->addMinutes(10)
         ]);
 
-        Mail::to($customer->email)
-            ->send(
-                new VerifyEmailOtpMail($otp)
-            );
+        try {
+            Mail::to($customer->email)
+                ->send(
+                    new VerifyEmailOtpMail($otp)
+                );
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'new_email' => 'Gagal mengirim email ke ' . $customer->email . '. Periksa pengaturan SMTP di file .env Anda.'
+            ])->withInput();
+        }
 
         session([
             'new_email' => $request->new_email,
             'change_email_step' => 1
         ]);
 
-        return back();
+        return back()->with('success', 'OTP verifikasi telah dikirim ke email lama Anda: ' . $customer->email);
     }
 
     public function verifyOldEmailOtp(Request $request)
@@ -259,11 +271,20 @@ class CustomerAccountController extends Controller
             'otp_expires_at' => now()->addMinutes(10)
         ]);
 
-        Mail::to(
-            session('new_email')
-        )->send(
-            new VerifyEmailOtpMail($otp)
-        );
+        $newEmail = session('new_email');
+        
+        if (!$newEmail) {
+            return back()->withErrors(['otp' => 'Sesi email baru hilang. Silakan ulangi dari awal.']);
+        }
+
+        try {
+            Mail::to($newEmail)
+                ->send(
+                    new VerifyEmailOtpMail($otp)
+                );
+        } catch (\Exception $e) {
+            return back()->withErrors(['otp' => 'Gagal mengirim OTP ke email baru (' . $newEmail . ').']);
+        }
 
         session([
             'change_email_step' => 3
@@ -324,4 +345,6 @@ class CustomerAccountController extends Controller
             'Email berhasil diganti'
         );
     }
+
+
 }

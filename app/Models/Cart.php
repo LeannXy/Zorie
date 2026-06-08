@@ -10,9 +10,18 @@ class Cart extends Model
 
         'customer_id',
         'product_id',
-        'quantity'
+        'size',
+        'qty'
 
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(
+            Product::class,
+            'product_id'
+        );
+    }
 
     public function customer()
     {
@@ -22,10 +31,10 @@ class Cart extends Model
         );
     }
 
-    public function product()
+    public function carts()
     {
-        return $this->belongsTo(
-            Product::class,
+        return $this->hasMany(
+            Cart::class,
             'product_id'
         );
     }

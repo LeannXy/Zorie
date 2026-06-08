@@ -8,10 +8,9 @@
 
     $navLinks = [
         ['label' => 'Beranda',      'url' => '/'],
-        ['label' => 'Toko',         'url' => $routeAllProducts],
+        ['label' => 'all-products', 'url' => $routeAllProducts],
         ['label' => 'Tentang Kami', 'url' => '/about'],
         ['label' => 'Contact',      'url' => '/contact'],
-        ['label' => 'Tanya Jawab',  'url' => '/faq'],
     ];
 @endphp
 
@@ -22,18 +21,20 @@
         categoryOpen: false,
         genderOpen: false,
         langOpen: false,
-        categories: [
-            { label: 'Sneakers', route: '{{ $routeSneakers }}' },
-            { label: 'Sports',   route: '{{ $routeSport }}' },
-            { label: 'Casual',   route: '{{ $routeCasual }}' },
-            { label: 'Running',  route: '{{ $routeRunning }}' },
-        ],
-        genders: [
-            { label: 'Pria',   route: '{{ route('all-products', ['gender' => 'Pria']) }}' },
-            { label: 'Wanita', route: '{{ route('all-products', ['gender' => 'Wanita']) }}' },
-            { label: 'Remaja', route: '{{ route('all-products', ['gender' => 'Remaja']) }}' },
-            { label: 'Anak',   route: '{{ route('all-products', ['gender' => 'Anak']) }}' },
-        ],
+        categories: @js(
+    $featuredCategories->map(function($category){
+        return [
+            'label' => $category->name,
+            'route' => route(
+                'all-products',
+                [
+                    'category' =>
+                    $category->slug
+                ]
+            )
+        ];
+    })
+),
         selectedCategory: 'Kategori',
         selectedRoute: '{{ $routeAllProducts }}',
         selectedGender: 'Kategori Usia',
@@ -91,7 +92,7 @@
                 {{-- SEARCH BAR --}}
                 <div class="flex-1 max-w-[700px] transition-all duration-300 overflow-visible"
                     :class="scrolled ? 'opacity-0 w-0 overflow-hidden pointer-events-none' : 'opacity-100'">
-                    <form action="{{ route('search') }}" method="GET"
+                    <form action="{{ route('products.search') }}" method="GET"
                         class="flex items-center h-[40px] bg-[#000039]/8 border border-[#000039]/20 rounded-full relative" style="overflow:visible !important;">
 
                         {{-- Dropdown Kategori --}}
@@ -202,7 +203,7 @@
                     @endphp
                     {{-- ACCOUNT --}}
                     @if (session('customer_id'))
-                        <a href="{{ route('account') }}"
+                        <a href="{{ route('customer.profile') }}"
                             class="flex items-center justify-center rounded-full bg-black transition-all duration-500 hover:scale-105"
                             :class="scrolled
                                 ?
@@ -235,7 +236,7 @@
  
                         </a>
                     @else
-                        <a href="{{ route('customer.login') }}"
+                        <a href="{{ route('customer.login.post') }}"
                             class="flex items-center justify-center rounded-full bg-[#000039] text-white transition-all duration-300 hover:scale-105 hover:bg-[#000039]/85"
                             :class="scrolled ? 'w-[38px] h-[38px]' : 'w-[44px] h-[44px]'">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
@@ -269,84 +270,7 @@
                         @endforeach
                     </div>
 
-                    {{-- KANAN: Gender + Language --}}
-                    <div class="flex items-center gap-1.5 shrink-0 py-1">
-
-                        {{-- GENDER DROPDOWN --}}
-                        <div class="relative" @click.outside="genderOpen = false">
-                            <button type="button"
-                                @click.stop="genderOpen = !genderOpen; langOpen = false; categoryOpen = false"
-                                class="h-[30px] flex items-center gap-1.5 px-3 text-[11px] font-semibold text-[#000039]/60 border border-[#000039]/20 bg-[#000039]/5 rounded-full hover:text-[#000039] hover:bg-[#000039]/10 transition whitespace-nowrap"
-                                style="font-family: 'Plus Jakarta Sans', sans-serif;">
-                                <span x-text="selectedGender"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 transition-transform duration-200"
-                                    :class="genderOpen ? 'rotate-180' : ''"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
-                                </svg>
-                            </button>
-
-                            {{-- Dropdown ke BAWAH --}}
-                            <div x-show="genderOpen"
-                                x-transition:enter="transition ease-out duration-150"
-                                x-transition:enter-start="opacity-0 -translate-y-1"
-                                x-transition:enter-end="opacity-100 translate-y-0"
-                                x-transition:leave="transition ease-in duration-100"
-                                x-transition:leave-start="opacity-100 translate-y-0"
-                                x-transition:leave-end="opacity-0 -translate-y-1"
-                                class="absolute top-full right-0 mt-2 w-36 bg-white border border-[#000039]/15 rounded-xl overflow-hidden z-[200] shadow-lg shadow-[#000039]/10">
-
-                                <button type="button"
-                                    @click="selectedGender = 'Kategori Usia'; genderOpen = false"
-                                    class="w-full text-left px-4 py-2.5 text-[12px] font-medium hover:bg-[#000039]/10 hover:text-[#000039] transition-colors duration-100 cursor-pointer"
-                                    :class="selectedGender === 'Kategori Usia' ? 'bg-[#000039]/8 text-[#000039] font-semibold' : 'text-[#000039]/60'"
-                                    style="font-family: 'Plus Jakarta Sans', sans-serif;">
-                                    Semua Usia
-                                </button>
-
-                                <template x-for="g in genders" :key="g.label">
-                                    <a :href="g.route"
-                                        @click="selectedGender = g.label; genderOpen = false"
-                                        class="block px-4 py-2.5 text-[12px] font-medium hover:bg-[#000039]/10 hover:text-[#000039] transition-colors duration-100 cursor-pointer"
-                                        :class="selectedGender === g.label ? 'bg-[#000039]/8 text-[#000039] font-semibold' : 'text-[#000039]/60'"
-                                        style="font-family: 'Plus Jakarta Sans', sans-serif;"
-                                        x-text="g.label">
-                                    </a>
-                                </template>
-
-                            </div>
-                        </div>
-
-                        {{-- LANGUAGE DROPDOWN --}}
-                        <div class="relative" @click.outside="langOpen = false">
-                            <button type="button"
-                                x-ref="langBtn"
-                                @click.stop="
-                                    langOpen = !langOpen;
-                                    genderOpen = false;
-                                    categoryOpen = false;
-                                    if (langOpen) {
-                                        const r = $refs.langBtn.getBoundingClientRect();
-                                        $refs.langDropdown.style.top = (r.bottom + 8) + 'px';
-                                        $refs.langDropdown.style.left = (r.right - 160) + 'px';
-                                    }
-                                "
-                                class="h-[30px] flex items-center gap-1.5 px-3 text-[11px] font-semibold text-[#000039]/60 border border-[#000039]/20 bg-[#000039]/5 rounded-full hover:text-[#000039] hover:bg-[#000039]/10 transition whitespace-nowrap"
-                                style="font-family: 'Plus Jakarta Sans', sans-serif;">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-[13px] h-[13px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                                </svg>
-                                <span x-text="selectedLang"></span>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 transition-transform duration-200"
-                                    :class="langOpen ? 'rotate-180' : ''"
-                                    fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
-                                </svg>
-                            </button>
-                        </div>
-
-                    </div>
+             
                     {{-- /KANAN --}}
 
                 </div>

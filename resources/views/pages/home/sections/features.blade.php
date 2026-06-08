@@ -1,57 +1,67 @@
-<section class="bg-white py-12 border-y border-[#000039]/8" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+{{-- Brand Pilihan Section --}}
+<section class="bg-white py-16 border-y border-[#000039]/8" style="font-family: 'Plus Jakarta Sans', sans-serif;">
 
     <div class="max-w-[1280px] mx-auto px-5">
 
-        <p class="text-[11px] font-bold tracking-[4px] uppercase text-[#000039]/40 mb-10">Brand Pilihan</p>
-
-        {{-- BARIS 1: Adidas saja (besar, centered) --}}
-        <div class="flex justify-center mb-6">
-            <div class="flex items-center justify-center bg-[#f8f8f8] border border-[#000039]/8 rounded-2xl px-16 py-8 hover:border-[#000039]/20 hover:bg-white hover:shadow-md transition-all duration-300 group w-full max-w-[400px]">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg"
-                    alt="Adidas"
-                    class="h-16 w-auto object-contain transition-all duration-300 group-hover:scale-110">
-            </div>
+        {{-- Section Header --}}
+        <div class="flex items-center justify-between mb-10">
+            <p class="text-[11px] font-bold tracking-[4px] uppercase text-[#000039]/40">Brand Pilihan</p>
+            <a href="{{ route('all-products') }}"
+               class="text-[11px] font-bold tracking-[3px] uppercase text-[#000039]/40 hover:text-[#000039] transition-colors duration-300 flex items-center gap-2 group">
+                Lihat Semua
+                <svg class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                </svg>
+            </a>
         </div>
 
-        {{-- BARIS 2: Nike, Puma, Asics --}}
-        <div class="grid grid-cols-3 gap-4 mb-4">
-            @php
-            $row2 = [
-                ['name' => 'Nike',  'logo' => 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg'],
-                ['name' => 'Puma',  'logo' => 'https://upload.wikimedia.org/wikipedia/commons/f/fd/Puma_logo.svg'],
-                ['name' => 'Asics', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Asics_Logo.svg'],
-            ];
-            @endphp
-            @foreach ($row2 as $brand)
-            <div class="flex items-center justify-center bg-[#f8f8f8] border border-[#000039]/8 rounded-2xl px-8 py-7 hover:border-[#000039]/20 hover:bg-white hover:shadow-md transition-all duration-300 group">
-                <img src="{{ $brand['logo'] }}"
-                    alt="{{ $brand['name'] }}"
-                    class="h-14 w-auto object-contain transition-all duration-300 group-hover:scale-110">
-            </div>
-            @endforeach
-        </div>
+        @php
+        $brands = [
+            ['name' => 'Adidas',      'logo' => 'https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg'],
+            ['name' => 'Nike',        'logo' => 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg'],
+            ['name' => 'Asics',       'logo' => 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Asics_Logo.svg'],
+            ['name' => 'Converse',    'logo' => 'https://upload.wikimedia.org/wikipedia/commons/3/30/Converse_logo.svg'],
+     
+        ];
+        @endphp
 
-        {{-- BARIS 3: New Balance, Reebok, Ourtus, Converse --}}
-        <div class="grid grid-cols-4 gap-4">
-            @php
-            $row3 = [
-                ['name' => 'New Balance', 'logo' => 'https://upload.wikimedia.org/wikipedia/commons/e/ea/New_Balance_logo.svg'],
-                ['name' => 'Reebok',      'logo' => 'https://upload.wikimedia.org/wikipedia/commons/0/0f/Reebok_2019_logo.svg'],
-                ['name' => 'Converse',    'logo' => 'https://upload.wikimedia.org/wikipedia/commons/3/30/Converse_logo.svg'],
-                ['name' => 'Ourtus',      'logo' => ''],
-            ];
-            @endphp
-            @foreach ($row3 as $brand)
-            <div class="flex flex-col items-center justify-center gap-3 bg-[#f8f8f8] border border-[#000039]/8 rounded-2xl px-6 py-7 hover:border-[#000039]/20 hover:bg-white hover:shadow-md transition-all duration-300 group">
-                @if($brand['logo'])
-                    <img src="{{ $brand['logo'] }}"
-                        alt="{{ $brand['name'] }}"
-                        class="h-12 w-auto object-contain transition-all duration-300 group-hover:scale-110">
-                @else
-                    <span class="text-[22px] font-black tracking-[-1px] text-[#000039] transition-colors">OURTUS</span>
-                    <span class="text-[10px] font-semibold text-[#000039]/40">{{ $brand['name'] }}</span>
-                @endif
-            </div>
+        {{-- Brand Grid --}}
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            @foreach ($brands as $brand)
+                <a href="{{ route('all-products', ['brand' => strtolower($brand['name'])]) }}"
+                   class="group relative flex flex-col items-center justify-center gap-3
+                          bg-[#f8f8f8] border border-[#000039]/8 rounded-2xl
+                          px-6 py-8
+                          hover:border-[#000039]/20 hover:bg-white hover:shadow-lg
+                          transition-all duration-300 cursor-pointer overflow-hidden">
+
+                    {{-- Hover background accent --}}
+                    <span class="absolute inset-0 bg-gradient-to-br from-[#000039]/[0.02] to-transparent
+                                 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></span>
+
+                    @if ($brand['logo'])
+                        <img src="{{ $brand['logo'] }}"
+                             alt="{{ $brand['name'] }}"
+                             class="h-10 w-auto object-contain grayscale opacity-60
+                                    group-hover:grayscale-0 group-hover:opacity-100
+                                    group-hover:scale-105
+                                    transition-all duration-300 relative z-10">
+                    @else
+                        <span class="text-[20px] font-black tracking-[-1px] text-[#000039]/50
+                                     group-hover:text-[#000039]
+                                     transition-colors duration-300 relative z-10">
+                            {{ strtoupper($brand['name']) }}
+                        </span>
+                    @endif
+
+                    <span class="text-[10px] font-semibold tracking-[2px] uppercase
+                                 text-[#000039]/30 group-hover:text-[#000039]/60
+                                 transition-colors duration-300 relative z-10">
+                        {{ $brand['name'] }}
+                    </span>
+
+                </a>
             @endforeach
         </div>
 

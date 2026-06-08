@@ -19,49 +19,125 @@ use App\Mail\OtpMail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\CategoryBannerController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PublicProductController;
+use App\Http\Controllers\CheckoutController;
+use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\ReviewController;
 
-Route::view('/', 'pages.home.index')->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Public all products route
-Route::view('/all-products', 'pages.all-products')->name('all-products');
+Route::get(
+    '/all-products',
+    [PublicProductController::class, 'index']
+)->name('all-products');
+Route::get(
+    '/product/{product}',
+    [PublicProductController::class, 'show']
+)->name('product.show');
 
 // Public running route
 Route::view('/running', 'pages.running')->name('running');
+Route::view('/about', 'pages.home.about')->name('about');
 
 // Public search route
 Route::get('/search', [SearchController::class, 'index'])->name('search');
+Route::get('/products-search', [PublicProductController::class, 'search'])->name('products.search');
 
 // Public cart and wishlist routes
 
 
+
+
+// tampilkan cart
 Route::get('/cart', [CartController::class, 'index'])->name('cart');
-Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
-Route::delete('/cart/remove/{productId}', [CartController::class, 'remove'])->name('cart.remove');
-Route::patch('/cart/update/{productId}', [CartController::class, 'update'])->name('cart.update');
-Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
+
+// tambah ke cart
+Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+
+// update qty
+Route::patch('/cart/{cart}', [CartController::class, 'update'])->name('cart.update');
+
+// hapus item
+Route::delete('/cart/{cart}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+// clear cart
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
+// hitung jumlah cart
+Route::get('/cart/count', [CartController::class, 'count'])->name('cart.count');
 
 Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist');
 Route::post('/wishlist/add/{product}', [WishlistController::class, 'add'])->name('wishlist.add');
 Route::delete('/wishlist/remove/{productId}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 Route::get('/wishlist/count', [WishlistController::class, 'count'])->name('wishlist.count');
 Route::post('/wishlist/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
+Route::post(
+    '/buy-now',
+    [CheckoutController::class, 'buyNow']
+)->name('buy-now');
 
-// customer akun
 
-Route::view(
-    '/login-customer',
-    'pages.home.loginCustomers'
-)->name('customer.login');
-Route::view(
-    '/login--',
-    'pages.home.account'
-)->name('customer.login');
+// customer akun - Protected Routes (using session middleware)
+Route::middleware(['CheckCustomerSession'])->group(function () {
+    Route::get('/my-account/dashboard', [CustomerAccountController::class, 'dashboard'])->name('customer.account');
+
+    Route::get('/my-account/profile', [
+        CustomerController::class,
+        'profile'
+    ])->name('customer.profile');
+
+    Route::get('/my-account/orders', [
+        CustomerController::class,
+        'orders'
+    ])->name('customer.orders');
+
+    Route::get('/my-account/wishlist', [
+        CustomerController::class,
+        'wishlist'
+    ])->name('customer.wishlist');
+
+    Route::get('/my-account/reviews', [
+        CustomerController::class,
+        'reviews'
+    ])->name('customer.reviews');
+
+    // Detail Transaksi & Success Page
+    Route::get('/checkout/success/{order}', [App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
+    Route::get('/orders/{order}/invoice', [App\Http\Controllers\CheckoutController::class, 'downloadInvoice'])->name('orders.invoice');
+    Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout/process', [App\Http\Controllers\CheckoutController::class, 'process'])->name('checkout.process');
+    Route::post('/check-ongkir', [App\Http\Controllers\CheckoutController::class, 'checkOngkir'])->name('check.ongkir');
+
+    // Tambahan detail order di akun
+    Route::get('/my-account/orders/{order}', [CustomerController::class, 'showOrder'])->name('customer.orders.show');
+
+   Route::post(
+    '/reviews/store',
+    [ReviewController::class, 'store']
+)->name('reviews.store');
+
+    Route::get('/my-account/security', [
+        CustomerController::class,
+        'security'
+    ])->name('customer.security');
+
+    Route::get('/my-account/addresses', [
+        AddressController::class,
+        'index'
+    ])->name('customer.addresses');
+});
 
 Route::post(
     '/customer/login',
     [CustomerAuthController::class, 'login']
 )->name('customer.login.post');
+Route::get(
+    '/customer/login',
+    [CustomerAuthController::class, 'showLogin']
+)->name('customer.login');
 
 Route::post(
     '/customer/register',
@@ -126,81 +202,152 @@ Route::get(
     [GoogleController::class, 'callback']
 );
 
-Route::get(
-    '/my-account',
-    [CustomerAccountController::class, 'dashboard']
-)->name('account');
+Route::get('/test-rajaongkir', function () {
 
+    $response = Http::withHeaders([
+        'key' => env('RAJAONGKIR_API_KEY')
+    ])->get(
+        'https://rajaongkir.komerce.id/api/v1/destination/domestic-destination',
+        [
+            'search' => 'jepara'
+        ]
+    );
+
+    dd(
+        $response->status(),
+        $response->headers(),
+        $response->body()
+    );
+});
+
+///////////////////
+//cek id raja ongkir
+///////////////////
+Route::get('/test-city', function () {
+
+    $response = Http::withHeaders([
+        'key' => env('RAJAONGKIR_API_KEY')
+    ])->get(
+        'https://rajaongkir.komerce.id/api/v1/destination/domestic-destination',
+        [
+            'search' => 'jepara'
+        ]
+    );
+
+    dd($response->json());
+});
+
+Route::get('/cekkota', function () {
+
+    $response = Http::withHeaders([
+        'key' => env('RAJAONGKIR_API_KEY')
+    ])->get(
+        'https://rajaongkir.komerce.id/api/v1/destination/domestic-destination',
+        [
+            'search' => '59452'
+        ]
+    );
+
+    dd($response->json());
+
+});
+Route::get(
+    '/search-city',
+    [AddressController::class,'searchCity']
+);
+Route::get(
+    '/search-postal-code',
+    [AddressController::class, 'searchPostalCode']
+)->name('search.postal.code');
 ///////////////////
 //edit profil
 //////////////////
-Route::post(
-    '/my-account/profile',
-    [CustomerAccountController::class, 'updateProfile']
-)->name('customer.profile.update');
-//cange pw
-Route::post(
-    '/customer/change-password',
-    [CustomerAccountController::class, 'changePassword']
-)->name('customer.password.change');
-//address
-Route::post(
-    '/customer/address',
-    [AddressController::class, 'store']
-)->name('address.store');
+Route::middleware(['CheckCustomerSession'])->group(function () {
+    Route::post(
+        '/my-account/profile',
+        [CustomerAccountController::class, 'updateProfile']
+    )->name('customer.profile.update');
+    
+    Route::post(
+        '/customer/change-password',
+        [CustomerAccountController::class, 'changePassword']
+    )->name('customer.password.change');
+    
+    Route::post(
+        '/customer/address',
+        [AddressController::class, 'store']
+    )->name('address.store');
 
-Route::delete(
-    '/customer/address/{address}',
-    [AddressController::class, 'destroy']
-)->name('address.destroy');
+    Route::delete(
+        '/customer/address/{address}',
+        [AddressController::class, 'destroy']
+    )->name('address.destroy');
 
-Route::post(
-    '/customer/address/default/{address}',
-    [AddressController::class, 'setDefault']
-)->name('address.default');
+    Route::post(
+        '/customer/address/default/{address}',
+        [AddressController::class, 'setDefault']
+    )->name('address.default');
 
-Route::put(
-    '/customer/address/{address}',
-    [AddressController::class, 'update']
-)->name('address.update');
-//verify email 
-Route::post(
-    '/customer/email/send-otp',
-    [CustomerAuthController::class, 'sendEmailVerificationOtp']
-)->name('customer.email.send-otp');
+    Route::put(
+        '/customer/address/{address}',
+        [AddressController::class, 'update']
+    )->name('address.update');
+    
+    Route::post(
+        '/customer/email/send-otp',
+        [CustomerAuthController::class, 'sendEmailVerificationOtp']
+    )->name('customer.email.send-otp');
 
-Route::post(
-    '/customer/email/verify',
-    [CustomerAuthController::class, 'verifyEmailOtp']
-)->name('customer.email.verify');
-//change email
-Route::post(
-    '/customer/email/send-old-otp',
-    [CustomerAccountController::class, 'sendOldEmailOtp']
-)->name('customer.email.send-old-otp');
+    Route::post(
+        '/customer/email/verify',
+        [CustomerAuthController::class, 'verifyEmailOtp']
+    )->name('customer.email.verify');
+    
+    Route::post(
+        '/customer/email/send-old-otp',
+        [CustomerAccountController::class, 'sendOldEmailOtp']
+    )->name('customer.email.send-old-otp');
 
-Route::post(
-    '/customer/email/verify-old-otp',
-    [CustomerAccountController::class, 'verifyOldEmailOtp']
-)->name('customer.email.verify-old-otp');
+    Route::post(
+        '/customer/email/verify-old-otp',
+        [CustomerAccountController::class, 'verifyOldEmailOtp']
+    )->name('customer.email.verify-old-otp');
 
-Route::post(
-    '/customer/email/verify-new-email',
-    [CustomerAccountController::class, 'sendNewEmailOtp']
-)->name('customer.email.send-new-otp');
+    Route::post(
+        '/customer/email/verify-new-email',
+        [CustomerAccountController::class, 'sendNewEmailOtp']
+    )->name('customer.email.send-new-otp');
 
-Route::post(
-    '/customer/email/verify-new-otp',
-    [CustomerAccountController::class, 'verifyNewEmailOtp']
-)->name('customer.email.verify-new-otp');
+    Route::post(
+        '/customer/email/verify-new-otp',
+        [CustomerAccountController::class, 'verifyNewEmailOtp']
+    )->name('customer.email.verify-new-otp');
 
+    Route::post(
+        '/testimonials/store',
+        [TestimonialController::class, 'storeFromCustomer']
+    )->name('testimonials.store');
+
+    Route::put(
+        '/testimonials/{testimonial}',
+        [TestimonialController::class, 'updateFromCustomer']
+    )->name('testimonials.update');
+
+    Route::delete(
+        '/testimonials/{testimonial}',
+        [TestimonialController::class, 'destroyFromCustomer']
+    )->name('testimonials.destroy');
+});
+
+
+// Callback Midtrans harus tetap di luar middleware (Public)
+Route::post('/midtrans/callback', [App\Http\Controllers\CheckoutController::class, 'callback'])->name('midtrans.callback');
 
 ///////////////////
 //DASHBOARD
 ///////////////////
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('/dashboard', 'pages.dashboard.dashboard')
-        ->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/products', [ProductController::class, 'index'])
         ->name('products');
@@ -214,20 +361,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update'])
         ->name('products.update');
 
-    Route::view('/categories', 'pages.categories')
-        ->name('categories');
-
-    Route::view('/customers', 'pages.customers')
-        ->name('customers');
-
-    Route::view('/orders', 'pages.orders')
-        ->name('orders');
-
-    // Route::view('/settings', 'pages.settings')
-    //     ->name('settings');
-
-    Route::view('/analytics', 'pages.analytics')
-        ->name('analytics');
+    // Rute view dihapus karena sudah ditangani oleh Controller di bawah
 
     Route::get('/products/search', [ProductController::class, 'search']);
     Route::post(
@@ -285,14 +419,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         'categories.toggleStatus'
     );
     Route::get(
-    '/categories/create',
-    [CategoryController::class,'create']
-)->name('categories.create');
+        '/categories/create',
+        [CategoryController::class, 'create']
+    )->name('categories.create');
 
-Route::get(
-    '/categories/{category}/edit',
-    [CategoryController::class,'edit']
-)->name('categories.edit');
+    Route::get(
+        '/categories/{category}/edit',
+        [CategoryController::class, 'edit']
+    )->name('categories.edit');
 
     Route::patch(
         '/categories/{category}/toggle-featured',
@@ -313,6 +447,10 @@ Route::get(
         [CategoryController::class, 'export']
     )->name(
         'categories.export'
+    );
+    Route::resource(
+        'category-banners',
+        CategoryBannerController::class
     );
 
 
@@ -470,17 +608,6 @@ Route::get(
         [AnalyticsController::class, 'index']
     )->name(
         'analytics'
-    );
-
-
-    Route::get(
-        '/dashboard',
-        [DashboardController::class, 'index']
-    )->middleware([
-        'auth',
-        'verified'
-    ])->name(
-        'dashboard'
     );
 
     Route::get(

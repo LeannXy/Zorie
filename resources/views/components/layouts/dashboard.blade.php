@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <title>{{ $title ?? 'Dashboard' }}</title>
     @fluxAppearance
     
@@ -264,6 +264,17 @@
                     <i data-lucide="layers-3" class="h-5 w-5"></i>
 
                     Kategori
+
+                </a>
+                <!-- Category Banners -->
+                <a href="{{ route('category-banners.index') }}" @click="sidebarOpen=false"
+                    class="flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition
+                        {{ request()->routeIs('category-banners.index')
+                            ? 'bg-blue-500/10 text-blue-500'
+                            : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white' }}">
+                    <i data-lucide="layers-3" class="h-5 w-5"></i>
+
+                    Category Banners
 
                 </a>
 

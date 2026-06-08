@@ -4,12 +4,13 @@
 
     @include('pages.home.sections.navbar')
 
-    <div class="min-h-screen bg-white pt-32 pb-12">
+    <div class="min-h-screen bg-white pt-8 pb-12">
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Breadcrumb with Back Button -->
             <div class="mb-8 flex items-center gap-4">
-                <a href="{{ route('home') }}" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-semibold transition">
+                <a href="{{ route('home') }}"
+                    class="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-semibold transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
@@ -26,156 +27,239 @@
                     <div>
                         <h2 class="text-2xl font-bold text-gray-900 mb-6">Item Keranjang</h2>
 
-                    @if(count($cartItems) > 0)
-                        <div class="space-y-4">
-                            @foreach($cartItems as $item)
-                                <div class="border border-gray-200 rounded-lg p-4 flex gap-4">
-                                    <!-- Product Image -->
-                                    <div class="flex-shrink-0">
-                                        @if($item['product']->productImages->count() > 0)
-                                            <img src="{{ asset('storage/' . $item['product']->productImages->first()->image_url) }}" 
-                                                 alt="{{ $item['product']->name }}" 
-                                                 class="h-24 w-24 object-cover rounded">
-                                        @else
-                                            <div class="h-24 w-24 bg-gray-200 rounded flex items-center justify-center">
-                                                <span class="text-gray-400 text-xs text-center">Tidak Ada Gambar</span>
-                                            </div>
-                                        @endif
-                                    </div>
+                        @if (count($cartItems) > 0)
+                            <div class="space-y-4">
+                                @foreach ($cartItems as $item)
+                                    <div class="border border-gray-200 rounded-lg p-4 flex gap-4">
+                                        <!-- Product Image -->
+                                        <div class="flex-shrink-0">
+                                            @if ($item->product->images->count() > 0)
+                                                <img src="{{ asset('storage/' . $item->product->images->first()->image) }}"
+                                                    alt="{{ $item->product->name }}" class="h-16 w-16 object-cover rounded">
+                                            @else
+                                                <div class="h-24 w-24 bg-gray-200 rounded flex items-center justify-center">
+                                                    <span class="text-gray-400 text-xs text-center">Tidak Ada Gambar</span>
+                                                </div>
+                                            @endif
+                                        </div>
 
-                                    <!-- Product Details -->
-                                    <div class="flex-grow">
-                                        <h3 class="text-sm font-semibold text-gray-900">{{ $item['product']->name }}</h3>
-                                        <p class="text-xs text-gray-600 mt-1">Sku: XXS</p>
-                                        <p class="text-xs text-gray-600">Warna: {{ $item['product']->category->name ?? 'Standard' }}</p>
-                                        
-                                        <!-- Quantity Selector -->
-                                        <div class="flex items-center gap-3 mt-3">
-                                            <button onclick="updateQuantity({{ $item['product']->id }}, {{ $item['quantity'] - 1 }})" 
+                                        <!-- Product Details -->
+                                        <div class="flex-grow">
+                                            <h3 class="text-sm font-semibold text-gray-900">{{ $item->product->name }}
+                                            </h3>
+                                            <p class="text-xs text-gray-600 mt-1">
+                                                Ukuran: {{ $item->size }}
+                                            </p>
+                                            <p class="text-xs text-gray-600">Warna:
+                                                {{ $item->product->categories->first()?->name ?? 'Standard' }}</p>
+
+                                            <!-- Quantity Selector -->
+                                            <div class="flex items-center gap-3 mt-3">
+                                                <button
+                                                    onclick="updateQuantity({{ $item->product->id }}, {{ $item->qty - 1 }})"
                                                     class="w-6 h-6 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm">−</button>
-                                            <span class="text-sm font-medium">{{ $item['quantity'] }}</span>
-                                            <button onclick="updateQuantity({{ $item['product']->id }}, {{ $item['quantity'] + 1 }})" 
+                                                <span class="text-sm font-medium">{{ $item->qty }}</span>
+                                                <button
+                                                    onclick="updateQuantity({{ $item->product->id }}, {{ $item->qty + 1 }})"
                                                     class="w-6 h-6 flex items-center justify-center border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm">+</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Price and Remove -->
+                                        <div class="text-right">
+                                            <p class="text-lg font-semibold text-gray-900">Rp
+                                                {{ number_format($item->product->price, 0, ',', '.') }}</p>
+                                            <button onclick="removeFromCart({{ $item->product->id }})"
+                                                class="text-xs text-red-600 hover:text-red-800 font-semibold mt-2">Hapus</button>
                                         </div>
                                     </div>
-
-                                    <!-- Price and Remove -->
-                                    <div class="text-right">
-                                        <p class="text-lg font-semibold text-gray-900">Rp {{ number_format($item['product']->price, 0, ',', '.') }}</p>
-                                        <button onclick="removeFromCart({{ $item['product']->id }})" 
-                                                class="text-xs text-red-600 hover:text-red-800 font-semibold mt-2">Hapus</button>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="text-center py-12 border border-gray-200 rounded-lg">
-                            <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                            </svg>
-                            <h3 class="text-gray-900 font-semibold mb-2">Keranjang Anda kosong</h3>
-                            <p class="text-gray-600 text-sm mb-4">Mulai berbelanja untuk menambahkan item ke keranjang Anda</p>
-                            <a href="{{ route('home') }}" class="inline-block text-gray-900 hover:text-gray-700 font-semibold">
-                                Lanjutkan Berbelanja
-                            </a>
-                        </div>
-                    @endif
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-center py-12 border border-gray-200 rounded-lg">
+                                <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                                <h3 class="text-gray-900 font-semibold mb-2">Keranjang Anda kosong</h3>
+                                <p class="text-gray-600 text-sm mb-4">Mulai berbelanja untuk menambahkan item ke keranjang
+                                    Anda</p>
+                                <a href="{{ route('home') }}"
+                                    class="inline-block text-gray-900 hover:text-gray-700 font-semibold">
+                                    Lanjutkan Berbelanja
+                                </a>
+                            </div>
+                        @endif
                     </div>
 
-                    <!-- Delivery Method Section -->
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-4">Metode Pengiriman</h3>
-                        <div class="space-y-3">
-                            <label class="border border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-50 transition">
-                                <input type="radio" name="delivery" value="standard" checked class="w-4 h-4 text-black">
-                                <span class="ml-3 text-sm text-gray-700">
-                                    <span class="font-semibold">Pengiriman Standar (5-6 hari)</span>
-                                    <span class="text-gray-600 ml-2">GRATIS</span>
-                                </span>
-                            </label>
-                            <label class="border border-gray-300 rounded-lg p-4 flex items-center cursor-pointer hover:bg-gray-50 transition">
-                                <input type="radio" name="delivery" value="express" class="w-4 h-4 text-black">
-                                <span class="ml-3 text-sm text-gray-700">
-                                    <span class="font-semibold">Pengiriman Ekspres (1-2 hari)</span>
-                                    <span class="text-gray-600 ml-2">Rp150.000</span>
-                                </span>
-                            </label>
-                        </div>
-                    </div>
 
                     <!-- Shipping Information Section -->
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-4">Informasi Pengiriman</h3>
-                        <div class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <input type="text" placeholder="Negara" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
-                                <input type="text" placeholder="Kota" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
+                        @if ($errors->any())
+                            <div class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+
+                                {{ $errors->first() }}
+
                             </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <input type="text" placeholder="Alamat" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
-                                <input type="text" placeholder="Kode Pos" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
+                        @endif
+                        <form action="{{ route('checkout.process') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="shipping_cost" id="shipping_input">
+                            <input type="hidden" id="weight" value="{{ $totalWeight }}">
+                            <h3 class="text-lg font-bold text-gray-900 mb-4">Informasi Pengiriman</h3>
+                            <div class="space-y-4">
+
+
+                                <div class="border rounded-xl p-4 bg-gray-50">
+
+                                    <div class="flex justify-between">
+
+                                        <h4 class="font-semibold">
+
+                                            Alamat Pengiriman
+
+                                        </h4>
+
+                                        <a href="{{ route('customer.addresses') }}" class="text-blue-600 text-sm font-semibold">
+                                            Ubah
+                                        </a>
+
+                                    </div>
+
+                                    @if ($defaultAddress)
+                                        <div class="mt-3">
+
+                                            <p class="font-medium">
+
+                                                {{ $defaultAddress->recipient_name }}
+
+                                            </p>
+
+                                            <p>
+
+                                                {{ $defaultAddress->phone }}
+
+                                            </p>
+
+                                            <p>
+
+                                                {{ $defaultAddress->address }}
+
+                                            </p>
+
+                                            <p>
+
+                                                {{ $defaultAddress->district }},
+                                                {{ $defaultAddress->city }},
+                                                {{ $defaultAddress->province }}
+
+                                            </p>
+
+                                            <p>
+
+                                                {{ $defaultAddress->postal_code }}
+
+                                            </p>
+
+                                        </div>
+                                    @else
+                                        <div class="text-red-500">
+
+                                            Belum ada alamat utama
+
+                                        </div>
+                                    @endif
+
+                                </div>
                             </div>
-                        </div>
                     </div>
 
                     <!-- Payment Method Section -->
                     <div>
                         <h3 class="text-lg font-bold text-gray-900 mb-4">Metode Pembayaran</h3>
-                        <div class="space-y-3">
-                            <!-- Visa -->
-                            <label class="border border-gray-300 rounded-lg p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition">
-                                <div class="flex items-center">
-                                    <input type="radio" name="payment" value="visa" checked class="w-4 h-4 text-black">
-                                    <span class="ml-3 text-sm font-semibold text-gray-700">Visa</span>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                            {{-- COD --}}
+                            <label class="relative border rounded-xl p-4 flex items-center cursor-pointer hover:border-black transition-all group">
+                                <input type="radio" name="payment" value="COD" checked class="w-4 h-4 text-black border-gray-300 focus:ring-black">
+                                <div class="ml-4 flex items-center justify-between w-full">
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-900 leading-none">COD</p>
+                                        <p class="text-[11px] text-gray-500 mt-1">Bayar saat barang sampai</p>
+                                    </div>
+                                    <svg class="w-8 h-8 text-gray-400 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" stroke-width="1.5"/>
+                                    </svg>
                                 </div>
-                                <svg class="w-8 h-5" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="48" height="32" rx="4" fill="#1434CB"/>
-                                    <text x="24" y="20" text-anchor="middle" fill="white" font-size="12" font-weight="bold">VISA</text>
-                                </svg>
                             </label>
 
-                            <!-- Mastercard -->
-                            <label class="border border-gray-300 rounded-lg p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition">
-                                <div class="flex items-center">
-                                    <input type="radio" name="payment" value="mastercard" class="w-4 h-4 text-black">
-                                    <span class="ml-3 text-sm font-semibold text-gray-700">Mastercard</span>
+                            {{-- QRIS --}}
+                            <label class="relative border rounded-xl p-4 flex items-center cursor-pointer hover:border-black transition-all group">
+                                <input type="radio" name="payment" value="QRIS" class="w-4 h-4 text-black border-gray-300 focus:ring-black">
+                                <div class="ml-4 flex items-center justify-between w-full">
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-900 leading-none">QRIS / E-Wallet</p>
+                                        <p class="text-[11px] text-gray-500 mt-1">Gopay, OVO, Dana, LinkAja</p>
+                                    </div>
+                                    <div class="flex gap-1">
+                                        <div class="px-1.5 py-0.5 bg-[#f5f5f5] rounded text-[9px] font-black text-[#e52e2e]">QRIS</div>
+                                    </div>
                                 </div>
-                                <svg class="w-8 h-5" viewBox="0 0 48 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect width="48" height="32" rx="4" fill="#EB001B"/>
-                                    <circle cx="20" cy="16" r="8" fill="#FF5F00"/>
-                                    <circle cx="28" cy="16" r="8" fill="#FFB81C"/>
-                                </svg>
                             </label>
 
-                            <!-- Google Pay -->
-                            <label class="border border-gray-300 rounded-lg p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition">
-                                <div class="flex items-center">
-                                    <input type="radio" name="payment" value="googlepay" class="w-4 h-4 text-black">
-                                    <span class="ml-3 text-sm font-semibold text-gray-700">Google Pay</span>
+                            {{-- BCA --}}
+                            <label class="relative border rounded-xl p-4 flex items-center cursor-pointer hover:border-black transition-all">
+                                <input type="radio" name="payment" value="BCA Transfer" class="w-4 h-4 text-black border-gray-300 focus:ring-black">
+                                <div class="ml-4 flex items-center justify-between w-full">
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-900 leading-none">BCA Transfer</p>
+                                        <p class="text-[11px] text-gray-500 mt-1">Konfirmasi manual</p>
+                                    </div>
+                                    <span class="text-[10px] font-black italic text-blue-800">BCA</span>
                                 </div>
-                                <div class="text-xs font-bold text-gray-500">G Pay</div>
                             </label>
 
-                            <!-- PayPal -->
-                            <label class="border border-gray-300 rounded-lg p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition">
-                                <div class="flex items-center">
-                                    <input type="radio" name="payment" value="paypal" class="w-4 h-4 text-black">
-                                    <span class="ml-3 text-sm font-semibold text-gray-700">PayPal</span>
+                            {{-- Mandiri --}}
+                            <label class="relative border rounded-xl p-4 flex items-center cursor-pointer hover:border-black transition-all">
+                                <input type="radio" name="payment" value="Mandiri Transfer" class="w-4 h-4 text-black border-gray-300 focus:ring-black">
+                                <div class="ml-4 flex items-center justify-between w-full">
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-900 leading-none">Mandiri</p>
+                                        <p class="text-[11px] text-gray-500 mt-1">Konfirmasi manual</p>
+                                    </div>
+                                    <span class="text-[10px] font-black italic text-blue-500">mandiri</span>
                                 </div>
-                                <div class="text-xs font-bold text-blue-600">PP</div>
                             </label>
-                        </div>
 
-                        <!-- Card Details (Shown when Visa is selected) -->
-                        <div id="cardDetails" class="mt-4 space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <input type="text" placeholder="Card number" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 col-span-2">
-                            </div>
-                            <div class="grid grid-cols-2 gap-4">
-                                <input type="text" placeholder="Expiry date (MM/YY)" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
-                                <input type="text" placeholder="CVV" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400">
-                            </div>
-                            <input type="text" placeholder="Cardholder full name" class="border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 w-full">
+                            {{-- BNI/BRI --}}
+                            <label class="relative border rounded-xl p-4 flex items-center cursor-pointer hover:border-black transition-all">
+                                <input type="radio" name="payment" value="BNI/BRI Transfer" class="w-4 h-4 text-black border-gray-300 focus:ring-black">
+                                <div class="ml-4 flex items-center justify-between w-full">
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-900 leading-none">BNI / BRI</p>
+                                        <p class="text-[11px] text-gray-500 mt-1">Konfirmasi manual</p>
+                                    </div>
+                                    <div class="flex gap-1">
+                                        <span class="text-[9px] font-black text-orange-600">BNI</span>
+                                        <span class="text-[9px] font-black text-blue-700">BRI</span>
+                                    </div>
+                                </div>
+                            </label>
+
+                            {{-- Retail --}}
+                            <label class="relative border rounded-xl p-4 flex items-center cursor-pointer hover:border-black transition-all">
+                                <input type="radio" name="payment" value="Retail Outlet" class="w-4 h-4 text-black border-gray-300 focus:ring-black">
+                                <div class="ml-4 flex items-center justify-between w-full">
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-900 leading-none">Indomaret / Alfamart</p>
+                                        <p class="text-[11px] text-gray-500 mt-1">Melalui kasir terdekat</p>
+                                    </div>
+                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-width="1.5"/>
+                                    </svg>
+                                </div>
+                            </label>
                         </div>
 
                         <!-- Log In Link -->
@@ -193,23 +277,29 @@
 
                         <!-- Product Items in Summary -->
                         <div class="space-y-4 mb-6 pb-6 border-b border-gray-200">
-                            @foreach($cartItems as $item)
+                            @foreach ($cartItems as $item)
                                 <div class="flex gap-3">
-                                    @if($item['product']->productImages->count() > 0)
-                                        <img src="{{ asset('storage/' . $item['product']->productImages->first()->image_url) }}" 
-                                             alt="{{ $item['product']->name }}" 
-                                             class="h-16 w-16 object-cover rounded">
+                                    @if ($item->product->images->count() > 0)
+                                        <img src="{{ asset('storage/' . $item->product->images->first()->image) }}"
+                                            alt="{{ $item->product->name }}" class="h-16 w-16 object-cover rounded">
                                     @else
                                         <div class="h-16 w-16 bg-gray-200 rounded flex items-center justify-center">
-                                            <span class="text-gray-400 text-xs">Tidak Ada Gambar</span>
+
+                                            <span class="text-gray-400 text-xs">
+
+                                                Tidak Ada Gambar
+
+                                            </span>
+
                                         </div>
                                     @endif
                                     <div class="flex-grow">
-                                        <p class="text-sm font-semibold text-gray-900">{{ $item['product']->name }}</p>
-                                        <p class="text-xs text-gray-600">Sku: XXS</p>
+                                        <p class="text-sm font-semibold text-gray-900">{{ $item->product->name }}</p>
+                                        <p class="text-xs text-gray-600">Ukuran: {{ $item->size }}</p>
                                         <div class="flex items-center justify-between mt-2">
-                                            <span class="text-xs text-gray-600">Qty: {{ $item['quantity'] }}</span>
-                                            <span class="font-semibold text-gray-900">Rp {{ number_format($item['product']->price, 0, ',', '.') }}</span>
+                                            <span class="text-xs text-gray-600">Qty: {{ $item->qty }}</span>
+                                            <span class="font-semibold text-gray-900">Rp
+                                                {{ number_format($item->product->price, 0, ',', '.') }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -218,32 +308,51 @@
 
                         <!-- Summary Calculations -->
                         <div class="space-y-3 text-sm">
-                            <div class="flex justify-between text-gray-600">
+
+                            <div class="flex justify-between">
                                 <span>Subtotal</span>
-                                <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
+                                <span>
+                                    Rp {{ number_format($total, 0, ',', '.') }}
+                                </span>
                             </div>
-                            <div class="flex justify-between text-gray-600">
-                                <span>Diskon</span>
-                                <span>-Rp 0</span>
+
+                            <div class="flex justify-between">
+                                <span>Ongkir</span>
+                                <span id="shipping-cost">
+                                    Rp 0
+                                </span>
                             </div>
-                            <div class="flex justify-between text-gray-600">
-                                <span>Pengiriman</span>
-                                <span class="text-gray-900 font-semibold">GRATIS</span>
+
+                            <hr>
+
+                            <div class="flex justify-between font-bold text-lg">
+                                <span>Total</span>
+                                <span id="grand-total">
+                                    Rp {{ number_format($total, 0, ',', '.') }}
+                                </span>
                             </div>
-                            <div class="border-t border-gray-200 pt-3 flex justify-between text-lg font-bold text-gray-900">
-                                <span>Total Pembayaran</span>
-                                <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
-                            </div>
+
                         </div>
 
+
+
                         <!-- Checkout Button -->
-                        <button class="w-full mt-6 bg-black hover:bg-gray-800 text-white py-3 rounded-lg font-semibold transition">
-                            Bayar Sekarang
+
+
+                        <button type="submit"
+                            class="  w-full  mt-6 bg-black  hover:bg-gray-800  text-white  py-3  rounded-lg  font-semibold  transition">
+
+
+                            Buat Pesanan
+
                         </button>
+
+                        </form>
 
                         <!-- Terms -->
                         <p class="text-xs text-gray-600 text-center mt-4">
-                            Dengan melanjutkan saya menerima <a href="#" class="text-gray-900 hover:text-gray-700 underline">Syarat & Ketentuan</a>
+                            Dengan melanjutkan saya menerima <a href="#"
+                                class="text-gray-900 hover:text-gray-700 underline">Syarat & Ketentuan</a>
                         </p>
                     </div>
                 </div>
@@ -254,65 +363,47 @@
     @include('pages.home.sections.footer')
 
     <script>
-        // Payment method visibility control
-        const paymentRadios = document.querySelectorAll('input[name="payment"]');
-        const cardDetails = document.getElementById('cardDetails');
+        document.addEventListener('DOMContentLoaded', function() {
+            const weight = document.getElementById('weight').value;
+            const hasAddress = @js($defaultAddress ? true : false);
 
-        paymentRadios.forEach(radio => {
-            radio.addEventListener('change', () => {
-                if (radio.value === 'visa' || radio.value === 'mastercard') {
-                    cardDetails.style.display = 'block';
-                } else {
-                    cardDetails.style.display = 'none';
-                }
-            });
-        });
-
-        // Initialize card details visibility
-        if (document.querySelector('input[name="payment"]:checked').value !== 'visa' && 
-            document.querySelector('input[name="payment"]:checked').value !== 'mastercard') {
-            cardDetails.style.display = 'none';
-        }
-
-        function updateQuantity(productId, newQuantity) {
-            if (newQuantity <= 0) {
-                removeFromCart(productId);
-                return;
+            if (hasAddress) {
+                calculateShipping(weight);
             }
 
-            fetch(`/cart/update/${productId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({ quantity: newQuantity })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.reload();
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
+            function calculateShipping(weight) {
+                const shippingCostEl = document.getElementById('shipping-cost');
+                const shippingInput = document.getElementById('shipping_input');
+                const grandTotalEl = document.getElementById('grand-total');
+                const subtotal = {{ $total }};
 
-        function removeFromCart(productId) {
-            fetch(`/cart/remove/${productId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.reload();
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
+                shippingCostEl.innerHTML = '<span class="text-[10px] text-blue-500 animate-pulse font-bold">MENGHITUNG...</span>';
+
+                fetch('{{ route('check.ongkir') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ weight: weight })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.data && data.data[0]) {
+                        let ongkir = data.data[0].cost;
+                        
+                        shippingCostEl.innerText = 'Rp ' + ongkir.toLocaleString('id-ID');
+                        shippingInput.value = ongkir;
+                        grandTotalEl.innerText = 'Rp ' + (subtotal + ongkir).toLocaleString('id-ID');
+                    } else {
+                        shippingCostEl.innerHTML = '<span class="text-red-500 text-xs">Gagal memuat ongkir</span>';
+                    }
+                })
+                .catch(err => {
+                    console.error('Shipping Error:', err);
+                    shippingCostEl.innerHTML = '<span class="text-red-500 text-xs">Error koneksi</span>';
+                });
+            }
+        });
     </script>
-
 @endsection

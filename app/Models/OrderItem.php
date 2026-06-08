@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Testimonial;
 
 class OrderItem extends Model
 {
@@ -13,7 +14,8 @@ class OrderItem extends Model
         'order_id',
         'product_id',
         'quantity',
-        'price'
+        'price',
+        'size',
 
     ];
 
@@ -37,4 +39,9 @@ class OrderItem extends Model
             OrderItem::class
         );
     }
+    public function testimonial() {
+    return $this->hasOne(Testimonial::class, 'product_id', 'product_id')
+                ->where('testimonials.order_id', $this->order_id);
+}
+
 }

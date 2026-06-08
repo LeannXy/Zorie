@@ -41,4 +41,9 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
+    'rajaongkir' => [
+        'key' => env('RAJAONGKIR_API_KEY'),
+        'origin' => env('RAJAONGKIR_ORIGIN_CITY_ID'), // Tambahkan ID kota pengirim di .env
+    ],
+
 ];

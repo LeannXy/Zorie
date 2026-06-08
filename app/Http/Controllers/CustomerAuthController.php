@@ -73,6 +73,12 @@ class CustomerAuthController extends Controller
         return redirect('/')
             ->with('success', 'Welcome back!');
     }
+    public function showLogin()
+{
+    return view(
+        'pages.home.loginCustomers'
+    );
+}
 
     public function logout()
     {
@@ -146,9 +152,8 @@ class CustomerAuthController extends Controller
 
     public function sendEmailVerificationOtp()
     {
-        $customer = CustomerAccount::find(
-            session('customer_id')
-        );
+        $customerId = session('customer_id');
+        $customer = CustomerAccount::find($customerId);
 
         if (!$customer) {
             return redirect()

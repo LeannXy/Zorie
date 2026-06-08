@@ -19,10 +19,14 @@ return new class extends Migration
             'order_number'
         )->unique();
 
-        $table->foreignId(
-            'user_id'
-        )->constrained()
+        $table->foreignId('customer_id')
+        ->constrained('customer_accounts')
         ->cascadeOnDelete();
+
+        $table->text('address')->nullable();
+        $table->string('city')->nullable();
+        $table->string('postal_code')->nullable();
+        $table->decimal('shipping_cost', 10, 2)->default(0);
 
         $table->decimal(
             'total',

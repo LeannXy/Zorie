@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Providers;
-
+use App\Models\Category;
+use Illuminate\Support\Facades\View;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -24,6 +25,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        View::share(
+    'featuredCategories',
+
+    Category::where(
+        'featured',
+        1
+    )->get()
+);
     }
 
     /**

@@ -1,6 +1,6 @@
 <x-layouts.dashboard>
 
-<div class="max-w-4xl mx-auto px-4 py-8">
+<div class="max-w-none mx-auto px-4 py-8">
 
     <div class="mb-8">
         <a href="{{ route('products') }}" class="inline-flex items-center gap-2 text-blue-500 hover:text-blue-600 transition mb-4">
@@ -23,6 +23,7 @@
             categories: [],
             price: '',
             discount: '',
+            weight: '',
             description: '',
             stock: '',
             images: [],
@@ -39,6 +40,7 @@
         showImagePreview: false,
         selectedImage: ''
     }">
+    
 
         @include('pages.products._form')
 

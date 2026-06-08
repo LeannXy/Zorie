@@ -127,7 +127,7 @@ window.location='?status='+this.value"
 
                             <td class="px-6 py-5">
 
-                                {{ $testimonial->user->name }}
+                               {{ $testimonial->customer?->name ?? 'Customer Tidak Ditemukan' }}
 
                             </td>
 

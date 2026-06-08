@@ -6,7 +6,7 @@
 
                 <!-- Header -->
 
-               
+
 
 
                 <form :action="editMode ? '/categories/' + form.id : '{{ route('categories.store') }}'" method="POST"
@@ -106,6 +106,7 @@
                                         </span>
 
                                     </label>
+
 
                                 </div>
 

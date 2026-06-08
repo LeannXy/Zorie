@@ -14,9 +14,9 @@ return Application::configure(
     pages: __DIR__.'/../resources/views/livewire',
 )
 ->withMiddleware(function (Middleware $middleware): void {
-
-    //
-
+    $middleware->alias([
+        'CheckCustomerSession' => \App\Http\Middleware\CheckCustomerSession::class,
+    ]);
 })
 ->withExceptions(function (Exceptions $exceptions): void {
 

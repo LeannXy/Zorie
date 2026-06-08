@@ -146,7 +146,8 @@ $save = function () {
             <div class="mb-8 grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
 
                 <!-- Total Products -->
-                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
+                <div
+                    class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
                     <div class="flex items-start justify-between gap-3">
 
@@ -174,7 +175,8 @@ $save = function () {
                 </div>
 
                 <!-- Total Stock -->
-                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
+                <div
+                    class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
                     <div class="flex items-start justify-between gap-3">
 
@@ -202,7 +204,8 @@ $save = function () {
                 </div>
 
                 <!-- Out Of Stock -->
-                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
+                <div
+                    class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
                     <div class="flex items-start justify-between gap-3">
 
@@ -232,7 +235,8 @@ $save = function () {
 
 
                 <!-- Inventory Value -->
-                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
+                <div
+                    class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-5 md:p-6">
 
                     <div class="flex items-start justify-between gap-3">
 
@@ -242,7 +246,8 @@ $save = function () {
                                 Inventory Value
                             </p>
 
-                            <h2 class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white truncate">
+                            <h2
+                                class="mt-2 md:mt-3 text-2xl md:text-3xl font-bold text-zinc-900 dark:text-white truncate">
                                 Rp {{ number_format($totalValue) }}
                             </h2>
 
@@ -295,180 +300,183 @@ $save = function () {
                 <!-- Top -->
                 <div class="border-b border-zinc-200 dark:border-zinc-800">
 
-    <!-- Scroll Hint Mobile -->
-    <div class="lg:hidden px-5 pt-4 flex items-center gap-2 text-xs text-zinc-500">
+                    <!-- Scroll Hint Mobile -->
+                    <div class="lg:hidden px-5 pt-4 flex items-center gap-2 text-xs text-zinc-500">
 
-        <i data-lucide="move-right" class="h-4 w-4"></i>
+                        <i data-lucide="move-right" class="h-4 w-4"></i>
 
-        <span>Geser untuk melihat filter lainnya</span>
+                        <span>Geser untuk melihat filter lainnya</span>
 
-    </div>
+                    </div>
 
-    <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+                    <div
+                        class="overflow-x-auto scrollbar-thin scrollbar-thumb-zinc-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
 
-        <div class="flex items-center justify-between gap-4 p-5 min-w-[900px]">
+                        <div class="flex items-center justify-between gap-4 p-5 min-w-[900px]">
 
-                    <div class="flex items-start gap-3">
+                            <div class="flex items-start gap-3">
 
-                        <div x-data="{
-                        
-                            search: '{{ request('search') }}',
-                            results: [],
-                        
-                            async getProducts() {
-                        
-                                if (this.search.length < 1) {
-                        
-                                    this.results = [];
-                                    return;
-                        
-                                }
-                        
-                                let response = await fetch(
-                                    `/products/search?search=${this.search}`
-                                );
-                        
-                                this.results = await response.json();
-                        
-                            }
-                        
-                        }" class="relative w-full max-w-sm">
+                                <div x-data="{
+                                
+                                    search: '{{ request('search') }}',
+                                    results: [],
+                                
+                                    async getProducts() {
+                                
+                                        if (this.search.length < 1) {
+                                
+                                            this.results = [];
+                                            return;
+                                
+                                        }
+                                
+                                        let response = await fetch(
+                                            `/products/search?search=${this.search}`
+                                        );
+                                
+                                        this.results = await response.json();
+                                
+                                    }
+                                
+                                }" class="relative w-full max-w-sm">
 
-                            <i data-lucide="search"
-                                class="absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-zinc-500">
-                            </i>
+                                    <i data-lucide="search"
+                                        class="absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-zinc-500">
+                                    </i>
 
-                            <input x-model="search" @input.debounce.300ms="getProducts()"
-                                placeholder="Search product..."
-                                class="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 py-2.5 pl-10 pr-4 text-sm text-zinc-900 dark:text-white">
+                                    <input x-model="search" @input.debounce.300ms="getProducts()"
+                                        placeholder="Search product..."
+                                        class="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 py-2.5 pl-10 pr-4 text-sm text-zinc-900 dark:text-white">
 
-                            <!-- Search Result -->
-                            <div x-show="results.length"
-                                class="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl">
+                                    <!-- Search Result -->
+                                    <div x-show="results.length"
+                                        class="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl">
 
-                                <template x-for="product in results" :key="product.id">
+                                        <template x-for="product in results" :key="product.id">
 
-                                    <div @click=" 
+                                            <div @click=" 
                                     search = product.name;results = [];
                                     window.location.href='{{ route('products') }}?search=' + product.name;"
-                                        class="cursor-pointer border-b border-zinc-100 px-4 py-3 hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-800">
+                                                class="cursor-pointer border-b border-zinc-100 px-4 py-3 hover:bg-zinc-100 dark:border-zinc-800 dark:hover:bg-zinc-800">
 
-                                        <p x-text="product.name" class="font-medium text-zinc-900 dark:text-white">
-                                        </p>
+                                                <p x-text="product.name"
+                                                    class="font-medium text-zinc-900 dark:text-white">
+                                                </p>
 
-                                        <p x-text="product.categories
+                                                <p x-text="product.categories
                                         ?.map(c => c.name)
                                         .join(', ')"
-                                            class="text-xs text-zinc-500">
-                                        </p>
+                                                    class="text-xs text-zinc-500">
+                                                </p>
+                                            </div>
+
+                                        </template>
+
                                     </div>
 
-                                </template>
+                                </div>
+
+
+
+
+                                <!-- Reset -->
+                                <button
+                                    @click=" search=''; results=[]; window.location.href='{{ route('products') }}'; "
+                                    class="rounded-xl border border-zinc-200 dark:border-zinc-800 px-4 py-2.5 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800">
+
+                                    Reset
+
+                                </button>
+
+                            </div>
+
+
+                            {{-- filter --}}
+                            <div class="flex items-center gap-3">
+
+                                <select
+                                    onchange=" window.location='{{ route('products') }}?'+ new URLSearchParams({ search:'{{ request('search') }}', category:this.value, stock:'{{ request('stock') }}'})"
+                                    class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 text-sm">
+
+                                    <option value="">
+
+                                        All Categories
+
+                                    </option>
+
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ request('category') == $category->id ? 'selected' : '' }}>
+
+                                            {{ $category->name }}
+
+                                        </option>
+                                    @endforeach
+
+                                </select>
+
+
+                                {{-- filter --}}
+                                <select
+                                    onchange="window.location='{{ route('products') }}?'+new URLSearchParams({search:'{{ request('search') }}',category:'{{ request('category') }}',stock:this.value})
+"
+                                    class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 text-sm">
+
+                                    <option value="">
+
+                                        All Stock
+
+                                    </option>
+
+                                    <option value="instock" {{ request('stock') == 'instock' ? 'selected' : '' }}>
+
+                                        In Stock
+
+                                    </option>
+
+                                    <option value="low" {{ request('stock') == 'low' ? 'selected' : '' }}>
+
+                                        Low Stock
+
+                                    </option>
+
+                                    <option value="out" {{ request('stock') == 'out' ? 'selected' : '' }}>
+
+                                        Out of Stock
+
+                                    </option>
+
+                                </select>
+
+                                {{-- download file --}}
+                                <a href="{{ route('products.export') }}"
+                                    class="flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/10 text-green-500 transition hover:bg-green-500 hover:text-white">
+
+                                    <i data-lucide="download" class="h-5 w-5">
+                                    </i>
+
+                                </a>
+
+                                <div x-show="selectedProducts.length" x-transition class="flex items-center">
+
+                                    <button
+                                        @click=" deleteNames= selectedProducts.map (id=>products.find(p=>p.id==id)?.name);isBulkDelete=true;deleteModal=true;"
+                                        class="flex h-11 w-11 items-center justify-center rounded-xl bg-red-500/10 text-red-500 transition hover:bg-red-500 hover:text-white">
+
+                                        <i data-lucide="trash-2" class="h-5 w-5">
+                                        </i>
+
+                                    </button>
+
+                                </div>
 
                             </div>
 
                         </div>
 
-
-
-
-                        <!-- Reset -->
-                        <button @click=" search=''; results=[]; window.location.href='{{ route('products') }}'; "
-                            class="rounded-xl border border-zinc-200 dark:border-zinc-800 px-4 py-2.5 text-sm text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800">
-
-                            Reset
-
-                        </button>
-
                     </div>
 
-
-                    {{-- filter --}}
-                    <div class="flex items-center gap-3">
-
-                        <select
-                            onchange=" window.location='{{ route('products') }}?'+ new URLSearchParams({ search:'{{ request('search') }}', category:this.value, stock:'{{ request('stock') }}'})"
-                            class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 text-sm">
-
-                            <option value="">
-
-                                All Categories
-
-                            </option>
-
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}"
-                                    {{ request('category') == $category->id ? 'selected' : '' }}>
-
-                                    {{ $category->name }}
-
-                                </option>
-                            @endforeach
-
-                        </select>
-
-
-                        {{-- filter --}}
-                        <select
-                            onchange="window.location='{{ route('products') }}?'+new URLSearchParams({search:'{{ request('search') }}',category:'{{ request('category') }}',stock:this.value})
-"
-                            class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 text-sm">
-
-                            <option value="">
-
-                                All Stock
-
-                            </option>
-
-                            <option value="instock" {{ request('stock') == 'instock' ? 'selected' : '' }}>
-
-                                In Stock
-
-                            </option>
-
-                            <option value="low" {{ request('stock') == 'low' ? 'selected' : '' }}>
-
-                                Low Stock
-
-                            </option>
-
-                            <option value="out" {{ request('stock') == 'out' ? 'selected' : '' }}>
-
-                                Out of Stock
-
-                            </option>
-
-                        </select>
-
-                        {{-- download file --}}
-                        <a href="{{ route('products.export') }}"
-                            class="flex h-11 w-11 items-center justify-center rounded-xl bg-green-500/10 text-green-500 transition hover:bg-green-500 hover:text-white">
-
-                            <i data-lucide="download" class="h-5 w-5">
-                            </i>
-
-                        </a>
-
-                        <div x-show="selectedProducts.length" x-transition class="flex items-center">
-
-                            <button
-                                @click=" deleteNames= selectedProducts.map (id=>products.find(p=>p.id==id)?.name);isBulkDelete=true;deleteModal=true;"
-                                class="flex h-11 w-11 items-center justify-center rounded-xl bg-red-500/10 text-red-500 transition hover:bg-red-500 hover:text-white">
-
-                                <i data-lucide="trash-2" class="h-5 w-5">
-                                </i>
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                        </div>
-
-    </div>
-
-</div>
+                </div>
 
                 <!-- Table -->
                 <div class="overflow-x-auto">
@@ -750,8 +758,9 @@ $save = function () {
                         </button>
                     </div>
 
-                    <form :action="editMode ? '/products/' + editId : '{{ route('products.store') }}'" method="POST"
-                        enctype="multipart/form-data" class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                    <form action="{{ route('address.update', $address->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
 
                         @csrf
 
@@ -1196,8 +1205,7 @@ $save = function () {
 
                         <template x-if="!isBulkDelete">
 
-                            <form :action="'/products/' + deleteId" method="POST">
-
+                            <form action="{{ route('address.destroy', $address->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
 
@@ -1219,7 +1227,7 @@ $save = function () {
 
 fetch(
 
-'{{ route('products.bulkDelete') }}',
+'{{ route('products.bulkDelete') }}',–
 
 {
 
