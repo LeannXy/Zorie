@@ -161,9 +161,8 @@
                                 <p class="text-[11px] text-[#aaa] mt-0.5">Order #{{ $item->order->order_number }} ·
                                     {{ $item->created_at->format('d M Y') }}</p>
                             </div>
-                       <button
-    type="button"
-    @click="
+                            <button type="button"
+                                @click="
         selectedReviewItem = {
             id: {{ $item->id }},
             name: '{{ addslashes($item->product->name) }}'
@@ -171,10 +170,9 @@
         rating = 5;
         reviewModal = true;
     "
-    class="px-4 py-2 bg-[#111] text-white rounded-lg text-sm"
->
-    Tulis Ulasan
-</button>
+                                class="px-4 py-2 bg-[#111] text-white rounded-lg text-sm">
+                                Tulis Ulasan
+                            </button>
                         </div>
                     @empty
                         <div class="bg-white rounded-2xl border border-[#e5e5e3] p-10 text-center">
@@ -230,95 +228,112 @@
         </main>
 
 
-    {{-- Review Modal --}}
-    <div x-show="reviewModal" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        class="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm px-5"
-        style="display:none;" x-cloak>
-        <div @click.away="reviewModal=false" x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            class="bg-white rounded-[2rem] p-8 w-full max-w-md shadow-2xl relative overflow-hidden">
+        {{-- Review Modal --}}
+        <div x-show="reviewModal" x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 px-5" style="display:none;" x-cloak>
 
-            <h3 class="text-[20px] font-black tracking-[-0.04em] text-[#111] mb-1">Berikan Ulasan</h3>
-            <p class="text-[13px] text-[#888] mb-8" x-text="'Produk: ' + selectedReviewItem?.name"></p>
+            <div @click.away="reviewModal = false" x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 scale-95 translate-y-4"
+                x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+                class="bg-white rounded-[1.75rem] p-8 w-full max-w-md relative"
+                style="border: 0.5px solid rgba(0,0,57,0.1);">
 
-        
-<form action="{{ route('reviews.store') }}" method="POST">
-    @csrf
+                {{-- Close Button --}}
+                <button @click="reviewModal = false"
+                    class="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#f5f5f5] flex items-center justify-center text-[#888] hover:bg-[#eee] transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
 
-    <input
-        type="hidden"
-        name="order_item_id"
-        value="{{ $item->id ?? '' }}"
-    >
+                {{-- Header --}}
+                <div class="mb-6">
+                    <p class="text-[10px] font-bold tracking-[3px] uppercase text-[#000039]/40 mb-1.5">Ulasan Produk</p>
+                    <h3 class="text-[20px] font-medium text-[#111] leading-snug"
+                        x-text="selectedReviewItem?.name ?? 'Produk'"></h3>
+                </div>
 
-    <div class="mb-6">
-        <label class="block mb-2 font-bold">
-            Rating
-        </label>
+                <div class="border-t border-[#000039]/8 pt-6">
+                    <form action="{{ route('reviews.store') }}" method="POST" x-ref="reviewForm">
+                        @csrf
+                        <input type="hidden" name="order_item_id" :value="selectedReviewItem?.order_item_id ?? ''">
+                        <input type="hidden" name="rating" x-model="reviewRating">
 
-        <select
-            name="rating"
-            required
-            class="w-full border rounded-lg p-3"
-        >
-            <option value="5">⭐⭐⭐⭐⭐ (5)</option>
-            <option value="4">⭐⭐⭐⭐ (4)</option>
-            <option value="3">⭐⭐⭐ (3)</option>
-            <option value="2">⭐⭐ (2)</option>
-            <option value="1">⭐ (1)</option>
-        </select>
-    </div>
+                        {{-- Star Rating --}}
+                        <div class="mb-5">
+                            <label class="block text-[11px] font-bold tracking-[2px] uppercase text-[#000039]/40 mb-3">
+                                Rating
+                            </label>
+                            <div class="flex items-center gap-1.5">
+                                <template x-for="star in [1,2,3,4,5]" :key="star">
+                                    <button type="button" @click="reviewRating = star" @mouseover="reviewHover = star"
+                                        @mouseleave="reviewHover = 0"
+                                        class="text-[2rem] leading-none transition-all duration-150 focus:outline-none"
+                                        :class="(reviewHover || reviewRating) >= star
+                                            ?
+                                            'opacity-100' :
+                                            'opacity-20'"
+                                        :style="(reviewHover || reviewRating) >= star
+                                            ?
+                                            'color: #f59e0b;' :
+                                            'color: #9ca3af;'">
+                                        ★
+                                    </button>
+                                </template>
+                            </div>
+                            <p class="text-[12px] text-[#000039]/40 mt-1.5 min-h-[16px]"
+                                x-text="['','Sangat buruk','Buruk','Cukup','Bagus','Sangat bagus'][reviewRating] ?? ''">
+                            </p>
+                        </div>
 
-    <div class="mb-6">
-        <label class="block mb-2 font-bold">
-            Komentar
-        </label>
+                        {{-- Komentar --}}
+                        <div class="mb-6">
+                            <label class="block text-[11px] font-bold tracking-[2px] uppercase text-[#000039]/40 mb-2.5">
+                                Komentar
+                            </label>
+                            <textarea name="comment" rows="4" required minlength="5"
+                                placeholder="Ceritakan pengalaman kamu dengan produk ini..."
+                                class="w-full bg-[#f8f8f8] border border-[#000039]/8 rounded-xl px-4 py-3
+                               text-[14px] text-[#111] placeholder-[#000039]/25
+                               focus:outline-none focus:border-[#000039]/30 focus:bg-white
+                               transition-all duration-200 resize-none leading-relaxed
+                               font-[Plus_Jakarta_Sans,sans-serif]"></textarea>
+                            <p class="text-[11px] text-[#000039]/30 mt-1.5">Minimal 5 karakter</p>
+                        </div>
 
-        <textarea
-            name="comment"
-            rows="4"
-            required
-            minlength="5"
-            class="w-full border rounded-lg p-3"
-        ></textarea>
-    </div>
+                        {{-- Submit --}}
+                        <button type="submit"
+                            class="w-full bg-[#000039] text-white rounded-xl py-3.5
+                           text-[14px] font-medium tracking-wide
+                           hover:bg-[#000039]/90 active:scale-[0.99]
+                           transition-all duration-200">
+                            Kirim Ulasan
+                        </button>
 
-    <button
-        type="submit"
-        class="w-full bg-black text-white py-3 rounded-lg"
-    >
-        Kirim Ulasan
-    </button>
-</form>
-```
+                    </form>
+                </div>
 
-        </div>
-    </div>
-
-    {{-- Logout Modal --}}
-    <div x-show="logoutModal" x-transition class="fixed inset-0 z-40 bg-black/50 flex items-center justify-center"
-        style="display:none;">
-        <div class="bg-white rounded-2xl border border-[#e5e5e3] p-8 max-w-sm">
-            <h3 class="text-[16px] font-bold text-[#111] mb-2">Yakin ingin keluar?</h3>
-            <p class="text-[13px] text-[#666] mb-6">Anda akan keluar dari akun Anda.</p>
-            <div class="flex gap-3">
-                <button @click="logoutModal = false"
-                    class="flex-1 px-4 py-3 border border-[#e5e5e3] text-[#111] rounded-xl text-[12px] font-bold hover:bg-[#f5f5f3] transition-all">Batal</button>
-                <form method="POST" action="{{ route('customer.logout') }}" class="flex-1">
-                    @csrf
-                    <button type="submit"
-                        class="w-full py-3 bg-red-500 text-white rounded-xl text-[12px] font-bold hover:bg-red-600 transition-all">Ya,
-                        Keluar</button>
-                </form>
             </div>
         </div>
-    </div>
 
-
-
-
-   
+        {{-- Logout Modal --}}
+        <div x-show="logoutModal" x-transition class="fixed inset-0 z-40 bg-black/50 flex items-center justify-center"
+            style="display:none;">
+            <div class="bg-white rounded-2xl border border-[#e5e5e3] p-8 max-w-sm">
+                <h3 class="text-[16px] font-bold text-[#111] mb-2">Yakin ingin keluar?</h3>
+                <p class="text-[13px] text-[#666] mb-6">Anda akan keluar dari akun Anda.</p>
+                <div class="flex gap-3">
+                    <button @click="logoutModal = false"
+                        class="flex-1 px-4 py-3 border border-[#e5e5e3] text-[#111] rounded-xl text-[12px] font-bold hover:bg-[#f5f5f3] transition-all">Batal</button>
+                    <form method="POST" action="{{ route('customer.logout') }}" class="flex-1">
+                        @csrf
+                        <button type="submit"
+                            class="w-full py-3 bg-red-500 text-white rounded-xl text-[12px] font-bold hover:bg-red-600 transition-all">Ya,
+                            Keluar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

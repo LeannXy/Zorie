@@ -19,11 +19,7 @@ class TestimonialController extends Controller
                 function ($query)
                 use ($request) {
 
-                    $query->whereHas(
-
-                        'user',
-
-                        function ($q)
+                    $query->whereHas('customer', function ($q)
                         use ($request) {
 
                             $q->where(

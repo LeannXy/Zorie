@@ -976,14 +976,6 @@
         </div>
     @endif
 
-    {{-- <div class="pd-wrap" x-data="{
-        isLoggedIn: {{ session('customer_id') ? 'true' : 'false' }},
-        activeImg: 0,
-        images: @js($product->images->map(fn($i) => asset('storage/' . $i->image))->values()),
-        selectedSize: null,
-        qty: 1,
-        wishlisted: false,
-        zoomOpen: false, --}}
 
 
     <div class="pd-wrap" x-data="{
@@ -1002,7 +994,7 @@
             document.querySelector('.pd-size-grid').scrollIntoView({ behavior: 'smooth', block: 'center' });
         },
         qty: 1,
-        wishlisted: false,
+        wishlisted: {{ $isWishlisted ? 'true' : 'false' }},
         zoomOpen: false,
         stockData: @js($product->sizes ?? collect()),
         reviewFilter: 'Semua',
@@ -1024,12 +1016,16 @@
     }">
 
         {{-- Error Toast --}}
-        <div x-show="errorToast" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-10" x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+        <div x-show="errorToast" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-x-10" x-transition:enter-end="opacity-100 translate-x-0"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
             class="fixed top-24 right-5 z-[9999] flex items-center gap-3 rounded-2xl border border-red-200 bg-white px-5 py-4 shadow-xl"
             style="display: none;">
             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-red-50">
                 <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
             </div>
             <div>
@@ -1165,11 +1161,7 @@
                                     'active': selectedSize === '{{ $sizeObj->size }}',
                                     'sold-out': {{ $sizeObj->stock == 0 ? 'true' : 'false' }}
                                 }"
-                                @click="
-selectedSize='{{ $sizeObj->size }}';
-showSizeWarning=false;
-qty=1
-"
+                                @click=" selectedSize='{{ $sizeObj->size }}'; showSizeWarning=false;qty=1"
                                 {{ $sizeObj->stock == 0 ? 'disabled' : '' }}>
                                 {{ $sizeObj->size }}
                             </button>
@@ -1265,7 +1257,7 @@ qty=1
 
                         <input type="hidden" name="qty" :value="qty">
 
-                        <button type="submit" class="pd-btn pd-btn-cart" 
+                        <button type="submit" class="pd-btn pd-btn-cart"
                             :class="{
                                 'opacity-60': !selectedSize
                             }">
@@ -1282,10 +1274,11 @@ qty=1
                         </button>
 
                     </form>
-                     <button class="pd-btn pd-btn-wishlist" :class="{ 'wishlisted': wishlisted }"
-                        @click="if(!isLoggedIn){ window.location.href='{{ route('customer.login') }}'; return; } wishlisted = !wishlisted; toggleWishlist({{ $product->id }}, wishlisted);">
+                    <button class="pd-btn pd-btn-wishlist" :class="{ 'wishlisted': wishlisted }"
+                        @click=" if(!isLoggedIn){  window.location.href='{{ route('customer.login') }}';  return;} toggleWishlist(); ">
                         <svg width="18" height="18" fill="none" viewBox="0 0 24 24"
-                            :fill="wishlisted ? '#e63' : 'none'" :stroke="wishlisted ? '#e63' : 'currentColor'" stroke-width="2">
+                            :fill="wishlisted ? '#e63' : 'none'" :stroke="wishlisted ? '#e63' : 'currentColor'"
+                            stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M2 9.5a5.5 5.5 0 019.591-3.676.56.56 0 00.818 0A5.49 5.49 0 0122 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 01-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
                         </svg>
@@ -1336,67 +1329,127 @@ qty=1
         </div>
 
         {{-- ════ WRITE REVIEW FORM ════ --}}
-        <div class="pd-reviews-section" style="background:#f8f8f8;border-radius:16px;padding:clamp(20px,4vw,32px);margin-bottom:clamp(32px,6vw,48px);">
-            
-            <p class="pd-section-title" style="margin-bottom:16px;">Tulis Ulasan Anda</p>
+        <div class="pd-reviews-section"
+            style="background:#f8f8f8;border-radius:16px;padding:clamp(20px,4vw,32px);margin-bottom:clamp(32px,6vw,48px);">
 
-            @if (session('customer_id'))
-                @php
-                    $existingReview = \App\Models\Testimonial::where('customer_id', session('customer_id'))
-                        ->where('product_id', $product->id)
-                        ->first();
-                @endphp
+            <div class="border-t border-[#000039]/8 pt-10 mt-10" style="font-family: 'Plus Jakarta Sans', sans-serif;">
 
-                @if ($existingReview)
-                    <div style="background:#fff3cd;border-left:4px solid #ffc107;padding:12px;border-radius:6px;margin-bottom:20px;font-size:13px;color:#856404;">
-                        ✓ Anda sudah menulis ulasan untuk produk ini
-                    </div>
-                @else
-                    <form action="{{ route('testimonials.store') }}" method="POST" style="display:flex;flex-direction:column;gap:16px;">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-
-                        {{-- Rating --}}
-                        <div>
-                            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:8px;color:#000039;">Rating</label>
-                            <div style="display:flex;gap:8px;align-items:center;">
-                                <input type="hidden" id="rating-input" name="rating" value="5">
-                                @for ($i = 1; $i <= 5; $i++)
-                                    <span class="pd-star" style="font-size:24px;cursor:pointer;transition:transform 200ms;" 
-                                        @click="document.getElementById('rating-input').value = {{ $i }}; document.querySelectorAll('.rating-star').forEach((el, idx) => { el.style.opacity = idx < {{ $i }} ? '1' : '0.3'; });"
-                                        :class="{}"
-                                        class="rating-star"
-                                        style="opacity:1;transform:scale(1.1);">★</span>
-                                @endfor
-                            </div>
-                            @error('rating') <span style="color:#dc2626;font-size:12px;">{{ $message }}</span> @enderror
-                        </div>
-
-                        {{-- Comment --}}
-                        <div>
-                            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:8px;color:#000039;">Ulasan (minimal 10 karakter)</label>
-                            <textarea name="comment" 
-                                placeholder="Bagikan pengalaman Anda dengan produk ini..."
-                                style="width:100%;padding:12px;border:1px solid #e0e0e0;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;resize:vertical;min-height:100px;outline:none;"
-                                required minlength="10" maxlength="1000"></textarea>
-                            <div style="font-size:11px;color:#666;margin-top:4px;">Maksimal 1000 karakter</div>
-                            @error('comment') <span style="color:#dc2626;font-size:12px;">{{ $message }}</span> @enderror
-                        </div>
-
-                        {{-- Submit Button --}}
-                        <button type="submit" style="background:#000039;color:white;padding:10px 20px;border:none;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;transition:background 200ms;align-self:flex-start;"
-                            @mouseover="this.style.background='rgba(0,0,57,0.85)'"
-                            @mouseout="this.style.background='#000039'">
-                            Kirim Ulasan
-                        </button>
-                    </form>
-                @endif
-            @else
-                <div style="background:#e3f2fd;border-left:4px solid #2196f3;padding:12px;border-radius:6px;font-size:13px;color:#1565c0;">
-                    <p style="margin:0;margin-bottom:8px;">Anda harus login untuk menulis ulasan</p>
-                    <a href="{{ route('login') }}" style="color:#1565c0;text-decoration:underline;font-weight:600;">Login di sini</a>
+                {{-- Header --}}
+                <div class="mb-6">
+                    <p class="text-[11px] font-bold tracking-[3px] uppercase text-[#000039]/35 mb-1.5">Bagikan pengalaman
+                        kamu
+                    </p>
+                    <p class="text-[18px] font-medium text-[#111]">Tulis ulasan</p>
                 </div>
-            @endif
+
+                @if (session('customer_id'))
+                    @php
+                        $existingReview = \App\Models\Testimonial::where('customer_id', session('customer_id'))
+                            ->where('product_id', $product->id)
+                            ->first();
+                    @endphp
+
+                    @if ($existingReview)
+                        {{-- Already reviewed notice --}}
+                        <div class="flex items-center gap-3 bg-white border border-[#000039]/8 rounded-xl px-4 py-3.5">
+                            <svg class="w-5 h-5 text-[#1d9e75] flex-shrink-0" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <p class="text-[13px] font-medium text-[#111] mb-0.5">Ulasan sudah dikirim</p>
+                                <p class="text-[12px] text-[#000039]/40">Kamu sudah memberikan ulasan untuk produk ini.</p>
+                            </div>
+                        </div>
+                    @else
+                        {{-- Review Form --}}
+                        <form action="{{ route('testimonials.store') }}" method="POST" x-data="{ rating: 5, hover: 0, charCount: 0 }"
+                            class="flex flex-col gap-5">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            <input type="hidden" name="rating" :value="rating">
+
+                            {{-- Star Rating --}}
+                            <div>
+                                <p class="text-[11px] font-bold tracking-[2px] uppercase text-[#000039]/35 mb-3">Rating</p>
+                                <div class="flex items-center gap-1">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <button type="button" @click="rating = {{ $i }}"
+                                            @mouseover="hover = {{ $i }}" @mouseleave="hover = 0"
+                                            class="text-[28px] leading-none p-0.5 focus:outline-none transition-all duration-150"
+                                            :style="(hover || rating) >= {{ $i }}
+                                                ?
+                                                'color:#f59e0b; opacity:1;' :
+                                                'color:#d1d5db; opacity:1;'">
+                                            ★
+                                        </button>
+                                    @endfor
+                                    <span class="text-[12px] text-[#000039]/40 ml-2 min-w-[90px]"
+                                        x-text="['','Sangat buruk','Buruk','Cukup','Bagus','Sangat bagus'][hover || rating]">
+                                    </span>
+                                </div>
+                                @error('rating')
+                                    <p class="text-[12px] text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Comment Textarea --}}
+                            <div>
+                                <p class="text-[11px] font-bold tracking-[2px] uppercase text-[#000039]/35 mb-2.5">Ulasan
+                                </p>
+                                <textarea name="comment" rows="4" required minlength="10" maxlength="1000"
+                                    @input="charCount = $event.target.value.length" placeholder="Ceritakan pengalaman kamu dengan produk ini..."
+                                    class="w-full bg-white border border-[#000039]/10 rounded-xl px-4 py-3
+                               text-[14px] text-[#111] placeholder-[#000039]/25 leading-relaxed
+                               focus:outline-none focus:border-[#000039]/25 focus:bg-white
+                               transition-all duration-200 resize-none
+                               font-[Plus_Jakarta_Sans,sans-serif]">{{ old('comment') }}</textarea>
+                                <div class="flex items-center justify-between mt-1.5">
+                                    <span class="text-[11px] text-[#000039]/30">Minimal 10 karakter</span>
+                                    <span class="text-[11px] text-[#000039]/30" x-text="charCount + ' / 1000'">0 /
+                                        1000</span>
+                                </div>
+                                @error('comment')
+                                    <p class="text-[12px] text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            {{-- Submit --}}
+                            <div class="flex justify-end">
+                                <button type="submit"
+                                    class="bg-[#000039] text-white rounded-xl px-6 py-3
+                               text-[13px] font-medium tracking-wide
+                               hover:bg-[#000039]/85 active:scale-[0.98]
+                               transition-all duration-200">
+                                    Kirim ulasan
+                                </button>
+                            </div>
+
+                        </form>
+                    @endif
+                @else
+                    {{-- Not logged in notice --}}
+                    <div class="flex items-center gap-3 bg-white border border-[#000039]/8 rounded-xl px-4 py-3.5">
+                        <svg class="w-5 h-5 text-[#000039]/30 flex-shrink-0" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                        <div>
+                            <p class="text-[13px] font-medium text-[#111] mb-0.5">Login untuk menulis ulasan</p>
+                            <p class="text-[12px] text-[#000039]/40">
+                                Kamu perlu login terlebih dahulu.
+                                <a href="{{ route('login') }}"
+                                    class="text-[#000039] font-semibold underline underline-offset-2 hover:opacity-70 transition-opacity">
+                                    Masuk sekarang
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                @endif
+
+            </div>
         </div>
 
         {{-- ════ REVIEWS ════ --}}
@@ -1438,79 +1491,93 @@ qty=1
             </div>
 
             {{-- Filter Chips --}}
-            <div class="pd-review-filters" x-data="{ filter: 'Semua' }">
-                @foreach (['Semua', '5 ★', '4 ★', '3 ★', '2 ★', '1 ★'] as $chip)
-                    <button class="pd-filter-chip" :class="{ active: filter === '{{ $chip }}' }"
-                        @click="filter = '{{ $chip }}'">{{ $chip }}</button>
-                @endforeach
+            <div x-data="{ filter: 'Semua' }">
 
-                {{-- Review Cards --}}
-                <div class="pd-review-list" style="width:100%;margin-top:16px;">
-                    @forelse($product->reviews ?? [] as $review)
-                        <div class="pd-review-card">
-                            <div class="pd-review-header">
-                                <div style="display:flex;align-items:flex-start;gap:10px;">
-                                    <div class="pd-reviewer-avatar">
-                                        {{ strtoupper(substr($review->customer?->name ?? $review->user?->name ?? 'Anonim', 0, 1)) }}</div>
-                                    <div>
-                                        <div class="pd-reviewer-name">{{ $review->customer?->name ?? $review->user?->name ?? 'Anonim' }}</div>
-                                        <div class="pd-review-date">{{ $review->created_at?->format('d M Y') }}</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="pd-stars">
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <span
-                                                class="{{ $i <= $review->rating ? 'pd-star' : 'pd-star-empty' }}">★</span>
-                                        @endfor
-                                    </div>
-                                    @if ($review->verified_purchase ?? false)
-                                        <span class="pd-verified" style="display:block;text-align:right;margin-top:3px;">✓
-                                            Terverifikasi</span>
-                                    @endif
-                                </div>
-                            </div>
-                            <p class="pd-review-text">{{ $review->comment }}</p>
-                            @if ($review->size_purchased ?? null)
-                                <span class="pd-review-tag">Ukuran: {{ $review->size_purchased }}</span>
-                            @endif
-                        </div>
-                    @empty
-                        {{-- Placeholder reviews untuk demo --}}
-                        @foreach ([['A', 'Andi Pratama', 5, '2025-03-10', 'Sepatu sangat nyaman dipakai seharian, bahan ringan dan sol empuk. Cocok banget buat anak yang aktif. Pengiriman juga cepat!', '40', 'true'], ['S', 'Sari Dewi', 4, '2025-02-28', 'Kualitas bagus, tapi warnanya sedikit berbeda dari foto. Overall masih puas dan recommended!', '38', 'true'], ['B', 'Budi Santoso', 5, '2025-02-15', 'Sudah beli ke-3 kalinya. Kualitas konsisten, pengiriman cepat. Recommended banget!', '42', 'false'], ['R', 'Rina Agustina', 3, '2025-01-20', 'Sepatu oke, tapi jahitan di bagian kanan kurang rapi. Tapi toko responsif dan mau replace.', '37', 'true']] as [$init, $name, $rat, $date, $comment, $sz, $ver])
-                            <div class="pd-review-card">
+                <div class="pd-review-filters">
+                    <button class="pd-filter-chip" :class="{ active: filter === 'Semua' }" @click="filter='Semua'">
+                        Semua ({{ $product->reviews->count() }})
+                    </button>
+
+                    @for ($i = 5; $i >= 1; $i--)
+                        <button class="pd-filter-chip" :class="{ active: filter === '{{ $i }} ★' }"
+                            @click="filter='{{ $i }} ★'">
+                            {{ $i }} ★
+                            ({{ $product->reviews->where('rating', $i)->count() }})
+                        </button>
+                    @endfor
+
+                    {{-- Review Cards --}}
+                    <div class="pd-review-list" style="width:100%;margin-top:16px;">
+                        @forelse($product->reviews ?? [] as $review)
+                            <div x-show=" filter === 'Semua' || filter === '{{ $review->rating }} ★'"
+                                class="pd-review-card">
                                 <div class="pd-review-header">
                                     <div style="display:flex;align-items:flex-start;gap:10px;">
-                                        <div class="pd-reviewer-avatar"
-                                            style="background:{{ ['#2563eb', '#7c3aed', '#059669', '#d97706'][$loop->index % 4] }}">
-                                            {{ $init }}</div>
+                                        <div class="pd-reviewer-avatar">
+                                            {{ strtoupper(substr($review->customer?->name ?? ($review->user?->name ?? 'Anonim'), 0, 1)) }}
+                                        </div>
                                         <div>
-                                            <div class="pd-reviewer-name">{{ $name }}</div>
-                                            <div class="pd-review-date">
-                                                {{ \Carbon\Carbon::parse($date)->format('d M Y') }}</div>
+                                            <div class="pd-reviewer-name">
+                                                {{ $review->customer?->name ?? ($review->user?->name ?? 'Anonim') }}</div>
+                                            <div class="pd-review-date">{{ $review->created_at?->format('d M Y') }}</div>
                                         </div>
                                     </div>
                                     <div>
                                         <div class="pd-stars">
-                                            @for ($i = 1; $i <= $rat; $i++)
-                                                <span class="pd-star">★</span>
-                                            @endfor
-                                            @for ($i = $rat + 1; $i <= 5; $i++)
-                                                <span class="pd-star-empty">★</span>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <span
+                                                    class="{{ $i <= $review->rating ? 'pd-star' : 'pd-star-empty' }}">★</span>
                                             @endfor
                                         </div>
-                                        @if ($ver === 'true')
+                                        @if ($review->verified_purchase ?? false)
                                             <span class="pd-verified"
                                                 style="display:block;text-align:right;margin-top:3px;">✓
                                                 Terverifikasi</span>
                                         @endif
                                     </div>
                                 </div>
-                                <p class="pd-review-text">{{ $comment }}</p>
-                                <span class="pd-review-tag">Ukuran: {{ $sz }}</span>
+                                <p class="pd-review-text">{{ $review->comment }}</p>
+                                @if ($review->size_purchased ?? null)
+                                    <span class="pd-review-tag">Ukuran: {{ $review->size_purchased }}</span>
+                                @endif
                             </div>
-                        @endforeach
-                    @endforelse
+                        @empty
+                            {{-- Placeholder reviews untuk demo --}}
+                            @foreach ([['A', 'Andi Pratama', 5, '2025-03-10', 'Sepatu sangat nyaman dipakai seharian, bahan ringan dan sol empuk. Cocok banget buat anak yang aktif. Pengiriman juga cepat!', '40', 'true'], ['S', 'Sari Dewi', 4, '2025-02-28', 'Kualitas bagus, tapi warnanya sedikit berbeda dari foto. Overall masih puas dan recommended!', '38', 'true'], ['B', 'Budi Santoso', 5, '2025-02-15', 'Sudah beli ke-3 kalinya. Kualitas konsisten, pengiriman cepat. Recommended banget!', '42', 'false'], ['R', 'Rina Agustina', 3, '2025-01-20', 'Sepatu oke, tapi jahitan di bagian kanan kurang rapi. Tapi toko responsif dan mau replace.', '37', 'true']] as [$init, $name, $rat, $date, $comment, $sz, $ver])
+                                <div class="pd-review-card">
+                                    <div class="pd-review-header">
+                                        <div style="display:flex;align-items:flex-start;gap:10px;">
+                                            <div class="pd-reviewer-avatar"
+                                                style="background:{{ ['#2563eb', '#7c3aed', '#059669', '#d97706'][$loop->index % 4] }}">
+                                                {{ $init }}</div>
+                                            <div>
+                                                <div class="pd-reviewer-name">{{ $name }}</div>
+                                                <div class="pd-review-date">
+                                                    {{ \Carbon\Carbon::parse($date)->format('d M Y') }}</div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="pd-stars">
+                                                @for ($i = 1; $i <= $rat; $i++)
+                                                    <span class="pd-star">★</span>
+                                                @endfor
+                                                @for ($i = $rat + 1; $i <= 5; $i++)
+                                                    <span class="pd-star-empty">★</span>
+                                                @endfor
+                                            </div>
+                                            @if ($ver === 'true')
+                                                <span class="pd-verified"
+                                                    style="display:block;text-align:right;margin-top:3px;">✓
+                                                    Terverifikasi</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <p class="pd-review-text">{{ $comment }}</p>
+                                    <span class="pd-review-tag">Ukuran: {{ $sz }}</span>
+                                </div>
+                            @endforeach
+                        @endforelse
+                    </div>
                 </div>
             </div>
 
@@ -1524,11 +1591,12 @@ qty=1
                 @foreach ($recommendations ?? [] as $rec)
                     <a href="{{ route('product.show', $rec) }}" class="pd-reco-card">
                         <div class="pd-reco-img">
-                            @if($rec->images->first())
+                            @if ($rec->images->first())
                                 <img src="{{ asset('storage/' . $rec->images->first()->image) }}"
                                     alt="{{ $rec->name }}" loading="lazy">
                             @else
-                                <div class="flex items-center justify-center w-full h-full text-[10px] font-bold uppercase tracking-widest text-[#aaa]">
+                                <div
+                                    class="flex items-center justify-center w-full h-full text-[10px] font-bold uppercase tracking-widest text-[#aaa]">
                                     No Image
                                 </div>
                             @endif
@@ -1570,5 +1638,66 @@ qty=1
             console.log('Wishlist toggle:', id);
         }
     </script>
+<script>
+async function toggleWishlist() {
 
+    const productId = {{ $product->id }};
+
+    try {
+
+        const btn =
+            document.querySelector('.pd-btn-wishlist');
+
+        const isWishlisted =
+            btn.classList.contains('wishlisted');
+
+        const response = await fetch(
+
+            isWishlisted
+                ? '/wishlist/remove/' + productId
+                : '/wishlist/add/' + productId,
+
+            {
+                method: isWishlisted
+                    ? 'DELETE'
+                    : 'POST',
+
+                headers: {
+                    'X-CSRF-TOKEN':
+                        document.querySelector(
+                            'meta[name="csrf-token"]'
+                        ).content,
+
+                    'Accept':
+                        'application/json'
+                }
+            }
+        );
+
+        const data =
+            await response.json();
+
+        if (data.success) {
+
+            btn.classList.toggle(
+                'wishlisted'
+            );
+
+        } else {
+
+            alert(data.message);
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            'Wishlist gagal diproses'
+        );
+
+    }
+}
+</script>
 @endsection

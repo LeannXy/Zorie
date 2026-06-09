@@ -177,31 +177,45 @@ public function search(Request $request)
         ]
     );
 }
-    public function show(Product $product)
-    {
-        $product->load([
-            'images',
-            'categories',
-            'sizes',
-            'reviews.customer'
-        ]);
+  public function show(Product $product)
+{
+    $product->load([
+        'images',
+        'categories',
+        'sizes',
+        'reviews.customer'
+    ]);
 
-        $recommendations = Product::with([
-            'images',
-            'categories'
-        ])
-            ->where('id', '!=', $product->id)
-            ->limit(4)
-            ->get();
+    $recommendations = Product::with([
+        'images',
+        'categories'
+    ])
+        ->where('id', '!=', $product->id)
+        ->limit(4)
+        ->get();
 
-        return view(
-            'pages.home.sections.product-detail',
-            compact(
-                'product',
-                'recommendations'
-            )
-        );
+    $isWishlisted = false;
 
-       
+    if (session('customer_id')) {
+
+        $isWishlisted = \App\Models\Wishlist::where(
+            'customer_id',
+            session('customer_id')
+        )
+        ->where(
+            'product_id',
+            $product->id
+        )
+        ->exists();
     }
+
+    return view(
+        'pages.home.sections.product-detail',
+        compact(
+            'product',
+            'recommendations',
+            'isWishlisted'
+        )
+    );
+}
 }

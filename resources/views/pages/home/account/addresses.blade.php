@@ -115,8 +115,8 @@
            TAB: ADDRESSES
              ════════════════════════════════════════ --}}
 
-            <main class="flex-1 min-w-0" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-1"
-                x-transition:enter-end="opacity-100 translate-y-0">
+            <main class="flex-1 min-w-0" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 translate-y-1" x-transition:enter-end="opacity-100 translate-y-0">
 
                 <div class="flex justify-end mb-4">
                     <button
@@ -369,8 +369,7 @@
                                 </div>
                             </div>
 
-                            <input type="hidden" name="rajaongkir_city_id" id="rajaongkir_city_id" :value="form.rajaongkir_city_id">
-                            <input type="hidden" name="city" id="city_name" :value="form.city">
+
 
                             {{-- ── SECTION: Lokasi ── --}}
                             {{-- <p class="text-[10px] font-bold tracking-[0.14em] uppercase text-[#ccc] mb-3.5 mt-5">Lokasi
@@ -442,7 +441,8 @@
                                         Kode Pos
 
                                     </label>
-
+                                    <input type="hidden" name="rajaongkir_city_id" id="rajaongkir_city_id"
+                                        :value="form.rajaongkir_city_id">
                                     <input type="text" id="postal_code" x-model="form.postal_code" name="postal_code"
                                         maxlength="5" placeholder="Masukan 5 digit kode pos alamat anda"
                                         class="w-full border p-3 rounded-xl border-[#ebebea] rounded-[10px] bg-[#f8f8f6] text-[13.5px] text-[#111] outline-none placeholder:text-[#ccc] focus:border-[#111] focus:bg-white focus:ring-[3px] focus:ring-black/[0.06] transition-all">
@@ -547,9 +547,9 @@
                         </form>
                     </div>
                 </div>
-            </div>
         </div>
-          <script>
+    </div>
+    <script>
         // Pencarian kode pos
         document.getElementById('postal_code').addEventListener('keyup', async function() {
             if (this.value.length < 5) return;
@@ -571,9 +571,8 @@
                 <p class="text-xs text-gray-400">${location.province_name}</p>
             </div>`;
                 });
-            }
-             else {
-        html = `
+            } else {
+                html = `
         <div class="flex items-center gap-3 p-4 rounded-xl border border-red-100 bg-red-50">
             <svg class="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -585,11 +584,11 @@
                 <p class="text-xs text-red-500 mt-0.5">Kode pos <strong>${this.value}</strong> tidak ditemukan. Periksa kembali atau coba kode pos lain.</p>
             </div>
         </div>`;
-    }
+            }
             document.getElementById('postal-result').innerHTML = html;
         });
 
-      
+
 
 
         // Klik kartu hasil
@@ -615,7 +614,6 @@
             );
             card.classList.add('border-blue-600', 'bg-blue-50');
         });
-
     </script>
     </div>
 @endsection
