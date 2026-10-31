@@ -14,7 +14,8 @@
         reviewModal: false,
         selectedReviewItem: null,
         revTab: 'pending',
-        rating: 5,
+        reviewRating: 5,
+        reviewHover: 0,
         isLoggedIn: @js(session()->has('customer_id')),
     
     
@@ -164,10 +165,11 @@
                             <button type="button"
                                 @click="
         selectedReviewItem = {
-            id: {{ $item->id }},
-            name: '{{ addslashes($item->product->name) }}'
+            order_item_id: {{ $item->id }},
+            name: @js($item->product->name)
         };
-        rating = 5;
+        reviewRating = 5;
+        reviewHover = 0;
         reviewModal = true;
     "
                                 class="px-4 py-2 bg-[#111] text-white rounded-lg text-sm">
@@ -269,6 +271,8 @@
                                 <template x-for="star in [1,2,3,4,5]" :key="star">
                                     <button type="button" @click="reviewRating = star" @mouseover="reviewHover = star"
                                         @mouseleave="reviewHover = 0"
+                                        :aria-label="`${star} bintang`"
+                                        :aria-pressed="reviewRating === star"
                                         class="text-[2rem] leading-none transition-all duration-150 focus:outline-none"
                                         :class="(reviewHover || reviewRating) >= star
                                             ?

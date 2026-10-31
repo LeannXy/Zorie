@@ -8,7 +8,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get(
         '/settings/profile',
         [SettingsController::class, 'index']
-    )->name('settings.profile');
+    )->name('profile.edit');
 
     Route::post(
         '/settings/update',
@@ -18,7 +18,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get(
         '/settings/security',
         [SettingsController::class, 'security']
-    )->name('settings.security');
+    )->name('security.edit');
 
     Route::post(
         '/settings/password',

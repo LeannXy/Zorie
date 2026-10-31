@@ -153,32 +153,32 @@ Route::post(
 //forgot password
 /////////////////
 Route::view(
-    '/forgot-password',
+    '/customer/forgot-password',
     'pages.home.forgotPassword'
 )->name('customer.password.request');
 
 Route::post(
-    '/forgot-password',
+    '/customer/forgot-password',
     [CustomerAuthController::class, 'sendResetLink']
 )->name('customer.password.email');
 
 Route::post(
-    '/forgot-password/send',
+    '/customer/forgot-password/send',
     [CustomerAuthController::class, 'sendOtp']
 )->name('customer.password.send');
 
 Route::post(
-    '/forgot-password/reset',
+    '/customer/forgot-password/reset',
     [CustomerAuthController::class, 'resetPassword']
 )->name('customer.password.reset');
 
 Route::post(
-    '/forgot-password/verify',
+    '/customer/forgot-password/verify',
     [CustomerAuthController::class, 'verifyOtp']
 )->name('customer.password.verify');
 
 // route step fogot pw
-Route::get('/forgot-password/cancel', function () {
+Route::get('/customer/forgot-password/cancel', function () {
 
     session()->forget([
         'showOtpForm',

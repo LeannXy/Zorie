@@ -11,21 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('carts', function (Blueprint $table) {
-
-    $table->id();
-
-    $table->foreignId('customer_id');
-
-    $table->foreignId('product_id');
-
-    $table->string('size');
-
-    $table->integer('qty');
-
-    $table->timestamps();
-
-});
+        Schema::table('carts', function (Blueprint $table) {
+            $table->renameColumn('quantity', 'qty');
+            $table->string('size')->nullable();
+        });
     }
 
     /**
@@ -33,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('carts');
+        Schema::table('carts', function (Blueprint $table) {
+            $table->dropColumn('size');
+            $table->renameColumn('qty', 'quantity');
+        });
     }
 };

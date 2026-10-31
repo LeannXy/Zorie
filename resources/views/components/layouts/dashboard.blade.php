@@ -395,9 +395,9 @@
 
                     <div x-show="openSettings" x-transition class="mt-2 ml-6 space-y-2">
 
-                        <a href="{{ route('settings.profile') }}" @click="sidebarOpen=false"
+                        <a href="{{ route('profile.edit') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-4 py-2 text-sm
-                             {{ request()->routeIs('settings.profile')
+                             {{ request()->routeIs('profile.edit')
                                  ? 'text-blue-500'
                                  : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
 
@@ -406,9 +406,9 @@
                         </a>
 
 
-                        <a href="{{ route('settings.security') }}" @click="sidebarOpen=false"
+                        <a href="{{ route('security.edit') }}" @click="sidebarOpen=false"
                             class="block rounded-lg px-4 py-2 text-sm
-                            {{ request()->routeIs('settings.security')
+                            {{ request()->routeIs('security.edit')
                                 ? 'text-blue-500'
                                 : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-white' }}">
 
@@ -820,7 +820,7 @@
                         <div x-show="openProfile" @click.away="openProfile=false" x-transition style="display:none"
                             class="absolute right-0 top-14 w-56 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl z-50">
 
-                            <a href="{{ route('settings.profile') }}"
+                            <a href="{{ route('profile.edit') }}"
                                 class="flex items-center gap-3 p-4 hover:bg-zinc-100 dark:hover:bg-zinc-800">
 
                                 <i data-lucide="user" class="h-4 w-4"></i>

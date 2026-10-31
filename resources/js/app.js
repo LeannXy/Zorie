@@ -1,4 +1,3 @@
-import ApexCharts from 'apexcharts'
 import Alpine from 'alpinejs'
 import { createIcons, icons } from 'lucide'
 
@@ -6,7 +5,6 @@ import TomSelect from "tom-select";
 import "tom-select/dist/css/tom-select.css";
 
 window.Alpine = Alpine
-window.ApexCharts = ApexCharts
 
 Alpine.start()
 

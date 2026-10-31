@@ -30,44 +30,7 @@ class DashboardController extends Controller
             ->get();
 
 
-        $salesData =
-
-            Order::where(
-                'status',
-                'Completed'
-            )
-
-            ->select(
-
-                DB::raw(
-                    'MONTH(created_at) as month'
-                ),
-
-                DB::raw(
-                    'SUM(total) as total'
-                )
-
-            )
-
-            ->groupBy(
-                'month'
-            )
-
-            ->orderBy(
-                'month'
-            )
-
-            ->get();
-
-
-        $chartLabels = [];
-
-        $chartValues = [];
-
-
-        /* sesuaikan bulan*/
         $currentMonth =
-
             now()->month;
 
         $chartLabels = [];
@@ -103,23 +66,13 @@ class DashboardController extends Controller
                 );
 
 
-            $monthData =
-
-                $salesData
-                ->firstWhere(
-                    'month',
-                    $i
-                );
-
-
-            $chartValues[] =
-
-                (int)(
-
-                    $monthData?->total
-                    ?? 0
-
-                );
+            $chartValues[] = (int) Order::where(
+                'status',
+                'Completed'
+            )
+                ->whereYear('created_at', now()->year)
+                ->whereMonth('created_at', $i)
+                ->sum('total');
         }
 
         $activities =
