@@ -1,6 +1,8 @@
 {
   "version": 2,
   "framework": null,
+  "buildCommand": "echo 'Skipping frontend build'",
+  "installCommand": "echo 'Skipping npm install'",
   "outputDirectory": "public",
   "functions": {
     "api/index.php": {
