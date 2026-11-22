@@ -23,10 +23,8 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy seluruh project terlebih dahulu
 COPY . .
 
-# Install dependency tanpa menjalankan script Laravel
 RUN composer install \
     --no-dev \
     --no-interaction \
@@ -34,7 +32,6 @@ RUN composer install \
     --optimize-autoloader \
     --no-scripts
 
-# Sekarang artisan dan vendor sudah tersedia
 RUN php artisan package:discover --ansi
 
 RUN mkdir -p \
@@ -44,8 +41,6 @@ RUN mkdir -p \
     storage/logs
 
 RUN chmod -R 775 storage bootstrap/cache
-
-RUN php artisan optimize
 
 EXPOSE 80
 
