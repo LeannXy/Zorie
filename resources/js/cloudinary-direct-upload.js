@@ -27,6 +27,7 @@ async function uploadImage(input, file) {
     const body = new FormData()
     body.append('file', file)
     body.append('api_key', signature.api_key)
+    body.append('asset_folder', signature.asset_folder)
     body.append('overwrite', 'false')
     body.append('timestamp', signature.timestamp)
     body.append('public_id', signature.public_id)

@@ -24,14 +24,22 @@ $app = Application::configure(
 })
 ->create();
 
-// Arahkan storage Laravel ke /tmp agar tidak error read-only di Vercel
-$storagePath = '/tmp/storage';
-if (!is_dir($storagePath)) {
-    mkdir($storagePath . '/framework/views', 0755, true);
-    mkdir($storagePath . '/framework/cache/data', 0755, true);
-    mkdir($storagePath . '/framework/sessions', 0755, true);
-    mkdir($storagePath . '/logs', 0755, true);
+// Vercel's application filesystem is read-only except for /tmp.
+if (getenv('VERCEL') === '1') {
+    $storagePath = '/tmp/storage';
+
+    foreach ([
+        $storagePath.'/framework/views',
+        $storagePath.'/framework/cache/data',
+        $storagePath.'/framework/sessions',
+        $storagePath.'/logs',
+    ] as $directory) {
+        if (! is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+    }
+
+    $app->useStoragePath($storagePath);
 }
-$app->useStoragePath($storagePath);
 
 return $app;

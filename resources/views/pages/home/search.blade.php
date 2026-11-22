@@ -53,7 +53,7 @@
                         </div>
 
                         <div class="p-4">
-                            <h3 class="font-semibold text-[#111] mb-2 line-clamp-2 group-hover:text-[#000039]">
+                            <h3 class="min-h-[3rem] font-semibold text-[#111] mb-2 line-clamp-2 group-hover:text-[#000039]">
                                 <a href="{{ route('product.show', $product) }}">{{ $product->name }}</a>
                             </h3>
                             

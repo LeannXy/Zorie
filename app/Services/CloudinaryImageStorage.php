@@ -34,11 +34,11 @@ class CloudinaryImageStorage
             throw new InvalidArgumentException("Unsupported image storage driver [{$driver}].");
         }
 
-        $publicId = trim(config('services.cloudinary.folder', 'zorie'), '/')
-            .'/'.trim($directory, '/')
-            .'/'.Str::uuid();
+        $assetFolder = $this->assetFolder($directory);
+        $publicId = $assetFolder.'/'.Str::uuid();
 
         $result = $this->uploadApi()->upload($image->getRealPath(), [
+            'asset_folder' => $assetFolder,
             'public_id' => $publicId,
             'overwrite' => false,
             'resource_type' => 'image',
@@ -60,11 +60,11 @@ class CloudinaryImageStorage
         }
 
         $cloud = $this->uploadApi()->getCloud();
-        $publicId = trim(config('services.cloudinary.folder', 'zorie'), '/')
-            .'/'.trim($directory, '/')
-            .'/'.Str::uuid();
+        $assetFolder = $this->assetFolder($directory);
+        $publicId = $assetFolder.'/'.Str::uuid();
         $timestamp = now()->timestamp;
         $parameters = [
+            'asset_folder' => $assetFolder,
             'overwrite' => 'false',
             'public_id' => $publicId,
             'timestamp' => $timestamp,
@@ -73,6 +73,7 @@ class CloudinaryImageStorage
         return [
             'cloud_name' => config('services.cloudinary.cloud_name'),
             'api_key' => config('services.cloudinary.api_key'),
+            'asset_folder' => $assetFolder,
             'public_id' => $publicId,
             'timestamp' => $timestamp,
             'signature' => ApiUtils::signParameters(
@@ -137,13 +138,14 @@ class CloudinaryImageStorage
         $timestamp = isset($parts[1]) ? filter_var($parts[1], FILTER_VALIDATE_INT) : false;
         $signature = $parts[2] ?? '';
         $publicId = Str::after($signedReference, self::REFERENCE_PREFIX);
-        $expectedPrefix = trim(config('services.cloudinary.folder', 'zorie'), '/')
-            .'/'.trim($directory, '/').'/';
+        $assetFolder = $this->assetFolder($directory);
+        $expectedPrefix = $assetFolder.'/';
         $cloud = $this->uploadApi()->getCloud();
         $expectedSignature = $timestamp === false
             ? ''
             : ApiUtils::signParameters(
                 [
+                    'asset_folder' => $assetFolder,
                     'overwrite' => 'false',
                     'public_id' => $publicId,
                     'timestamp' => $timestamp,
@@ -167,6 +169,12 @@ class CloudinaryImageStorage
         }
 
         return $signedReference;
+    }
+
+    private function assetFolder(string $directory): string
+    {
+        return trim(config('services.cloudinary.folder', 'zorie'), '/')
+            .'/'.trim($directory, '/');
     }
 
     public function url(?string $reference): ?string

@@ -75,25 +75,25 @@
         {{-- ===== TOP BAR ===== --}}
         <div class="backdrop-blur-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-visible"
             :class="scrolled
-                ? 'bg-white/95 rounded-full border border-[#000039]/15 px-4 h-[54px]'
-                : 'bg-white/95 rounded-none border-b border-[#000039]/15 px-6 h-[68px]'">
+                ? 'bg-white/95 rounded-full border border-[#000039]/15 px-3 sm:px-4 h-[54px]'
+                : 'bg-white/95 rounded-none border-b border-[#000039]/15 px-3 sm:px-6 h-[68px]'">
 
-            <div class="flex items-center justify-between h-full gap-4 max-w-[1280px] mx-auto overflow-visible">
+            <div class="flex items-center justify-between h-full gap-2 sm:gap-4 max-w-[1280px] mx-auto overflow-visible">
 
                 {{-- LOGO --}}
                 <a href="/" class="shrink-0">
                     <h1 class="text-[#000039] font-[800] tracking-[-2px] uppercase leading-none transition-all duration-500"
                         style="font-family: 'Plus Jakarta Sans', sans-serif;"
-                        :class="scrolled ? 'text-[20px]' : 'text-[28px]'">
+                        :class="scrolled ? 'text-[20px]' : 'text-[24px] sm:text-[28px]'">
                         ZORIE
                     </h1>
                 </a>
 
                 {{-- SEARCH BAR --}}
-                <div class="flex-1 max-w-[700px] transition-all duration-300 overflow-visible"
-                    :class="scrolled ? 'opacity-0 w-0 overflow-hidden pointer-events-none' : 'opacity-100'">
+                <div class="hidden md:flex min-w-0 max-w-[700px] transition-all duration-300 overflow-visible"
+                    :class="scrolled ? 'opacity-0 w-0 flex-none overflow-hidden pointer-events-none' : 'opacity-100 flex-1'">
                     <form action="{{ route('products.search') }}" method="GET"
-                        class="flex items-center h-[40px] bg-[#000039]/8 border border-[#000039]/20 rounded-full relative" style="overflow:visible !important;">
+                        class="flex w-full min-w-0 items-center h-[40px] bg-[#000039]/8 border border-[#000039]/20 rounded-full relative" style="overflow:visible !important;">
 
                         {{-- Dropdown Kategori --}}
                         <div class="relative h-full shrink-0" @click.outside="categoryOpen = false">
@@ -109,7 +109,7 @@
                                         $refs.catDropdown.style.left = r.left + 'px';
                                     }
                                 "
-                                class="h-full flex items-center gap-1.5 pl-4 pr-3 text-[12px] font-semibold text-[#000039]/70 border-r border-[#000039]/20 hover:text-[#000039] transition whitespace-nowrap"
+                                class="h-full flex items-center gap-1.5 pl-3 pr-2 lg:pl-4 lg:pr-3 text-[11px] lg:text-[12px] font-semibold text-[#000039]/70 border-r border-[#000039]/20 hover:text-[#000039] transition whitespace-nowrap"
                                 style="font-family: 'Plus Jakarta Sans', sans-serif;">
                                 <span x-text="selectedCategory"></span>
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 transition-transform duration-200"
@@ -123,14 +123,14 @@
                         {{-- Input --}}
                         <input type="text" name="q"
                             placeholder="Cari produk sepatu..."
-                            class="flex-1 h-full px-3 text-[12px] text-[#000039] bg-transparent outline-none placeholder-[#000039]/30"
+                            class="min-w-0 flex-1 h-full px-2 lg:px-3 text-[12px] text-[#000039] bg-transparent outline-none placeholder-[#000039]/30"
                             style="font-family: 'Plus Jakarta Sans', sans-serif;" />
 
                         <input type="hidden" name="filter" :value="selectedCategory !== 'Semua' ? selectedCategory : ''" />
 
                         {{-- Tombol Cari --}}
                         <button type="submit"
-                            class="h-full px-5 text-[12px] font-bold text-white bg-[#000039] rounded-full transition-all hover:bg-[#000039]/85 active:scale-95 shrink-0"
+                            class="h-full px-3 lg:px-5 text-[12px] font-bold text-white bg-[#000039] rounded-full transition-all hover:bg-[#000039]/85 active:scale-95 shrink-0"
                             style="font-family: 'Plus Jakarta Sans', sans-serif;">
                             Cari
                         </button>
@@ -139,15 +139,23 @@
                 </div>
 
                 {{-- ACTION ICONS --}}
-                <div class="flex items-center gap-2 shrink-0">
+                <div class="flex items-center gap-1 sm:gap-2 shrink-0">
 
                     {{-- Icon Search (saat scrolled) --}}
+                    <a href="{{ route('search') }}"
+                        class="flex md:hidden w-[34px] h-[34px] items-center justify-center rounded-full border border-[#000039]/20 bg-[#000039]/8 text-[#000039]/70 hover:text-[#000039] hover:bg-[#000039]/15 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-[15px] h-[15px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.34-4.34" />
+                            <circle cx="11" cy="11" r="8" />
+                        </svg>
+                    </a>
+
                     <a x-show="scrolled"
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 scale-75"
                         x-transition:enter-end="opacity-100 scale-100"
                         href="{{ route('search') }}"
-                        class="w-[38px] h-[38px] flex items-center justify-center rounded-full border border-[#000039]/20 bg-[#000039]/8 text-[#000039]/70 hover:text-[#000039] hover:bg-[#000039]/15 transition">
+                        class="hidden md:flex w-[38px] h-[38px] items-center justify-center rounded-full border border-[#000039]/20 bg-[#000039]/8 text-[#000039]/70 hover:text-[#000039] hover:bg-[#000039]/15 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-[16px] h-[16px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.34-4.34" />
                             <circle cx="11" cy="11" r="8" />
@@ -157,7 +165,7 @@
                     {{-- Wishlist --}}
                     <a href="{{ route('wishlist') }}"
                         class="flex items-center justify-center rounded-full border border-[#000039]/20 bg-[#000039]/8 text-[#000039]/70 hover:text-[#000039] hover:bg-[#000039]/15 transition-all duration-300"
-                        :class="scrolled ? 'w-[38px] h-[38px]' : 'w-[44px] h-[44px]'">
+                        :class="scrolled ? 'w-[34px] h-[34px] sm:w-[38px] sm:h-[38px]' : 'w-[36px] h-[36px] sm:w-[44px] sm:h-[44px]'">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
                             :class="scrolled ? 'w-[16px] h-[16px]' : 'w-[20px] h-[20px]'">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -168,7 +176,7 @@
                     {{-- Cart --}}
                     <a href="{{ route('cart') }}"
                         class="relative flex items-center justify-center rounded-full border border-[#000039]/20 bg-[#000039]/8 text-[#000039]/70 hover:text-[#000039] hover:bg-[#000039]/15 transition-all duration-300"
-                        :class="scrolled ? 'w-[38px] h-[38px]' : 'w-[44px] h-[44px]'">
+                        :class="scrolled ? 'w-[34px] h-[34px] sm:w-[38px] sm:h-[38px]' : 'w-[36px] h-[36px] sm:w-[44px] sm:h-[44px]'">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                             :class="scrolled ? 'w-[15px] h-[15px]' : 'w-[18px] h-[18px]'">
                             <circle cx="8" cy="21" r="1" />
@@ -188,7 +196,7 @@
                     {{-- @if (session('customer_id'))
                         <a href="{{ route('account') }}"
                             class="flex items-center justify-center rounded-full bg-[#000039] text-white transition-all duration-300 hover:scale-105 hover:bg-[#000039]/85"
-                            :class="scrolled ? 'w-[38px] h-[38px]' : 'w-[44px] h-[44px]'">
+                            :class="scrolled ? 'w-[34px] h-[34px] sm:w-[38px] sm:h-[38px]' : 'w-[36px] h-[36px] sm:w-[44px] sm:h-[44px]'">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
                                 :class="scrolled ? 'w-[16px] h-[16px]' : 'w-[20px] h-[20px]'">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -207,8 +215,8 @@
                             class="flex items-center justify-center rounded-full bg-black transition-all duration-500 hover:scale-105"
                             :class="scrolled
                                 ?
-                                'w-[38px] h-[38px]' :
-                                'w-[46px] h-[46px]'">
+                                'w-[34px] h-[34px] sm:w-[38px] sm:h-[38px]' :
+                                'w-[36px] h-[36px] sm:w-[46px] sm:h-[46px]'">
 
                             @if ($navbarCustomer)
 
@@ -257,10 +265,10 @@
         <div class="transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
             :class="scrolled ? 'max-h-0 opacity-0 overflow-hidden' : 'max-h-[300px] opacity-100 overflow-visible'">
             <div class="bg-white/90 backdrop-blur-xl border-b border-[#000039]/10 max-w-full overflow-visible">
-                <div class="max-w-[1280px] mx-auto px-6 flex items-center justify-between scrollbar-hide overflow-visible">
+                <div class="max-w-[1280px] mx-auto px-3 sm:px-6 flex items-center justify-start overflow-x-auto overflow-y-hidden scrollbar-hide">
 
                     {{-- KIRI: Nav Links --}}
-                    <div class="flex items-center">
+                    <div class="flex w-max min-w-full items-center">
                         @foreach ($navLinks as $link)
                             <a href="{{ $link['url'] }}"
                                 class="flex items-center px-4 py-2.5 text-[12px] font-semibold text-[#000039]/45 hover:text-[#000039]/90 transition-all whitespace-nowrap border-b-2 border-transparent hover:border-[#000039]/30"

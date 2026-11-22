@@ -79,7 +79,7 @@
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed top-6 right-6 z-[9999]">
 
         <div
-            class="flex items-start gap-3 rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-5 py-4 shadow-2xl min-w-[320px]">
+            class="flex w-[calc(100vw-2rem)] max-w-[calc(100vw-2rem)] items-start gap-3 rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-4 py-4 shadow-2xl sm:w-auto sm:min-w-[320px] sm:px-5">
 
             <div class="rounded-full bg-green-500/10 p-2">
 
@@ -177,17 +177,17 @@
 
         <!-- Sidebar Overlay for mobile -->
         <div @click="sidebarOpen=false" :class="{ 'hidden': !sidebarOpen, 'block': sidebarOpen }"
-            class="fixed inset-0 bg-black/50 z-40 md:hidden md:hidden">
+            class="fixed inset-0 bg-black/50 z-40 lg:hidden">
         </div>
 
         <!-- Sidebar -->
         <aside
-            class="fixed left-0 top-0 h-screen w-72 border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 overflow-y-auto z-50 md:flex flex-col"
-            :class="{ 'hidden': !sidebarOpen, 'flex': sidebarOpen, 'md:flex': true }">
+            class="fixed left-0 top-0 h-screen w-72 border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 overflow-y-auto z-50 lg:flex flex-col"
+            :class="{ 'hidden': !sidebarOpen, 'flex': sidebarOpen, 'lg:flex': true }">
 
             <!-- Close button for mobile -->
             <button @click="sidebarOpen=false"
-                class="md:hidden absolute top-6 right-4 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300">
+                class="lg:hidden absolute top-6 right-4 text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300">
                 <i data-lucide="x" class="h-6 w-6"></i>
             </button>
 
@@ -470,13 +470,13 @@
         </aside>
 
         <!-- Main -->
-        <main class="md:ml-72 flex flex-1 flex-col w-full">
+        <main class="w-full min-w-0 flex flex-1 flex-col lg:ml-72">
 
             <header
                 class="sticky top-0 z-40 flex items-center justify-between border-b border-zinc-200 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md px-6 md:px-8 py-4 md:py-5 dark:border-zinc-800">
 
                 <!-- Mobile Sidebar & search Toggle -->
-                <div class="md:hidden flex items-center gap-2">
+                <div class="lg:hidden flex items-center gap-2">
 
                     <button @click="sidebarOpen=!sidebarOpen"
                         class="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
@@ -496,7 +496,7 @@
 
                 <!-- Search -->
                 <!-- Search Desktop -->
-                <div class="hidden md:block flex-1 max-w-lg ml-6">
+                <div class="hidden lg:block flex-1 max-w-lg ml-6">
 
                     <div class="relative w-full max-w-xl" @click.away="openSearch=false">
 
@@ -573,7 +573,7 @@
 
                 <!-- Mobile Search Modal -->
                 <div x-show="openSearch" x-transition style="display:none"
-                    class="fixed inset-0 z-[9999] bg-white dark:bg-zinc-950 md:hidden">
+                    class="fixed inset-0 z-[9999] bg-white dark:bg-zinc-950 lg:hidden">
 
                     <div class="border-b border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950">
 
@@ -795,7 +795,7 @@
 
                             </div>
 
-                            <div class="hidden md:block text-left">
+                            <div class="hidden lg:block text-left">
 
                                 <p class="text-sm font-medium">
 

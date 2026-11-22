@@ -64,10 +64,13 @@ it('signs direct uploads and accepts only matching Cloudinary references', funct
     );
 
     expect($signature['signature'])->toBe(ApiUtils::signParameters([
+        'asset_folder' => 'zorie/products',
         'overwrite' => 'false',
         'public_id' => $signature['public_id'],
         'timestamp' => $signature['timestamp'],
     ], 'test-secret'))
+        ->and($signature['asset_folder'])
+        ->toBe('zorie/products')
         ->and($storage->acceptDirectReference($reference, 'products', 'image'))
         ->toBe("cloudinary:{$signature['public_id']}")
         ->and($storedImages)
@@ -84,7 +87,8 @@ it('rejects direct-upload references with a different folder or signature', func
     $signature = $storage->signedUpload('categories');
     $reference = "cloudinary:{$signature['public_id']}|{$signature['timestamp']}|{$signature['signature']}";
 
-    expect(fn () => $storage->acceptDirectReference($reference, 'products', 'image'))
+    expect($signature['asset_folder'])->toBe('zorie/categories')
+        ->and(fn () => $storage->acceptDirectReference($reference, 'products', 'image'))
         ->toThrow(ValidationException::class)
         ->and(fn () => $storage->acceptDirectReference(
             "cloudinary:zorie/products/fake|{$signature['timestamp']}|invalid",

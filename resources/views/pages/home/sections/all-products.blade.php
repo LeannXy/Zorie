@@ -170,7 +170,12 @@
             color: #000039;
             letter-spacing: .2px;
             line-height: 1.3;
+            min-height: 2.6em;
             margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
         }
 
         .prod-price-label {
@@ -381,16 +386,6 @@
                                 {{ number_format($product->price, 0, ',', '.') }}
                             </span>
                         </div>
-                         <form action="{{ route('cart.store') }}" method="POST" class="inline">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="quantity" value="1">
-                                    <button type="submit" class="p-2 rounded-lg bg-[#f5f5f3] text-[#111] hover:bg-[#000039] hover:text-white transition-colors duration-300">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                    </button>
-                                </form>
 
                     </div>
 

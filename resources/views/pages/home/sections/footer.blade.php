@@ -12,13 +12,13 @@
             </div>
 
             {{-- Newsletter --}}
-            <div class="flex items-center gap-3 w-full max-w-[480px]">
-                <div class="flex-1 flex items-center h-[46px] bg-[#000039]/5 border border-[#000039]/12 rounded-full px-5 gap-3">
+            <div class="flex items-center gap-3 w-full max-w-[480px] min-w-0">
+                <div class="flex-1 min-w-0 flex items-center h-[46px] bg-[#000039]/5 border border-[#000039]/12 rounded-full px-5 gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#000039]/30 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                     </svg>
                     <input type="email" placeholder="Email Anda"
-                        class="flex-1 bg-transparent outline-none text-[13px] text-[#000039] placeholder-[#000039]/30">
+                        class="flex-1 min-w-0 bg-transparent outline-none text-[13px] text-[#000039] placeholder-[#000039]/30">
                 </div>
                 <button class="h-[46px] px-6 bg-[#000039] text-white text-[12px] font-bold rounded-full hover:bg-[#000039]/85 transition-all duration-300 whitespace-nowrap shrink-0">
                     Berlangganan

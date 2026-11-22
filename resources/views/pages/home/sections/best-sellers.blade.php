@@ -135,33 +135,19 @@
 
                                     </p>
 
-                                    <h3 class="mt-2 text-[17px] font-bold text-[#000039]">
+                                    <h3 class="mt-2 min-h-[3rem] text-[17px] font-bold leading-6 text-[#000039] line-clamp-2">
 
                                         {{ $product->name }}
 
                                     </h3>
 
-                                    <div class="flex items-center justify-between mt-4">
+                                    <div class="mt-4">
 
                                         <p class="text-[20px] font-black text-[#000039]">
 
                                             Rp {{ number_format($product->price, 0, ',', '.') }}
 
                                         </p>
-
-                                        <a href="{{ route('product.show', $product->id) }}"
-                                            class=" w-[42px] h-[42px] rounded-md bg-[#000039] flex items-center justify-center hover:bg-[#000039]/80 transition-all">
-
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white"
-                                                fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                stroke-width="2">
-
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M3 3h2l.4 2M7 13h10l4-8H5.4" />
-
-                                            </svg>
-
-                                        </a>
                                     </div>
                                 </div>
                             </a>

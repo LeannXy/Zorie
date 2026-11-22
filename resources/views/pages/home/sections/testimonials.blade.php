@@ -14,14 +14,21 @@
         <div
             x-data="{
                 current: 0,
+                perPage: 1,
                 total: 0,
                 init() {
-                    this.total = Math.ceil(this.$refs.track.children.length / 3);
+                    this.updateLayout();
+                },
+                updateLayout() {
+                    this.perPage = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+                    this.total = Math.ceil(this.$refs.track.children.length / this.perPage);
+                    this.current = Math.min(this.current, this.total - 1);
                 },
                 prev() { if (this.current > 0) this.current-- },
                 next() { if (this.current < this.total - 1) this.current++ },
             }"
             x-init="init()"
+            @resize.window="updateLayout()"
             class="relative">
 
             {{-- TRACK --}}
@@ -29,7 +36,7 @@
                 <div
                     x-ref="track"
                     class="flex gap-5 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
-                    :style="'transform: translateX(calc(-' + current + ' * (100% + 20px) / 1))'">
+                    :style="'transform: translateX(-' + (current * ($refs.track.parentElement.clientWidth + 20)) + 'px)'">
 
                     @php
                     $testimonials = [
@@ -73,7 +80,7 @@
                     @endphp
 
                     @foreach ($testimonials as $t)
-                    <div class="min-w-[calc(33.333%-14px)] bg-[#f7f7f9] rounded-[20px] p-7 flex flex-col justify-between gap-8 border border-[#000039]/6 hover:border-[#000039]/15 hover:shadow-md transition-all duration-300">
+                    <div class="flex-none w-full md:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)] bg-[#f7f7f9] rounded-[20px] p-7 flex flex-col justify-between gap-8 border border-[#000039]/6 hover:border-[#000039]/15 hover:shadow-md transition-all duration-300">
 
                         {{-- QUOTE MARK --}}
                         <div>

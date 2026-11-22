@@ -70,13 +70,13 @@
             </div>
 
             {{-- NAVIGATION ARROWS --}}
-            <button @click="prev()" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 lg:-translate-x-16 z-30 w-12 h-12 rounded-full bg-[#000039] text-white flex items-center justify-center hover:bg-[#000039]/80 transition-all">
+            <button @click="prev()" class="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-[#000039] text-white flex items-center justify-center hover:bg-[#000039]/80 transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                 </svg>
             </button>
 
-            <button @click="next()" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 lg:translate-x-16 z-30 w-12 h-12 rounded-full bg-[#000039] text-white flex items-center justify-center hover:bg-[#000039]/80 transition-all">
+            <button @click="next()" class="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-[#000039] text-white flex items-center justify-center hover:bg-[#000039]/80 transition-all">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                 </svg>
