@@ -307,6 +307,10 @@
         <div class="border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-lg p-8 text-center bg-zinc-50 dark:bg-zinc-950/50 hover:bg-zinc-100 dark:hover:bg-zinc-900/50 transition cursor-pointer"
             @click="$refs.imageInput.click()">
             <input x-ref="imageInput" type="file" name="image[]" multiple accept="image/*"
+                @if (config('services.cloudinary.driver') === 'cloudinary')
+                    data-cloudinary-upload-url="{{ route('cloudinary.sign.admin') }}"
+                    data-cloudinary-directory="products"
+                @endif
                 @change="Array.from($event.target.files).forEach(file => {
                     form.files.push(file);
                     form.images.push(URL.createObjectURL(file));

@@ -61,18 +61,17 @@ class CustomerController extends Controller
 
             'email' => 'required|email',
 
-            'profile_photo' =>
-            'nullable|image|mimes:jpg,png,jpeg|max:2048'
+            'profile_photo' => $request->hasFile('profile_photo')
+                ? 'nullable|image|mimes:jpg,png,jpeg|max:2048'
+                : 'nullable|string|max:255'
 
         ]);
 
 
-        if ($request->hasFile(
-            'profile_photo'
-        )) {
+        if ($request->hasFile('profile_photo') || $request->filled('profile_photo')) {
 
             $previousPhoto = $customer->profile_photo;
-            $image = $imageStorage->store($request->file('profile_photo'), 'profiles');
+            $image = $imageStorage->storeRequestImage($request, 'profile_photo', 'profiles');
 
             $customer->update([
 

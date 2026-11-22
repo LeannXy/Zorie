@@ -167,6 +167,10 @@
                                     </h3>
 
                                     <input x-ref="imageInput" type="file" name="image" accept="image/*"
+                                        @if (config('services.cloudinary.driver') === 'cloudinary')
+                                            data-cloudinary-upload-url="{{ route('cloudinary.sign.admin') }}"
+                                            data-cloudinary-directory="categories"
+                                        @endif
                                         @change="
                 let file=$event.target.files[0];
 

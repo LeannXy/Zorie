@@ -3,6 +3,7 @@ import { createIcons, icons } from 'lucide'
 
 import TomSelect from "tom-select";
 import "tom-select/dist/css/tom-select.css";
+import './cloudinary-direct-upload'
 
 window.Alpine = Alpine
 

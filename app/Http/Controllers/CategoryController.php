@@ -138,12 +138,7 @@ class CategoryController extends Controller
             'Category already exists'
 
         ]);
-        $image = null;
-
-        if ($request->hasFile('image')) {
-
-            $image = $imageStorage->store($request->file('image'), 'categories');
-        }
+        $image = $imageStorage->storeRequestImage($request, 'image', 'categories');
 
         // Category::create([
 
@@ -262,9 +257,9 @@ public function edit(
 
         ];
 
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('image') || $request->filled('image')) {
             $previousImage = $category->image;
-            $data['image'] = $imageStorage->store($request->file('image'), 'categories');
+            $data['image'] = $imageStorage->storeRequestImage($request, 'image', 'categories');
         }
 
         $category->update(

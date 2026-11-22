@@ -210,19 +210,10 @@ class ProductController extends Controller
 
         ]);
 
-        // upload gambar
-        if ($request->hasFile('image')) {
-
-            foreach ($request->file('image') as $image) {
-
-                $path = $imageStorage->store($image, 'products');
-
-                $product->images()->create([
-
-                    'image' => $path,
-
-                ]);
-            }
+        foreach ($imageStorage->storeRequestImages($request, 'image', 'products') as $path) {
+            $product->images()->create([
+                'image' => $path,
+            ]);
         }
 
         // simpan kategori
@@ -376,20 +367,10 @@ class ProductController extends Controller
         }
 
         // tambah gambar baru
-        if ($request->hasFile('image')) {
-
-            foreach ($request->file('image') as $file) {
-
-                $path = $imageStorage->store($file, 'products');
-
-                $product
-                    ->images()
-                    ->create([
-
-                        'image' => $path
-
-                    ]);
-            }
+        foreach ($imageStorage->storeRequestImages($request, 'image', 'products') as $path) {
+            $product->images()->create([
+                'image' => $path,
+            ]);
         }
         $product->categories()->sync(
             $request->categories ?? []

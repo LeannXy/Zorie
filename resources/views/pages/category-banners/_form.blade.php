@@ -199,6 +199,10 @@
                     </div>
 
                     <input hidden type="file" name="image" accept="image/*"
+                        @if (config('services.cloudinary.driver') === 'cloudinary')
+                            data-cloudinary-upload-url="{{ route('cloudinary.sign.admin') }}"
+                            data-cloudinary-directory="category-banners"
+                        @endif
                         @change=" let file = $event.target.files[0]; if(file){     preview =     URL.createObjectURL(file); }">
 
                 </label>

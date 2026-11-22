@@ -47,7 +47,9 @@ class CategoryBannerController extends Controller
 
             'button_text' => 'nullable',
 
-            'image' => 'nullable|image',
+            'image' => $request->hasFile('image')
+                ? 'nullable|image'
+                : 'nullable|string|max:255',
 
             'banner_type' =>
             'required|in:main,secondary',
@@ -102,9 +104,7 @@ class CategoryBannerController extends Controller
             }
         }
 
-        $image = $request->hasFile('image')
-            ? $imageStorage->store($request->file('image'), 'category-banners')
-            : null;
+        $image = $imageStorage->storeRequestImage($request, 'image', 'category-banners');
 
         CategoryBanner::create([
 
@@ -167,7 +167,9 @@ class CategoryBannerController extends Controller
 
             'button_text' => 'nullable',
 
-            'image' => 'nullable|image',
+            'image' => $request->hasFile('image')
+                ? 'nullable|image'
+                : 'nullable|string|max:255',
 
             'banner_type' =>
             'required|in:main,secondary',
@@ -192,9 +194,9 @@ class CategoryBannerController extends Controller
         ];
 
         $previousImage = null;
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('image') || $request->filled('image')) {
             $previousImage = $categoryBanner->image;
-            $data['image'] = $imageStorage->store($request->file('image'), 'category-banners');
+            $data['image'] = $imageStorage->storeRequestImage($request, 'image', 'category-banners');
         }
         if ($request->banner_type === 'main') {
 

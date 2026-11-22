@@ -526,6 +526,10 @@
 
                                 <input type="file" name="profile_photo" id="profile_photo" accept="image/*"
                                     class="hidden"
+                                    @if (config('services.cloudinary.driver') === 'cloudinary')
+                                        data-cloudinary-upload-url="{{ route('cloudinary.sign.customer') }}"
+                                        data-cloudinary-directory="profiles"
+                                    @endif
                                     @change=" const file = $event.target.files[0]; if(file){ preview = URL.createObjectURL(file); }">
                                 <label for="profile_photo"
                                     class="absolute -bottom-1 -right-1 w-7 h-7 bg-white border border-[#e5e5e3] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#f5f5f3] transition-colors shadow-sm">

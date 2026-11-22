@@ -25,6 +25,7 @@ use App\Http\Controllers\PublicProductController;
 use App\Http\Controllers\CheckoutController;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\CloudinaryUploadController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -82,6 +83,9 @@ Route::post(
 
 // customer akun - Protected Routes (using session middleware)
 Route::middleware(['CheckCustomerSession'])->group(function () {
+    Route::post('/cloudinary/sign-upload/customer', [CloudinaryUploadController::class, 'signCustomer'])
+        ->name('cloudinary.sign.customer');
+
     Route::get('/my-account/dashboard', [CustomerAccountController::class, 'dashboard'])->name('customer.account');
 
     Route::get('/my-account/profile', [
@@ -347,6 +351,9 @@ Route::post('/midtrans/callback', [App\Http\Controllers\CheckoutController::clas
 //DASHBOARD
 ///////////////////
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/cloudinary/sign-upload/admin', [CloudinaryUploadController::class, 'signAdmin'])
+        ->name('cloudinary.sign.admin');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/products', [ProductController::class, 'index'])

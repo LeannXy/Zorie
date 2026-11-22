@@ -105,6 +105,10 @@
                         </label>
 
                         <input type="file" name="profile_photo" accept="image/*"
+                            @if (config('services.cloudinary.driver') === 'cloudinary')
+                                data-cloudinary-upload-url="{{ route('cloudinary.sign.admin') }}"
+                                data-cloudinary-directory="profile-admin"
+                            @endif
                             class="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 p-3">
 
                         @error('profile_photo')

@@ -846,6 +846,10 @@ $save = function () {
 
                             <!-- Upload Input -->
                             <input x-ref="imageInput" type="file" name="image[]" multiple
+                                @if (config('services.cloudinary.driver') === 'cloudinary')
+                                    data-cloudinary-upload-url="{{ route('cloudinary.sign.admin') }}"
+                                    data-cloudinary-directory="products"
+                                @endif
                                 @change="
                         Array.from($event.target.files).forEach(file => {
                             form.files.push(file);

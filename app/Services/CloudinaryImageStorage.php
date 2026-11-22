@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
+use Cloudinary\Api\ApiUtils;
 use Cloudinary\Api\Upload\UploadApi;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -48,6 +51,122 @@ class CloudinaryImageStorage
         }
 
         return self::REFERENCE_PREFIX.$uploadedPublicId;
+    }
+
+    public function signedUpload(string $directory): array
+    {
+        if (config('services.cloudinary.driver') !== 'cloudinary') {
+            throw new RuntimeException('Direct uploads require IMAGE_STORAGE_DRIVER=cloudinary.');
+        }
+
+        $cloud = $this->uploadApi()->getCloud();
+        $publicId = trim(config('services.cloudinary.folder', 'zorie'), '/')
+            .'/'.trim($directory, '/')
+            .'/'.Str::uuid();
+        $timestamp = now()->timestamp;
+        $parameters = [
+            'overwrite' => 'false',
+            'public_id' => $publicId,
+            'timestamp' => $timestamp,
+        ];
+
+        return [
+            'cloud_name' => config('services.cloudinary.cloud_name'),
+            'api_key' => config('services.cloudinary.api_key'),
+            'public_id' => $publicId,
+            'timestamp' => $timestamp,
+            'signature' => ApiUtils::signParameters(
+                $parameters,
+                $cloud->apiSecret,
+                $cloud->signatureAlgorithm,
+            ),
+            'upload_url' => 'https://api.cloudinary.com/v1_1/'
+                .rawurlencode(config('services.cloudinary.cloud_name'))
+                .'/image/upload',
+        ];
+    }
+
+    public function storeRequestImage(Request $request, string $field, string $directory): ?string
+    {
+        if ($request->hasFile($field)) {
+            $file = $request->file($field);
+
+            if ($file instanceof UploadedFile) {
+                return $this->store($file, $directory);
+            }
+        }
+
+        $reference = $request->input($field);
+
+        return is_string($reference) && $reference !== ''
+            ? $this->acceptDirectReference($reference, $directory, $field)
+            : null;
+    }
+
+    public function storeRequestImages(Request $request, string $field, string $directory): array
+    {
+        $stored = [];
+        $files = $request->file($field, []);
+
+        foreach (is_array($files) ? $files : [$files] as $file) {
+            if ($file instanceof UploadedFile) {
+                $stored[] = $this->store($file, $directory);
+            }
+        }
+
+        $references = $request->input($field, []);
+        foreach (is_array($references) ? $references : [$references] as $reference) {
+            if (is_string($reference) && $reference !== '') {
+                $stored[] = $this->acceptDirectReference($reference, $directory, $field);
+            }
+        }
+
+        return $stored;
+    }
+
+    public function acceptDirectReference(string $reference, string $directory, string $field): string
+    {
+        if (config('services.cloudinary.driver') !== 'cloudinary') {
+            throw ValidationException::withMessages([
+                $field => 'Direct image uploads are not enabled.',
+            ]);
+        }
+
+        $parts = explode('|', $reference);
+        $signedReference = $parts[0] ?? '';
+        $timestamp = isset($parts[1]) ? filter_var($parts[1], FILTER_VALIDATE_INT) : false;
+        $signature = $parts[2] ?? '';
+        $publicId = Str::after($signedReference, self::REFERENCE_PREFIX);
+        $expectedPrefix = trim(config('services.cloudinary.folder', 'zorie'), '/')
+            .'/'.trim($directory, '/').'/';
+        $cloud = $this->uploadApi()->getCloud();
+        $expectedSignature = $timestamp === false
+            ? ''
+            : ApiUtils::signParameters(
+                [
+                    'overwrite' => 'false',
+                    'public_id' => $publicId,
+                    'timestamp' => $timestamp,
+                ],
+                $cloud->apiSecret,
+                $cloud->signatureAlgorithm,
+            );
+
+        if (
+            count($parts) !== 3
+            || ! Str::startsWith($signedReference, self::REFERENCE_PREFIX)
+            || ! Str::startsWith($publicId, $expectedPrefix)
+            || $timestamp === false
+            || $timestamp < now()->timestamp - 3600
+            || $timestamp > now()->timestamp + 60
+            || ! hash_equals($expectedSignature, $signature)
+        ) {
+            throw ValidationException::withMessages([
+                $field => 'The uploaded image reference is invalid.',
+            ]);
+        }
+
+        return $signedReference;
     }
 
     public function url(?string $reference): ?string

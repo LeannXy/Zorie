@@ -33,7 +33,9 @@ class SettingsController extends Controller
 
             'email' => 'required|email|unique:users,email,' . $user->id,
 
-            'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048'
+            'profile_photo' => $request->hasFile('profile_photo')
+                ? 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048'
+                : 'nullable|string|max:255'
 
         ]);
 
@@ -42,12 +44,9 @@ class SettingsController extends Controller
         $user->email = $validated['email'];
 
 
-        if ($request->hasFile('profile_photo')) {
+        if ($request->hasFile('profile_photo') || $request->filled('profile_photo')) {
             $previousPhoto = $user->profile_photo;
-            $user->profile_photo = $imageStorage->store(
-                $request->file('profile_photo'),
-                'profile-admin',
-            );
+            $user->profile_photo = $imageStorage->storeRequestImage($request, 'profile_photo', 'profile-admin');
         }
 
         $user->save();

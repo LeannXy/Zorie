@@ -94,14 +94,15 @@ class CustomerAccountController extends Controller
 
             'date_of_birth' => 'nullable|date',
 
-            'profile_photo' =>
-            'nullable|image|mimes:jpg,jpeg,png,webp|max:2048'
+            'profile_photo' => $request->hasFile('profile_photo')
+                ? 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048'
+                : 'nullable|string|max:255'
 
         ]);
 
-        if ($request->hasFile('profile_photo')) {
+        if ($request->hasFile('profile_photo') || $request->filled('profile_photo')) {
             $previousPhoto = $customer->profile_photo;
-            $path = $imageStorage->store($request->file('profile_photo'), 'profiles');
+            $path = $imageStorage->storeRequestImage($request, 'profile_photo', 'profiles');
             $customer->profile_photo = $path;
         }
         $customer->name = $request->name;
