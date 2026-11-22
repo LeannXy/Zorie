@@ -17,6 +17,7 @@ return Application::configure(
     $middleware->alias([
         'CheckCustomerSession' => \App\Http\Middleware\CheckCustomerSession::class,
     ]);
+    $middleware->trustProxies(at: '*');
 })
 ->withExceptions(function (Exceptions $exceptions): void {
 
