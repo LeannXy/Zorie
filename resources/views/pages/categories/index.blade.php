@@ -618,7 +618,7 @@
 
                                         <div class="h-12 w-12 overflow-hidden rounded-xl">
 
-                                            <img src="{{ $category->image ? asset('storage/' . $category->image) : 'https://placehold.co/80x80?text=No' }}"
+                                            <img src="{{ $category->image ? media_url($category->image) : 'https://placehold.co/80x80?text=No' }}"
                                                 class="h-full w-full object-cover">
 
                                         </div>

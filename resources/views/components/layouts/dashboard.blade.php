@@ -778,7 +778,7 @@
                             <div class="relative">
 
                                 @if (auth()->user()->profile_photo)
-                                    <img src="{{ Storage::url(auth()->user()->profile_photo) }}"
+                                    <img src="{{ media_url(auth()->user()->profile_photo) }}"
                                         class="h-10 w-10 rounded-full object-cover flex-shrink-0">
                                 @else
                                     <div

@@ -27,7 +27,7 @@
             weight: {{ $product->weight ?? 1000 }},
             description: @js($product->description ?? ''),
             stock: {{ $product->stock ?? 0 }},
-            images: @js($product->images->map(fn($img) => ['id' => $img->id, 'url' => asset('storage/' . $img->image)])->toArray()),
+            images: @js($product->images->map(fn($img) => ['id' => $img->id, 'url' => media_url($img->image)])->toArray()),
             files: [],
             deletedImages: [],
             sizes: @js($product->sizes->map(fn($s) => ['size' => $s->size, 'stock' => $s->stock])->toArray())

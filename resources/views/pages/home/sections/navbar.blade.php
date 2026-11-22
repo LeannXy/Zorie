@@ -218,7 +218,7 @@
                                         <img src="{{ $navbarCustomer->profile_photo }}" alt="Profile"
                                             class="w-full h-full rounded-full object-cover">
                                     @else
-                                        <img src="{{ asset('storage/' . $navbarCustomer->profile_photo) }}"
+                                        <img src="{{ media_url($navbarCustomer->profile_photo) }}"
                                             alt="Profile" class="w-full h-full rounded-full object-cover">
                                     @endif
                                 @else

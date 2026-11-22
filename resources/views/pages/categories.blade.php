@@ -620,7 +620,7 @@
 
                                         <div class="h-12 w-12 overflow-hidden rounded-xl">
 
-                                            <img src="{{ $category->image ? asset('storage/' . $category->image) : 'https://placehold.co/80x80?text=No' }}"
+                                            <img src="{{ $category->image ? media_url($category->image) : 'https://placehold.co/80x80?text=No' }}"
                                                 class="h-full w-full object-cover">
 
                                         </div>
@@ -715,7 +715,7 @@
                                                      form.name=`{{ $category->name }}`;
                                                      form.description=`{{ $category->description }}`;form.status={{ $category->status ? 'true' : 'false' }};
                                                      form.featured= {{ $category->featured ? 'true' : 'false' }};
-                                                     form.image='{{ $category->image ? asset('storage/' . $category->image) : '' }}';"
+                                                     form.image='{{ $category->image ? media_url($category->image) : '' }}';"
                                             class="rounded-lg bg-blue-500/10 p-2 text-blue-500">
 
                                             <i data-lucide="pencil" class="h-4 w-4"></i>

@@ -27,7 +27,7 @@
                             <!-- Product Image -->
                             <div class="relative h-48 bg-gray-200 overflow-hidden">
                                 @if ($product->images->count() > 0)
-                                    <img src="{{ asset('storage/' . $product->images->first()->image) }}"
+                                    <img src="{{ media_url($product->images->first()->image) }}"
                                         alt="{{ $product->name }}"
                                         class="w-full h-full object-cover hover:scale-110 transition">
                                 @else

@@ -70,7 +70,7 @@
         
                 featured: {{ $category->featured ? 'true' : 'false' }},
         
-                image: @js($category->image ? asset('storage/' . $category->image) : '')
+                image: @js($category->image ? media_url($category->image) : '')
         
             }
         

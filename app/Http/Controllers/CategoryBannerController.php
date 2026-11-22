@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\CategoryBanner;
+use App\Services\CloudinaryImageStorage;
 use Illuminate\Http\Request;
 
 class CategoryBannerController extends Controller
@@ -35,7 +36,7 @@ class CategoryBannerController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(Request $request, CloudinaryImageStorage $imageStorage)
     {
         $request->validate([
 
@@ -55,17 +56,6 @@ class CategoryBannerController extends Controller
 
         ]);
 
-        $image = null;
-
-        if ($request->hasFile('image')) {
-
-            $image = $request
-                ->file('image')
-                ->store(
-                    'category-banners',
-                    'public'
-                );
-        }
         if ($request->banner_type === 'main') {
 
             $existingMain = CategoryBanner::where(
@@ -111,6 +101,11 @@ class CategoryBannerController extends Controller
                     ]);
             }
         }
+
+        $image = $request->hasFile('image')
+            ? $imageStorage->store($request->file('image'), 'category-banners')
+            : null;
+
         CategoryBanner::create([
 
             'category_id' => $request->category_id,
@@ -159,7 +154,8 @@ class CategoryBannerController extends Controller
 
     public function update(
         Request $request,
-        CategoryBanner $categoryBanner
+        CategoryBanner $categoryBanner,
+        CloudinaryImageStorage $imageStorage
     ) {
         $request->validate([
 
@@ -195,15 +191,10 @@ class CategoryBannerController extends Controller
 
         ];
 
+        $previousImage = null;
         if ($request->hasFile('image')) {
-
-            $data['image'] =
-                $request
-                ->file('image')
-                ->store(
-                    'category-banners',
-                    'public'
-                );
+            $previousImage = $categoryBanner->image;
+            $data['image'] = $imageStorage->store($request->file('image'), 'category-banners');
         }
         if ($request->banner_type === 'main') {
 
@@ -265,6 +256,10 @@ class CategoryBannerController extends Controller
             $data
         );
 
+        if ($previousImage) {
+            $imageStorage->delete($previousImage);
+        }
+
         return redirect()
             ->route(
                 'category-banners.index'
@@ -277,8 +272,10 @@ class CategoryBannerController extends Controller
 
 
     public function destroy(
-        CategoryBanner $categoryBanner
+        CategoryBanner $categoryBanner,
+        CloudinaryImageStorage $imageStorage
     ) {
+        $imageStorage->delete($categoryBanner->image);
         $categoryBanner->delete();
 
         return back()

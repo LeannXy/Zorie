@@ -34,7 +34,7 @@
                                         <!-- Product Image -->
                                         <div class="flex-shrink-0">
                                             @if ($item->product->images->count() > 0)
-                                                <img src="{{ asset('storage/' . $item->product->images->first()->image) }}"
+                                                <img src="{{ media_url($item->product->images->first()->image) }}"
                                                     alt="{{ $item->product->name }}" class="h-16 w-16 object-cover rounded">
                                             @else
                                                 <div class="h-24 w-24 bg-gray-200 rounded flex items-center justify-center">
@@ -280,7 +280,7 @@
                             @foreach ($cartItems as $item)
                                 <div class="flex gap-3">
                                     @if ($item->product->images->count() > 0)
-                                        <img src="{{ asset('storage/' . $item->product->images->first()->image) }}"
+                                        <img src="{{ media_url($item->product->images->first()->image) }}"
                                             alt="{{ $item->product->name }}" class="h-16 w-16 object-cover rounded">
                                     @else
                                         <div class="h-16 w-16 bg-gray-200 rounded flex items-center justify-center">

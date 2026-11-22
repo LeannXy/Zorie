@@ -57,7 +57,7 @@
                             @foreach ($order->items as $item)
                                 <div class="flex items-center gap-4">
                                     @if ($item->product->images->count() > 0)
-                                        <img src="{{ asset('storage/' . $item->product->images->first()->image) }}"
+                                        <img src="{{ media_url($item->product->images->first()->image) }}"
                                             alt="{{ $item->product->name }}"
                                             class="w-14 h-14 object-cover rounded-lg border border-gray-200 flex-shrink-0">
                                     @else

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Support\Facades\Storage;
 use App\Models\Product;
+use App\Services\CloudinaryImageStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -190,7 +190,7 @@ class ProductController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(Request $request, CloudinaryImageStorage $imageStorage)
     {
         $product = Product::create([
 
@@ -215,10 +215,7 @@ class ProductController extends Controller
 
             foreach ($request->file('image') as $image) {
 
-                $path = $image->store(
-                    'products',
-                    'public'
-                );
+                $path = $imageStorage->store($image, 'products');
 
                 $product->images()->create([
 
@@ -297,14 +294,12 @@ class ProductController extends Controller
         );
     }
 
-    public function destroy(Product $product)
+    public function destroy(Product $product, CloudinaryImageStorage $imageStorage)
     {
         foreach ($product->images as $image) {
 
             // hapus file dari storage
-            Storage::disk('public')->delete(
-                $image->image
-            );
+            $imageStorage->delete($image->image);
 
             // hapus record gambar
             $image->delete();
@@ -339,7 +334,7 @@ class ProductController extends Controller
         );
     }
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Product $product, CloudinaryImageStorage $imageStorage)
     {
         $product->update([
 
@@ -372,8 +367,7 @@ class ProductController extends Controller
                 if ($image) {
 
                     // hapus file dari storage
-                    Storage::disk('public')
-                        ->delete($image->image);
+                    $imageStorage->delete($image->image);
 
                     // hapus record database
                     $image->delete();
@@ -386,10 +380,7 @@ class ProductController extends Controller
 
             foreach ($request->file('image') as $file) {
 
-                $path = $file->store(
-                    'products',
-                    'public'
-                );
+                $path = $imageStorage->store($file, 'products');
 
                 $product
                     ->images()
@@ -486,7 +477,8 @@ class ProductController extends Controller
     }
 
     public function bulkDelete(
-        Request $request
+        Request $request,
+        CloudinaryImageStorage $imageStorage
     ) {
 
         $request->validate([
@@ -513,11 +505,7 @@ class ProductController extends Controller
                 $image
             ) {
 
-                Storage::disk(
-                    'public'
-                )->delete(
-                    $image->image
-                );
+                $imageStorage->delete($image->image);
 
                 $image->delete();
             }

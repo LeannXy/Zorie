@@ -100,7 +100,7 @@
                             <td class="px-6 py-5 justify-center">
 
                                 <img src="{{ $customer->profile_photo
-                                    ? asset('storage/' . $customer->profile_photo)
+                                    ? media_url($customer->profile_photo)
                                     : 'https://ui-avatars.com/api/?name=' . $customer->name }}"
                                     class="h-10 w-10 rounded-full object-cover cursor-pointer hover:scale-110 transition"
                                     @click="selectedCustomer={
@@ -112,7 +112,7 @@ orders:'{{ $customer->orders_count }}',
 status:'{{ $customer->status }}',
 
 photo:'{{ $customer->profile_photo
-    ? asset('storage/' . $customer->profile_photo)
+    ? media_url($customer->profile_photo)
     : 'https://ui-avatars.com/api/?name=' . $customer->name }}'
 
 };showCustomer=true">

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Models\User;
+use App\Services\CloudinaryImageStorage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -22,7 +22,7 @@ class SettingsController extends Controller
         return view('pages.settings-profile');
     }
 
-    public function update(Request $request)
+    public function update(Request $request, CloudinaryImageStorage $imageStorage)
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
@@ -43,26 +43,18 @@ class SettingsController extends Controller
 
 
         if ($request->hasFile('profile_photo')) {
-
-            if (
-                $user->profile_photo &&
-                Storage::disk('public')->exists($user->profile_photo)
-            ) {
-
-                Storage::disk('public')->delete(
-                    $user->profile_photo
-                );
-            }
-
-            $user->profile_photo = $request
-                ->file('profile_photo')
-                ->store(
-                    'profile-admin',
-                    'public'
-                );
+            $previousPhoto = $user->profile_photo;
+            $user->profile_photo = $imageStorage->store(
+                $request->file('profile_photo'),
+                'profile-admin',
+            );
         }
 
         $user->save();
+
+        if (isset($previousPhoto)) {
+            $imageStorage->delete($previousPhoto);
+        }
         $this->createNotification(
 
             'Profile updated',

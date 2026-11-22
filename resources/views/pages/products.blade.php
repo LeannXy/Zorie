@@ -601,7 +601,7 @@ $save = function () {
                                                selectedProduct.discount = @js($product->discount ?? 0);
                                                selectedProduct.stock = @js($product->stock);
                                                selectedProduct.description = @js($product->description);
-                                               selectedProduct.images = @js($product->images->map(fn($i) => asset('storage/' . $i->image))->values());
+                                               selectedProduct.images = @js($product->images->map(fn($i) => media_url($i->image))->values());
                                                selectedProduct.activeDetailImage = selectedProduct.images[0] ?? '';
                                                $nextTick(() => {activeDetailImage = selectedProduct.images[0];}); ">
 
@@ -609,7 +609,7 @@ $save = function () {
                                         <div class="flex items-center gap-4">
 
                                             <img src="{{ $product->images->first()
-                                                ? asset('storage/' . $product->images->first()->image)
+                                                ? media_url($product->images->first()->image)
                                                 : 'https://placehold.co/100x100/18181b/ffffff?text=No+Image' }}"
                                                 class="h-14 w-14 rounded-xl object-cover">
 
@@ -689,7 +689,7 @@ $save = function () {
                                                       form.discount = @js((string) ($product->discount ?? 0));
                                                       form.stock = @js((string) $product->stock);
                                                       form.description = @js($product->description);
-                                                      form.images = @js($product->images->map(fn($i) => ['id' => $i->id, 'url' => asset('storage/' . $i->image)])->values());
+                                                      form.images = @js($product->images->map(fn($i) => ['id' => $i->id, 'url' => media_url($i->image)])->values());
                                                       form.files = [];
                                                       form.deletedImages = [];
                                                       $nextTick(() => { if ($refs.imageInput) $refs.imageInput.value = ''; });

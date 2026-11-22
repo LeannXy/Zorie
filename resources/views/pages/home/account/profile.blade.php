@@ -140,7 +140,7 @@
                                             @if (str_starts_with($customer->profile_photo, 'http'))
                                                 <img src="{{ $customer->profile_photo }}" class="w-20 h-20 rounded-full object-cover border border-[#e5e5e3]">
                                             @else
-                                                <img src="{{ asset('storage/' . $customer->profile_photo) }}" class="w-20 h-20 rounded-full object-cover border border-[#e5e5e3]">
+                                                <img src="{{ media_url($customer->profile_photo) }}" class="w-20 h-20 rounded-full object-cover border border-[#e5e5e3]">
                                             @endif
                                         @else
                                             <div class="w-20 h-20 rounded-full bg-[#111] text-white flex items-center justify-center text-[20px] font-black tracking-wide" x-text="initials"></div>

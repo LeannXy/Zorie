@@ -6,6 +6,7 @@ use App\Models\CustomerAccount;
 use App\Models\Testimonial;
 use App\Models\Order;
 use App\Models\Wishlist;
+use App\Services\CloudinaryImageStorage;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -51,7 +52,8 @@ class CustomerController extends Controller
     }
     public function updateProfile(
         Request $request,
-        CustomerAccount $customer
+        CustomerAccount $customer,
+        CloudinaryImageStorage $imageStorage
     ) {
         $request->validate([
 
@@ -69,17 +71,8 @@ class CustomerController extends Controller
             'profile_photo'
         )) {
 
-            $image =
-
-                $request
-                ->file(
-                    'profile_photo'
-                )
-
-                ->store(
-                    'profiles',
-                    'public'
-                );
+            $previousPhoto = $customer->profile_photo;
+            $image = $imageStorage->store($request->file('profile_photo'), 'profiles');
 
             $customer->update([
 
@@ -87,6 +80,10 @@ class CustomerController extends Controller
                 $image
 
             ]);
+
+            if ($previousPhoto) {
+                $imageStorage->delete($previousPhoto);
+            }
         }
 
 
@@ -190,8 +187,10 @@ class CustomerController extends Controller
     }
 
     public function destroy(
-        CustomerAccount $customer
+        CustomerAccount $customer,
+        CloudinaryImageStorage $imageStorage
     ) {
+        $imageStorage->delete($customer->profile_photo);
         $customer->delete();
 
         return back()->with(

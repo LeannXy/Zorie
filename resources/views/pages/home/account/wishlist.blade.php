@@ -127,7 +127,7 @@
                             {{-- Image --}}
                             <div class="relative overflow-hidden bg-[#f5f5f3]" style="height:180px;">
                                 @if ($product->images->count() > 0)
-                                    <img src="{{ asset('storage/' . $product->images->first()->image) }}"
+                                    <img src="{{ media_url($product->images->first()->image) }}"
                                          alt="{{ $product->name }}"
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 @else

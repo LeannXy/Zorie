@@ -163,7 +163,7 @@
             <!-- Banner Image -->
 
             <div x-data="{
-                preview: '{{ isset($banner) && $banner->image ? asset('storage/' . $banner->image) : '' }}'
+                preview: '{{ isset($banner) && $banner->image ? media_url($banner->image) : '' }}'
             }" class="  rounded-3xl border border-zinc-200 dark:border-zinc-800 p-6">
 
                 <label class=" mb-4 block text-sm font-medium">

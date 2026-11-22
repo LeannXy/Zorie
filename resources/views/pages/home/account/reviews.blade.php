@@ -145,7 +145,7 @@
                             <div
                                 class="w-14 h-14 rounded-xl bg-[#f5f5f3] border border-[#e5e5e3] flex-shrink-0 overflow-hidden">
                                 @if ($item->product->images->count())
-                                    <img src="{{ asset('storage/' . $item->product->images->first()->image) }}"
+                                    <img src="{{ media_url($item->product->images->first()->image) }}"
                                         class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center">
@@ -191,7 +191,7 @@
                                 <div
                                     class="w-14 h-14 rounded-xl bg-[#f5f5f3] border border-[#e5e5e3] flex-shrink-0 overflow-hidden">
                                     @if ($review->product->images->count())
-                                        <img src="{{ asset('storage/' . $review->product->images->first()->image) }}"
+                                        <img src="{{ media_url($review->product->images->first()->image) }}"
                                             class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center">

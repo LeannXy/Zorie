@@ -981,7 +981,7 @@
     <div class="pd-wrap" x-data="{
         isLoggedIn: {{ session('customer_id') ? 'true' : 'false' }},
         activeImg: 0,
-        images: @js($product->images->map(fn($i) => asset('storage/' . $i->image))->values()),
+        images: @js($product->images->map(fn($i) => media_url($i->image))->values()),
         selectedSize: null,
         showSizeWarning: false,
         errorToast: false,
@@ -1592,7 +1592,7 @@
                     <a href="{{ route('product.show', $rec) }}" class="pd-reco-card">
                         <div class="pd-reco-img">
                             @if ($rec->images->first())
-                                <img src="{{ asset('storage/' . $rec->images->first()->image) }}"
+                                <img src="{{ media_url($rec->images->first()->image) }}"
                                     alt="{{ $rec->name }}" loading="lazy">
                             @else
                                 <div

@@ -287,7 +287,7 @@
                             @endphp
 
                             @if ($product && $product->images->count())
-                                <img src="{{ asset('storage/' . $product->images->first()->image) }}"
+                                <img src="{{ media_url($product->images->first()->image) }}"
                                     class="w-14 h-14 rounded-xl object-cover border border-[#e5e5e3]">
                             @else
                                 <div
@@ -416,7 +416,7 @@
                                 <div class="flex items-center justify-between p-5 border border-[#e5e5e3] rounded-2xl bg-white hover:border-[#111] transition-all group">
                                     <div class="flex items-center gap-4">
                                         @if($item->product->images->count())
-                                            <img src="{{ asset('storage/' . $item->product->images->first()->image) }}" class="w-14 h-14 rounded-xl object-cover border border-[#e5e5e3]">
+                                            <img src="{{ media_url($item->product->images->first()->image) }}" class="w-14 h-14 rounded-xl object-cover border border-[#e5e5e3]">
                                         @endif
                                         <div>
                                             <p class="text-[13px] font-bold text-[#111]">{{ $item->product->name }}</p>

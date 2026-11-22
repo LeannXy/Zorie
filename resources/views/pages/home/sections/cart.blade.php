@@ -65,7 +65,7 @@
 
                                 <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded-2xl border border-[#e5e5e3] bg-[#f5f5f3]">
                                     @if($item->product->images->count() > 0)
-                                        <img src="{{ asset('storage/' . $item->product->images->first()->image) }}" 
+                                        <img src="{{ media_url($item->product->images->first()->image) }}"
                                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     @else
                                         <div class="w-full h-full bg-gray-50 flex items-center justify-center text-[10px] text-gray-400">No Image</div>

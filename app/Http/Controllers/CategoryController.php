@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
+use App\Services\CloudinaryImageStorage;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
@@ -124,7 +124,7 @@ class CategoryController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(Request $request, CloudinaryImageStorage $imageStorage)
     {
         $request->validate([
 
@@ -142,12 +142,7 @@ class CategoryController extends Controller
 
         if ($request->hasFile('image')) {
 
-            $image = $request
-                ->file('image')
-                ->store(
-                    'categories',
-                    'public'
-                );
+            $image = $imageStorage->store($request->file('image'), 'categories');
         }
 
         // Category::create([
@@ -243,7 +238,8 @@ public function edit(
 
     public function update(
         Request $request,
-        Category $category
+        Category $category,
+        CloudinaryImageStorage $imageStorage
     ) {
 
         $data = [
@@ -267,31 +263,17 @@ public function edit(
         ];
 
         if ($request->hasFile('image')) {
-
-            if (
-                $category->image &&
-                Storage::disk('public')->exists(
-                    $category->image
-                )
-            ) {
-
-                Storage::disk('public')
-                    ->delete(
-                        $category->image
-                    );
-            }
-
-            $data['image'] = $request
-                ->file('image')
-                ->store(
-                    'categories',
-                    'public'
-                );
+            $previousImage = $category->image;
+            $data['image'] = $imageStorage->store($request->file('image'), 'categories');
         }
 
         $category->update(
             $data
         );
+
+        if (isset($previousImage)) {
+            $imageStorage->delete($previousImage);
+        }
         Notification::create([
 
             'user_id' => Auth::id(),
@@ -317,13 +299,12 @@ public function edit(
 
 
     public function destroy(
-        Category $category
+        Category $category,
+        CloudinaryImageStorage $imageStorage
     ) {
-
+        $imageStorage->delete($category->image);
         $category->delete();
         $name = $category->name;
-
-        $category->delete();
 
         Notification::create([
 
@@ -407,15 +388,19 @@ public function edit(
     }
 
     public function bulkDelete(
-        Request $request
+        Request $request,
+        CloudinaryImageStorage $imageStorage
     ) {
-
-        Category::whereIn(
+        $categories = Category::whereIn(
             'id',
             $request->ids
-        )
+        )->get();
 
-            ->delete();
+        foreach ($categories as $category) {
+            $imageStorage->delete($category->image);
+        }
+
+        Category::whereIn('id', $categories->modelKeys())->delete();
 
         return response()->json([
 

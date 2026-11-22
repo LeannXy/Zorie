@@ -352,7 +352,7 @@
                     <div class="prod-image-wrap">
 
                         @if($product->images->first())
-                            <img src="{{ asset('storage/' . $product->images->first()->image) }}"
+                            <img src="{{ media_url($product->images->first()->image) }}"
                                 class="prod-image" alt="{{ $product->name }}">
                         @else
                             <div class="absolute inset-0 flex items-center justify-center bg-[#fcfcfc] text-[#ddd] text-[9px] font-black uppercase tracking-widest">

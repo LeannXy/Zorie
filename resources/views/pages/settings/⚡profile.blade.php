@@ -3,7 +3,7 @@
 use App\Concerns\ProfileValidationRules;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use App\Services\CloudinaryImageStorage;
 use Flux\Flux;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
@@ -41,12 +41,9 @@ new #[Title('Profile settings')] class extends Component {
         $user->email = $validated['email'];
 
         if ($this->photo) {
-            // Hapus foto lama jika ada
-            if ($user->profile_photo) {
-                Storage::disk('public')->delete($user->profile_photo);
-            }
-
-            $user->profile_photo = $this->photo->store('profiles', 'public');
+            $previousPhoto = $user->profile_photo;
+            $user->profile_photo = app(CloudinaryImageStorage::class)
+                ->store($this->photo, 'profiles');
             $this->photo = null; // Reset setelah upload
         }
 
@@ -55,6 +52,10 @@ new #[Title('Profile settings')] class extends Component {
         }
 
         $user->save();
+
+        if (isset($previousPhoto)) {
+            app(CloudinaryImageStorage::class)->delete($previousPhoto);
+        }
 
         Flux::toast(variant: 'success', text: 'Profile updated successfully.');
     }
@@ -108,7 +109,7 @@ new #[Title('Profile settings')] class extends Component {
 
                         @elseif(auth()->user()->profile_photo)
                             <img
-                                src="{{ Storage::url(auth()->user()->profile_photo) }}"
+                                src="{{ media_url(auth()->user()->profile_photo) }}"
                                 alt="Foto profil"
                                 class="h-full w-full object-cover">
 

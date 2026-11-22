@@ -95,7 +95,7 @@
                                 @if ($banner->image)
                                     <div class="  absolute  right-0  bottom-0  h-full  w-[160px]">
 
-                                        <img src="{{ asset('storage/' . $banner->image) }}"
+                                        <img src="{{ media_url($banner->image) }}"
                                             class=" h-full w-full object-cover">
 
                                     </div>
@@ -120,7 +120,7 @@
                                     class="relative bg-[#fafafa] h-[220px] flex items-center justify-center overflow-hidden">
 
                                     <img src="{{ $product->images->first()
-                                        ? asset('storage/' . $product->images->first()->image)
+                                        ? media_url($product->images->first()->image)
                                         : asset('images/no-image.png') }}"
                                         class="w-[180px] h-[160px] object-cover transition duration-300 group-hover:scale-105">
 

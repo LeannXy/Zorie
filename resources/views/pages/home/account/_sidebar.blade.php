@@ -21,7 +21,7 @@
                 @if (Str::startsWith($customer->profile_photo, 'http'))
                     <img src="{{ $customer->profile_photo }}" class="w-20 h-20 rounded-full object-cover">
                 @else
-                    <img src="{{ asset('storage/' . $customer->profile_photo) }}"
+                    <img src="{{ media_url($customer->profile_photo) }}"
                         class="w-20 h-20 rounded-full object-cover">
                 @endif
             @else

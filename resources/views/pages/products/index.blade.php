@@ -586,7 +586,7 @@ $save = function () {
                                                        'stock'=>$size->stock
                                                       ])->values());
                                                selectedProduct.description = @js($product->description);
-                                               selectedProduct.images = @js($product->images->map(fn($i) => asset('storage/' . $i->image))->values());
+                                               selectedProduct.images = @js($product->images->map(fn($i) => media_url($i->image))->values());
                                                selectedProduct.activeDetailImage = selectedProduct.images[0] ?? '';
                                                $nextTick(() => {activeDetailImage = selectedProduct.images[0];}); ">
 
@@ -594,7 +594,7 @@ $save = function () {
                                         <div class="flex items-center gap-4">
 
                                             <img src="{{ $product->images->first()
-                                                ? asset('storage/' . $product->images->first()->image)
+                                                ? media_url($product->images->first()->image)
                                                 : 'https://placehold.co/100x100/18181b/ffffff?text=No+Image' }}"
                                                 class="h-14 w-14 rounded-xl object-cover">
 

@@ -34,7 +34,7 @@
                     <div class="group bg-white rounded-2xl border border-[#e5e5e3] overflow-hidden hover:shadow-lg transition-all duration-300">
                         <div class="relative aspect-square overflow-hidden bg-[#f5f5f3]">
                             @if($product->images->first())
-                                <img src="{{ asset('storage/' . $product->images->first()->image) }}"
+                                <img src="{{ media_url($product->images->first()->image) }}"
                                     alt="{{ $product->name }}"
                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                             @else

@@ -141,7 +141,7 @@
                 @if (Str::startsWith($customer->profile_photo, 'http'))
                     <img src="{{ $customer->profile_photo }}" class="w-20 h-20 rounded-full object-cover">
                 @else
-                    <img src="{{ asset('storage/' . $customer->profile_photo) }}"
+                    <img src="{{ media_url($customer->profile_photo) }}"
                         class="w-20 h-20 rounded-full object-cover">
                 @endif
             @else
@@ -510,7 +510,7 @@
                                                 <img src="{{ $customer->profile_photo }}"
                                                     class="w-20 h-20 rounded-full object-cover border border-[#e5e5e3]">
                                             @else
-                                                <img src="{{ asset('storage/' . $customer->profile_photo) }}"
+                                                <img src="{{ media_url($customer->profile_photo) }}"
                                                     class="w-20 h-20 rounded-full object-cover border border-[#e5e5e3]">
                                             @endif
                                         @else

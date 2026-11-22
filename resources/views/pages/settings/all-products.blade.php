@@ -312,7 +312,7 @@
 
             'discount' => $product->discount,
 
-            'image' => $product->images->first() ? asset('storage/' . $product->images->first()->image) : '',
+            'image' => $product->images->first() ? media_url($product->images->first()->image) : '',
 
             'categories' => $product->categories->pluck('name')->toArray(),
         ];

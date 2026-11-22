@@ -29,7 +29,7 @@
                         class="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border border-zinc-200 dark:border-zinc-700">
 
                         @if (auth()->user()->profile_photo)
-                            <img src="{{ Storage::url(auth()->user()->profile_photo) }}"
+                            <img src="{{ media_url(auth()->user()->profile_photo) }}"
                                 class="h-full w-full object-cover">
                         @else
                             <div

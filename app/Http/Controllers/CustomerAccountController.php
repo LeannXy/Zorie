@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CustomerAccount;
 use App\Models\Order;
 use App\Models\Testimonial;
+use App\Services\CloudinaryImageStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -69,7 +70,7 @@ class CustomerAccountController extends Controller
         );
     }
 
-    public function updateProfile(Request $request)
+    public function updateProfile(Request $request, CloudinaryImageStorage $imageStorage)
     {
         $customer = CustomerAccount::find(
             session('customer_id')
@@ -99,14 +100,8 @@ class CustomerAccountController extends Controller
         ]);
 
         if ($request->hasFile('profile_photo')) {
-
-            $path = $request
-                ->file('profile_photo')
-                ->store(
-                    'profiles',
-                    'public'
-                );
-
+            $previousPhoto = $customer->profile_photo;
+            $path = $imageStorage->store($request->file('profile_photo'), 'profiles');
             $customer->profile_photo = $path;
         }
         $customer->name = $request->name;
@@ -121,6 +116,10 @@ class CustomerAccountController extends Controller
             $request->date_of_birth;
 
         $customer->save();
+
+        if (isset($previousPhoto)) {
+            $imageStorage->delete($previousPhoto);
+        }
 
         return back()
             ->with(

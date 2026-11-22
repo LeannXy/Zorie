@@ -136,7 +136,7 @@
                                 @endphp
 
                                 @if ($product && $product->images->count())
-                                    <img src="{{ asset('storage/' . $product->images->first()->image) }}"
+                                    <img src="{{ media_url($product->images->first()->image) }}"
                                         class="w-14 h-14 rounded-xl object-cover border border-[#e5e5e3]">
                                 @else
                                     <div
