@@ -23,15 +23,19 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-COPY composer.json composer.lock ./
+# Copy seluruh project terlebih dahulu
+COPY . .
 
+# Install dependency tanpa menjalankan script Laravel
 RUN composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --no-scripts
 
-COPY . .
+# Sekarang artisan dan vendor sudah tersedia
+RUN php artisan package:discover --ansi
 
 RUN mkdir -p \
     storage/framework/cache \
