@@ -81,22 +81,17 @@
                                 height: clamp(28px, 4vw, 56px);">
                     </div>
 
-                    {{-- 3D Model --}}
-                    <model-viewer
-                        src="/shoe/source/Sneakers.glb"
-                        auto-rotate
-                        camera-controls
-                        disable-pan
-                        shadow-intensity="1.2"
-                        exposure="1.05"
-                        camera-target="0m 0m 0m"
-                        min-camera-orbit="auto auto 80%"
-                        max-camera-orbit="auto auto 140%"
-                        camera-orbit="0deg 72deg 110%"
-                        interaction-prompt="none"
-                        style="width: clamp(240px, 44vw, 640px);
-                               height: clamp(200px, 38vw, 520px);">
-                    </model-viewer>
+                    <div id="hero-model-container"
+                         class="flex items-center justify-center"
+                         style="width: clamp(240px, 44vw, 640px);
+                                height: clamp(200px, 38vw, 520px);">
+                        <button id="load-hero-model" type="button"
+                                class="flex flex-col items-center gap-2 rounded-2xl border border-[#000039]/15 bg-white/80 px-6 py-5 text-sm font-semibold text-[#000039] shadow-sm transition hover:bg-white"
+                                aria-label="Muat tampilan sepatu 3D">
+                            <span>Muat tampilan sepatu 3D</span>
+                            <span class="text-xs font-normal text-[#000039]/50">Model 3D besar akan diunduh</span>
+                        </button>
+                    </div>
 
                 </div>
 
@@ -198,6 +193,44 @@
 
 </section>
 
-<script type="module"
-    src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js">
+<script>
+    (() => {
+        const button = document.getElementById('load-hero-model');
+        const container = document.getElementById('hero-model-container');
+
+        if (!button || !container) return;
+
+        button.addEventListener('click', () => {
+            button.disabled = true;
+            button.textContent = 'Menyiapkan tampilan 3D...';
+
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js';
+            script.onload = () => {
+                const viewer = document.createElement('model-viewer');
+                viewer.setAttribute('src', '/shoe/source/Sneakers.glb');
+                viewer.setAttribute('auto-rotate', '');
+                viewer.setAttribute('camera-controls', '');
+                viewer.setAttribute('disable-pan', '');
+                viewer.setAttribute('shadow-intensity', '1.2');
+                viewer.setAttribute('exposure', '1.05');
+                viewer.setAttribute('camera-target', '0m 0m 0m');
+                viewer.setAttribute('min-camera-orbit', 'auto auto 80%');
+                viewer.setAttribute('max-camera-orbit', 'auto auto 140%');
+                viewer.setAttribute('camera-orbit', '0deg 72deg 110%');
+                viewer.setAttribute('interaction-prompt', 'none');
+                viewer.style.width = '100%';
+                viewer.style.height = '100%';
+
+                container.replaceChildren(viewer);
+            };
+            script.onerror = () => {
+                button.disabled = false;
+                button.textContent = 'Model 3D gagal dimuat. Coba lagi';
+            };
+
+            document.head.appendChild(script);
+        });
+    })();
 </script>

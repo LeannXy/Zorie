@@ -38,9 +38,11 @@
         </div>
 
 
-        <div class="overflow-hidden rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-lg">
+        <div class="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
 
-            <table class="dashboard-table">
+            <div class="overflow-x-auto overscroll-x-contain">
+            <p class="px-4 py-2 text-xs text-zinc-500 sm:hidden">Geser tabel untuk melihat kolom lainnya.</p>
+            <table class="dashboard-table min-w-[760px]">
 
                 <thead>
 
@@ -224,6 +226,7 @@ photo:'{{ $customer->profile_photo
                 </tbody>
 
             </table>
+            </div>
 
         </div>
 

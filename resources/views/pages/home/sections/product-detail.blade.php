@@ -1017,7 +1017,51 @@
             if (this.selectedStock !== null && this.qty < this.selectedStock) this.qty++;
             else if (this.selectedStock === null) this.qty++;
         },
-        decQty() { if (this.qty > 1) this.qty--; }
+        decQty() { if (this.qty > 1) this.qty--; },
+        async submitCart(form) {
+            if (!this.isLoggedIn) {
+                window.location.href = '{{ route('customer.login') }}';
+                return;
+            }
+
+            if (!this.selectedSize) {
+                this.triggerError('Silakan pilih ukuran sepatu terlebih dahulu');
+                return;
+            }
+
+            const button = form.querySelector('button[type=submit]');
+            const originalText = button.textContent.trim();
+            button.disabled = true;
+            button.textContent = 'Menambahkan...';
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: { Accept: 'application/json' }
+                });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Produk gagal ditambahkan ke keranjang.');
+                }
+
+                window.dispatchEvent(new CustomEvent('cart-updated', {
+                    detail: { increment: this.qty }
+                }));
+                button.textContent = 'Berhasil ditambahkan';
+                window.setTimeout(() => {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }, 1500);
+            } catch (error) {
+                this.errorMsg = error.message;
+                this.errorToast = true;
+                window.setTimeout(() => { this.errorToast = false; }, 3000);
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
     }">
 
         {{-- Error Toast --}}
@@ -1242,17 +1286,7 @@
 
                     </form>
                     <form action="{{ route('cart.store') }}" method="POST"
-                        @submit.prevent="
-                            if(!isLoggedIn){
-                                window.location.href='{{ route('customer.login') }}';
-                                return;
-                            }
-                            if(!selectedSize){
-                                triggerError('Silakan pilih ukuran sepatu terlebih dahulu');
-                                return;
-                            }
-                            $el.submit()
-                        ">
+                        @submit.prevent="submitCart($el)">
 
                         @csrf
 

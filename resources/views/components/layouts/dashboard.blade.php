@@ -182,7 +182,7 @@
 
         <!-- Sidebar -->
         <aside
-            class="fixed left-0 top-0 h-screen w-72 border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950 overflow-y-auto z-50 lg:flex flex-col"
+            class="fixed inset-y-0 left-0 z-50 h-screen h-dvh w-72 max-w-[calc(100vw-2rem)] flex-col overflow-y-auto overscroll-contain border-r border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-950 lg:flex lg:shadow-none"
             :class="{ 'hidden': !sidebarOpen, 'flex': sidebarOpen, 'lg:flex': true }">
 
             <!-- Close button for mobile -->
@@ -473,20 +473,21 @@
         <main class="w-full min-w-0 flex flex-1 flex-col lg:ml-72">
 
             <header
-                class="sticky top-0 z-40 flex items-center justify-between border-b border-zinc-200 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md px-6 md:px-8 py-4 md:py-5 dark:border-zinc-800">
+                class="sticky top-0 z-40 flex items-center justify-between gap-2 border-b border-zinc-200 bg-white/80 px-3 py-3 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-950/80 sm:px-6 sm:py-4 md:px-8 md:py-5">
 
                 <!-- Mobile Sidebar & search Toggle -->
                 <div class="lg:hidden flex items-center gap-2">
 
-                    <button @click="sidebarOpen=!sidebarOpen"
-                        class="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+                    <button @click="sidebarOpen=!sidebarOpen" :aria-expanded="sidebarOpen"
+                        aria-label="Buka navigasi"
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
 
                         <i data-lucide="menu" class="h-5 w-5"></i>
 
                     </button>
 
-                    <button @click="openSearch=true"
-                        class="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+                    <button @click="openSearch=true" aria-label="Buka pencarian"
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
 
                         <i data-lucide="search" class="h-5 w-5"></i>
 
@@ -573,7 +574,7 @@
 
                 <!-- Mobile Search Modal -->
                 <div x-show="openSearch" x-transition style="display:none"
-                    class="fixed inset-0 z-[9999] bg-white dark:bg-zinc-950 lg:hidden">
+                    class="fixed inset-0 z-[9999] h-dvh overflow-y-auto bg-white dark:bg-zinc-950 lg:hidden">
 
                     <div class="border-b border-zinc-200 dark:border-zinc-800 p-4 bg-white dark:bg-zinc-950">
 
@@ -619,7 +620,7 @@
                 </div>
 
                 <!-- Right -->
-                <div class="ml-6 flex items-center gap-3">
+                <div class="ml-0 flex shrink-0 items-center gap-2 sm:ml-6 sm:gap-3">
 
                     <!-- Theme Toggle -->
                     <button
@@ -633,7 +634,8 @@
                              } else {
                                     document.documentElement.classList.remove('dark')
                       }"
-                        class="flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600 transition hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800">
+                        aria-label="Ganti tema"
+                        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600 transition hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 sm:h-11 sm:w-11">
 
 
 
@@ -658,7 +660,8 @@
                     <div class="relative">
 
                         <button @click="showNotifications=!showNotifications"
-                            class="relative flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 transition hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white">
+                            aria-label="Tampilkan notifikasi"
+                            class="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-white text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white sm:h-11 sm:w-11">
 
 
                             <i data-lucide="bell" class="h-5 w-5"></i>
@@ -677,7 +680,7 @@
 
                         <div x-show="showNotifications" @click.away="showNotifications=false" x-transition
                             style="display:none"
-                            class="absolute right-0 top-14 w-96 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-2xl z-50">
+                            class="fixed right-3 top-16 z-50 max-h-[calc(100dvh-5rem)] w-[calc(100vw-1.5rem)] max-w-sm overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-800 dark:bg-zinc-900 sm:absolute sm:right-0 sm:top-14 sm:max-h-[calc(100vh-6rem)] sm:w-96">
 
                             <div class="border-b border-zinc-200 dark:border-zinc-800 p-4">
 
@@ -773,7 +776,7 @@
                     <div class="relative" x-data="{ openProfile: false }">
 
                         <button @click="openProfile=!openProfile"
-                            class="flex items-center gap-3 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-2 md:px-3 py-2 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition">
+                            class="flex shrink-0 items-center gap-2 rounded-xl border border-zinc-200 bg-white px-1.5 py-1.5 transition hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800 sm:gap-3 sm:px-3 sm:py-2">
 
                             <div class="relative">
 
@@ -864,7 +867,7 @@
             </header>
 
             <!-- Content -->
-            <div class="flex-1 overflow-y-auto p-6 md:p-8 lg:p-10">
+            <div class="min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 lg:p-10">
 
                 {{ $slot }}
 

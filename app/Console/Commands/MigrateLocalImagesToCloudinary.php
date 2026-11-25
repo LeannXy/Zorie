@@ -91,7 +91,7 @@ class MigrateLocalImagesToCloudinary extends Command
 
                         $model->setAttribute(
                             $attribute,
-                            $imageStorage->store($file, $directory),
+                            $imageStorage->store($file, $directory, $attribute, false),
                         );
                         $model->save();
                         $migrated++;

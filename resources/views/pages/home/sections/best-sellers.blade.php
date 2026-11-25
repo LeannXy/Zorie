@@ -122,7 +122,8 @@
                                     <img src="{{ $product->images->first()
                                         ? media_url($product->images->first()->image)
                                         : asset('images/no-image.png') }}"
-                                        class="w-[180px] h-[160px] object-cover transition duration-300 group-hover:scale-105">
+                                        class="w-[180px] h-[160px] object-cover transition duration-300 group-hover:scale-105"
+                                        loading="lazy" decoding="async">
 
                                 </div>
                             </a>

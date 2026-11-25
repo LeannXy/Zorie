@@ -72,9 +72,11 @@ window.location='?status='+this.value"
         </div>
 
 
-        <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+        <div class="overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
 
-            <table class="w-full">
+            <div class="overflow-x-auto overscroll-x-contain">
+            <p class="px-4 py-2 text-xs text-zinc-500 sm:hidden">Geser tabel untuk melihat kolom lainnya.</p>
+            <table class="w-full min-w-[680px]">
 
                 <thead>
 
@@ -223,6 +225,7 @@ window.location='?status='+this.value"
                 </tbody>
 
             </table>
+            </div>
 
         </div>
 

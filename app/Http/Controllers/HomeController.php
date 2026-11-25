@@ -10,7 +10,8 @@ class HomeController extends Controller
     {
         $featuredCategories =
             Category::with([
-                'banners.category',
+                'banners',
+                'products' => fn ($query) => $query->limit(4),
                 'products.images',
                 'products.categories'
             ])

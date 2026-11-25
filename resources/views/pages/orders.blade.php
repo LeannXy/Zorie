@@ -135,9 +135,9 @@
         <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden shadow-lg">
             <!-- Filter Section -->
             <div
-                class="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 p-5 flex-col md:flex-row gap-4">
-                <form method="GET" class="flex gap-3 w-full">
-                    <div class="relative w-full md:w-[450px]">
+                class="flex flex-col gap-4 border-b border-zinc-200 p-4 dark:border-zinc-800 sm:p-5 md:flex-row md:items-center md:justify-between">
+                <form method="GET" class="flex w-full flex-col gap-3 sm:flex-row sm:items-center">
+                    <div class="relative w-full sm:flex-1 md:max-w-[450px]">
                         <i data-lucide="search"
                             class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500"></i>
                         <input name="search" value="{{ request('search') }}" type="text"
@@ -145,13 +145,13 @@
                             class="w-full rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 py-2.5 pl-10 pr-4 text-sm">
                     </div>
                     <a href="{{ route('orders') }}"
-                        class="rounded-xl bg-zinc-700 px-4 py-2 text-white hover:bg-zinc-600">
+                        class="rounded-xl bg-zinc-700 px-4 py-2 text-center text-white hover:bg-zinc-600 sm:shrink-0">
 
                         Reset
 
                     </a>
                     <select name="status" onchange="this.form.submit()"
-                        class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 px-4 py-2.5 text-sm">
+                        class="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-2.5 text-sm dark:border-zinc-800 dark:bg-zinc-950 sm:w-auto sm:shrink-0">
                         <option value="">All Status</option>
                         <option value="Pending" {{ request('status') == 'Pending' ? 'selected' : '' }}>Pending</option>
                         <option value="Paid" {{ request('status') == 'Paid' ? 'selected' : '' }}>Paid</option>
@@ -233,8 +233,8 @@
 
 
             <!-- Table Section -->
-            <div class="overflow-x-auto">
-                <table class="w-full">
+            <div class="overflow-x-auto overscroll-x-contain">
+                <table class="w-full min-w-[900px]">
                     <thead>
                         <tr
                             class="border-b border-zinc-200 dark:border-zinc-800 text-left text-sm text-zinc-500 bg-zinc-50 dark:bg-zinc-800/50">

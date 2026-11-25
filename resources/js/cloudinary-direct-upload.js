@@ -1,3 +1,78 @@
+const webpQuality = 0.85
+
+async function convertToWebp(file) {
+    const mimeType = file.type.toLowerCase()
+
+    if (
+        mimeType === 'image/webp'
+        || mimeType === 'image/gif'
+        || mimeType === 'image/svg+xml'
+        || /\.gif$/i.test(file.name)
+        || /\.svg$/i.test(file.name)
+    ) {
+        return file
+    }
+
+    let bitmap
+    let objectUrl
+
+    if (typeof createImageBitmap === 'function') {
+        bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
+    } else {
+        objectUrl = URL.createObjectURL(file)
+        bitmap = await new Promise((resolve, reject) => {
+            const image = new Image()
+            image.onload = () => resolve({
+                source: image,
+                width: image.naturalWidth,
+                height: image.naturalHeight,
+            })
+            image.onerror = () => reject(new Error('Gambar tidak dapat dibaca untuk konversi WebP.'))
+            image.src = objectUrl
+        }).finally(() => URL.revokeObjectURL(objectUrl))
+    }
+
+    const canvas = document.createElement('canvas')
+    canvas.width = bitmap.width
+    canvas.height = bitmap.height
+    const context = canvas.getContext('2d')
+
+    if (!context) {
+        bitmap.close?.()
+        throw new Error('Browser tidak dapat memproses gambar untuk konversi WebP.')
+    }
+
+    try {
+        context.drawImage(bitmap.source || bitmap, 0, 0)
+    } finally {
+        bitmap.close?.()
+    }
+
+    let webpBlob
+    try {
+        webpBlob = await new Promise((resolve, reject) => {
+            canvas.toBlob((blob) => {
+                if (!blob || blob.type !== 'image/webp') {
+                    reject(new Error('Browser tidak mendukung konversi gambar ke WebP.'))
+                    return
+                }
+
+                resolve(blob)
+            }, 'image/webp', webpQuality)
+        })
+    } finally {
+        canvas.width = 0
+        canvas.height = 0
+    }
+
+    const baseName = file.name.replace(/\.[^.]+$/, '') || 'image'
+
+    return new File([webpBlob], `${baseName}.webp`, {
+        type: 'image/webp',
+        lastModified: file.lastModified,
+    })
+}
+
 async function uploadImage(input, file) {
     const form = input.closest('form')
     const csrfToken = input.dataset.csrfToken
@@ -8,6 +83,7 @@ async function uploadImage(input, file) {
         throw new Error('Token keamanan tidak ditemukan. Muat ulang halaman lalu coba lagi.')
     }
 
+    const uploadFile = await convertToWebp(file)
     const signResponse = await fetch(input.dataset.cloudinaryUploadUrl, {
         method: 'POST',
         credentials: 'same-origin',
@@ -25,7 +101,7 @@ async function uploadImage(input, file) {
 
     const signature = await signResponse.json()
     const body = new FormData()
-    body.append('file', file)
+    body.append('file', uploadFile, uploadFile.name)
     body.append('api_key', signature.api_key)
     body.append('asset_folder', signature.asset_folder)
     body.append('overwrite', 'false')
@@ -39,7 +115,11 @@ async function uploadImage(input, file) {
     })
     const uploaded = await uploadResponse.json()
 
-    if (!uploadResponse.ok || uploaded.public_id !== signature.public_id) {
+    if (
+        !uploadResponse.ok
+        || uploaded.public_id !== signature.public_id
+        || (uploadFile.type === 'image/webp' && uploaded.format !== 'webp')
+    ) {
         throw new Error(uploaded.error?.message || 'Gagal mengunggah gambar ke Cloudinary.')
     }
 
@@ -60,7 +140,7 @@ document.addEventListener('change', async (event) => {
     input.disabled = true
 
     const status = document.querySelector(input.dataset.cloudinaryStatusTarget)
-    if (status) status.textContent = 'Mengunggah foto...'
+    if (status) status.textContent = 'Mengompres dan mengunggah foto...'
 
     try {
         const uploaded = await uploadImage(input, file)

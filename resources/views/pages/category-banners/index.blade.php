@@ -2,7 +2,7 @@
 
     <div class="px-4 py-8">
 
-        <div class="mb-8 flex items-center justify-between">
+        <div class="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 
             <div>
 
@@ -26,7 +26,10 @@
             bg-blue-500
             px-5
             py-3
-            text-white">
+            text-center
+            text-white
+            w-full
+            sm:w-auto">
 
                 Add Banner
 
@@ -42,7 +45,9 @@
         border-zinc-200
         dark:border-zinc-800">
 
-            <table class="w-full">
+            <div class="overflow-x-auto overscroll-x-contain">
+            <p class="px-4 py-2 text-xs text-zinc-500 sm:hidden">Geser tabel untuk melihat kolom lainnya.</p>
+            <table class="w-full min-w-[640px]">
 
                 <thead>
 
@@ -209,6 +214,7 @@
                 </tbody>
 
             </table>
+            </div>
 
         </div>
 

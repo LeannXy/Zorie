@@ -5,12 +5,21 @@
     $routeCasual      = route('all-products', ['filter' => 'Casual']);
     $routeRunning     = route('all-products', ['filter' => 'Running']);
     $routeCartCount   = route('cart.count');
+    $currentNavLabel = match (true) {
+        request()->routeIs('home') => 'Beranda',
+        request()->routeIs('all-products', 'product.show', 'products.search') => 'Produk',
+        request()->routeIs('about') => 'Tentang Kami',
+        request()->routeIs('cart') => 'Keranjang',
+        request()->routeIs('wishlist') => 'Wishlist',
+        request()->routeIs('search') => 'Pencarian',
+        default => null,
+    };
 
     $navLinks = [
-        ['label' => 'Beranda',      'url' => '/'],
-        ['label' => 'all-products', 'url' => $routeAllProducts],
-        ['label' => 'Tentang Kami', 'url' => '/about'],
-        ['label' => 'Contact',      'url' => '/contact'],
+        ['label' => 'Beranda',      'url' => '/',                'active' => request()->routeIs('home')],
+        ['label' => 'Produk',       'url' => $routeAllProducts,  'active' => request()->routeIs('all-products', 'product.show', 'products.search')],
+        ['label' => 'Tentang Kami', 'url' => '/about',           'active' => request()->routeIs('about')],
+        ['label' => 'Contact',      'url' => '/contact',         'active' => request()->is('contact')],
     ];
 @endphp
 
@@ -18,9 +27,13 @@
     x-data="{
         scrolled: false,
         cartCount: 0,
+        cartCountLoaded: false,
+        pendingCartCount: 0,
         categoryOpen: false,
         genderOpen: false,
         langOpen: false,
+        searchOpen: false,
+        currentNavLabel: @js($currentNavLabel),
         categories: @js(
     $featuredCategories->map(function($category){
         return [
@@ -56,7 +69,10 @@
     x-init="
         fetch('{{ $routeCartCount }}')
             .then(r => r.json())
-            .then(d => cartCount = d.count);
+            .then(d => {
+                cartCount = d.count + pendingCartCount;
+                cartCountLoaded = true;
+            });
 
         // Deteksi lang dari URL
         const params = new URLSearchParams(window.location.search);
@@ -64,12 +80,16 @@
         if (lang === 'en') selectedLang = 'EN';
         else selectedLang = 'ID';
     "
+    @cart-updated.window="
+        if (cartCountLoaded) cartCount += $event.detail.increment;
+        else pendingCartCount += $event.detail.increment;
+    "
     @scroll.window="scrolled = window.scrollY > 60"
-    @click.outside="categoryOpen = false; genderOpen = false; langOpen = false"
+    @click.outside="categoryOpen = false; genderOpen = false; langOpen = false; searchOpen = false"
     class="fixed top-0 left-0 w-full z-[100] pointer-events-none">
 
     {{-- ===== WRAPPER ===== --}}
-    <div class="transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto overflow-visible"
+    <div class="relative transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto overflow-visible"
         :class="scrolled ? 'mx-auto mt-3 max-w-[500px]' : 'mx-0 mt-0 max-w-full'">
 
         {{-- ===== TOP BAR ===== --}}
@@ -88,6 +108,14 @@
                         ZORIE
                     </h1>
                 </a>
+                <span x-show="scrolled && currentNavLabel"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    class="min-w-0 max-w-[72px] truncate text-[10px] font-semibold text-[#000039]/65 sm:max-w-none sm:text-xs"
+                    aria-current="page">
+                    <span class="mr-1 text-[#000039]/30">/</span><span x-text="currentNavLabel"></span>
+                </span>
 
                 {{-- SEARCH BAR --}}
                 <div class="hidden md:flex min-w-0 max-w-[700px] transition-all duration-300 overflow-visible"
@@ -142,25 +170,40 @@
                 <div class="flex items-center gap-1 sm:gap-2 shrink-0">
 
                     {{-- Icon Search (saat scrolled) --}}
-                    <a href="{{ route('search') }}"
+                    <button type="button"
+                        @click="
+                            searchOpen = !searchOpen;
+                            categoryOpen = false;
+                            if (searchOpen) $nextTick(() => $refs.compactSearch.focus());
+                        "
+                        :aria-expanded="searchOpen.toString()"
+                        aria-controls="compact-product-search-panel"
+                        aria-label="Buka pencarian"
                         class="flex md:hidden w-[34px] h-[34px] items-center justify-center rounded-full border border-[#000039]/20 bg-[#000039]/8 text-[#000039]/70 hover:text-[#000039] hover:bg-[#000039]/15 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-[15px] h-[15px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.34-4.34" />
                             <circle cx="11" cy="11" r="8" />
                         </svg>
-                    </a>
+                    </button>
 
-                    <a x-show="scrolled"
+                    <button type="button" x-show="scrolled"
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 scale-75"
                         x-transition:enter-end="opacity-100 scale-100"
-                        href="{{ route('search') }}"
+                        @click="
+                            searchOpen = !searchOpen;
+                            categoryOpen = false;
+                            if (searchOpen) $nextTick(() => $refs.compactSearch.focus());
+                        "
+                        :aria-expanded="searchOpen.toString()"
+                        aria-controls="compact-product-search-panel"
+                        aria-label="Buka pencarian"
                         class="hidden md:flex w-[38px] h-[38px] items-center justify-center rounded-full border border-[#000039]/20 bg-[#000039]/8 text-[#000039]/70 hover:text-[#000039] hover:bg-[#000039]/15 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-[16px] h-[16px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.34-4.34" />
                             <circle cx="11" cy="11" r="8" />
                         </svg>
-                    </a>
+                    </button>
 
                     {{-- Wishlist --}}
                     <a href="{{ route('wishlist') }}"
@@ -261,6 +304,22 @@
             </div>
         </div>
 
+        <div id="compact-product-search-panel" x-show="searchOpen" x-transition
+            class="absolute left-0 right-0 top-full z-[110] px-3 pt-2 sm:px-4 md:px-0"
+            style="display: none;">
+            <form action="{{ route('products.search') }}" method="GET"
+                class="mx-auto flex h-12 w-full max-w-[520px] items-center gap-2 rounded-full border border-[#000039]/15 bg-white p-1.5 shadow-lg shadow-[#000039]/10">
+                <label for="compact-product-search" class="sr-only">Cari produk</label>
+                <input id="compact-product-search" x-ref="compactSearch" type="search" name="q"
+                    placeholder="Cari produk sepatu..."
+                    class="min-w-0 flex-1 bg-transparent px-3 text-sm text-[#000039] outline-none placeholder:text-[#000039]/40">
+                <button type="submit"
+                    class="h-full shrink-0 rounded-full bg-[#000039] px-5 text-sm font-semibold text-white transition hover:bg-[#000039]/85">
+                    Cari
+                </button>
+            </form>
+        </div>
+
         {{-- ===== SECONDARY NAV ===== --}}
         <div class="transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
             :class="scrolled ? 'max-h-0 opacity-0 overflow-hidden' : 'max-h-[300px] opacity-100 overflow-visible'">
@@ -271,7 +330,8 @@
                     <div class="flex w-max min-w-full items-center">
                         @foreach ($navLinks as $link)
                             <a href="{{ $link['url'] }}"
-                                class="flex items-center px-4 py-2.5 text-[12px] font-semibold text-[#000039]/45 hover:text-[#000039]/90 transition-all whitespace-nowrap border-b-2 border-transparent hover:border-[#000039]/30"
+                                @if ($link['active']) aria-current="page" @endif
+                                class="flex items-center whitespace-nowrap border-b-2 px-4 py-2.5 text-[12px] font-semibold transition-all {{ $link['active'] ? 'border-[#000039] bg-white/50 text-[#000039]' : 'border-transparent text-[#000039]/45 hover:border-[#000039]/30 hover:text-[#000039]/90' }}"
                                 style="font-family: 'Plus Jakarta Sans', sans-serif;">
                                 {{ $link['label'] }}
                             </a>

@@ -49,7 +49,7 @@ new #[Title('Profile settings')] class extends Component {
         } elseif ($this->photo) {
             $previousPhoto = $user->profile_photo;
             $user->profile_photo = app(CloudinaryImageStorage::class)
-                ->store($this->photo, 'profiles');
+                ->store($this->photo, 'profiles', 'photo');
             $this->photo = null; // Reset setelah upload
         }
 

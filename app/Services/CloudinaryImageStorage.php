@@ -16,7 +16,12 @@ class CloudinaryImageStorage
 {
     private const REFERENCE_PREFIX = 'cloudinary:';
 
-    public function store(UploadedFile $image, string $directory): string
+    public function store(
+        UploadedFile $image,
+        string $directory,
+        string $field = 'image',
+        bool $convertToWebp = true,
+    ): string
     {
         $driver = config('services.cloudinary.driver');
 
@@ -36,18 +41,32 @@ class CloudinaryImageStorage
 
         $assetFolder = $this->assetFolder($directory);
         $publicId = $assetFolder.'/'.Str::uuid();
+        $uploadApi = $this->uploadApi();
+        $webpPath = $convertToWebp
+            ? app(WebpImageConverter::class)->convert($image, $field)
+            : null;
 
-        $result = $this->uploadApi()->upload($image->getRealPath(), [
-            'asset_folder' => $assetFolder,
-            'public_id' => $publicId,
-            'overwrite' => false,
-            'resource_type' => 'image',
-        ]);
+        try {
+            $result = $uploadApi->upload($webpPath ?? $image->getRealPath(), [
+                'asset_folder' => $assetFolder,
+                'public_id' => $publicId,
+                'overwrite' => false,
+                'resource_type' => 'image',
+            ]);
+        } finally {
+            if ($webpPath !== null && is_file($webpPath)) {
+                unlink($webpPath);
+            }
+        }
 
         $uploadedPublicId = $result['public_id'] ?? null;
 
         if (! is_string($uploadedPublicId) || $uploadedPublicId === '') {
             throw new RuntimeException('Cloudinary did not return an image public ID.');
+        }
+
+        if ($webpPath !== null && ($result['format'] ?? null) !== 'webp') {
+            throw new RuntimeException('Cloudinary did not store the converted image as WebP.');
         }
 
         return self::REFERENCE_PREFIX.$uploadedPublicId;
@@ -93,7 +112,7 @@ class CloudinaryImageStorage
             $file = $request->file($field);
 
             if ($file instanceof UploadedFile) {
-                return $this->store($file, $directory);
+                return $this->store($file, $directory, $field);
             }
         }
 
@@ -111,7 +130,7 @@ class CloudinaryImageStorage
 
         foreach (is_array($files) ? $files : [$files] as $file) {
             if ($file instanceof UploadedFile) {
-                $stored[] = $this->store($file, $directory);
+                $stored[] = $this->store($file, $directory, $field);
             }
         }
 

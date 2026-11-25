@@ -126,6 +126,13 @@ class CartController extends Controller
 
         // Proteksi: Customer harus login untuk menggunakan keranjang database
         if (!$customerId) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Silakan login terlebih dahulu untuk menambahkan produk ke keranjang.',
+                ], 401);
+            }
+
             return redirect()->route('customer.login')
                 ->with('error', 'Silakan login terlebih dahulu untuk menambahkan produk ke keranjang.');
         }
@@ -169,10 +176,16 @@ class CartController extends Controller
             ]);
         }
 
-        return back()->with(
-            'success',
-            $request->qty . ' produk berhasil ditambahkan ke keranjang'
-        );
+        $message = $request->qty . ' produk berhasil ditambahkan ke keranjang';
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+            ]);
+        }
+
+        return back()->with('success', $message);
     }
     public function destroy(Cart $cart)
     {

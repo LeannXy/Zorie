@@ -11,9 +11,8 @@ class PublicProductController extends Controller
     public function index(Request $request)
     {
         $query = Product::with([
-            'images',
+            'images' => fn ($query) => $query->limit(1),
             'categories',
-            'sizes'
         ]);
 
         if ($request->filled('category')) {
@@ -113,18 +112,6 @@ class PublicProductController extends Controller
                 }
             );
         }
-        if ($request->filled('size')) {
-
-            $query->whereHas(
-                'sizes',
-                fn($q) =>
-                $q->where(
-                    'size',
-                    $request->size
-                )
-            );
-        }
-
         $products = $query
             ->paginate(16);
 

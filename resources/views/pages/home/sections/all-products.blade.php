@@ -4,8 +4,6 @@
     @include('pages.home.sections.navbar')
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-
         .catalog-wrap * {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
@@ -351,14 +349,20 @@
 
         {{-- PRODUCT GRID --}}
         <div class="catalog-grid">
-            @foreach ($products as $product)
+            @foreach ($products as $productIndex => $product)
                 <a href="{{ route('product.show', $product) }}" class="prod-card block">
 
                     <div class="prod-image-wrap">
 
                         @if($product->images->first())
                             <img src="{{ media_url($product->images->first()->image) }}"
-                                class="prod-image" alt="{{ $product->name }}">
+                                class="prod-image" alt="{{ $product->name }}"
+                                @if ($productIndex === 0)
+                                    loading="eager" fetchpriority="high"
+                                @else
+                                    loading="lazy" fetchpriority="low"
+                                @endif
+                                decoding="async">
                         @else
                             <div class="absolute inset-0 flex items-center justify-center bg-[#fcfcfc] text-[#ddd] text-[9px] font-black uppercase tracking-widest">
                                 No Image

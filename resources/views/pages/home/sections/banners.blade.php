@@ -38,6 +38,8 @@
                                 src="{{ $banner['image'] }}"
                                 class="absolute inset-0 w-full h-full object-cover"
                                 alt="{{ $banner['title'] }}"
+                                loading="lazy"
+                                decoding="async"
                             >
 
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
